@@ -1,0 +1,17 @@
+C:\Users\THANH HOA\Documents\PRN222\UniSpace\UniSpace.Domain\bin\Debug\net8.0\UniSpace.Domain.deps.json
+C:\Users\THANH HOA\Documents\PRN222\UniSpace\UniSpace.Domain\bin\Debug\net8.0\UniSpace.Domain.runtimeconfig.json
+C:\Users\THANH HOA\Documents\PRN222\UniSpace\UniSpace.Domain\bin\Debug\net8.0\UniSpace.Domain.dll
+C:\Users\THANH HOA\Documents\PRN222\UniSpace\UniSpace.Domain\bin\Debug\net8.0\UniSpace.Domain.pdb
+C:\Users\THANH HOA\Documents\PRN222\UniSpace\UniSpace.Domain\bin\Debug\net8.0\UniSpace.BusinessObject.dll
+C:\Users\THANH HOA\Documents\PRN222\UniSpace\UniSpace.Domain\bin\Debug\net8.0\UniSpace.BusinessObject.pdb
+C:\Users\THANH HOA\Documents\PRN222\UniSpace\UniSpace.Domain\obj\Debug\net8.0\UniSpace.Domain.csproj.AssemblyReference.cache
+C:\Users\THANH HOA\Documents\PRN222\UniSpace\UniSpace.Domain\obj\Debug\net8.0\UniSpace.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\THANH HOA\Documents\PRN222\UniSpace\UniSpace.Domain\obj\Debug\net8.0\UniSpace.Domain.AssemblyInfoInputs.cache
+C:\Users\THANH HOA\Documents\PRN222\UniSpace\UniSpace.Domain\obj\Debug\net8.0\UniSpace.Domain.AssemblyInfo.cs
+C:\Users\THANH HOA\Documents\PRN222\UniSpace\UniSpace.Domain\obj\Debug\net8.0\UniSpace.Domain.csproj.CoreCompileInputs.cache
+C:\Users\THANH HOA\Documents\PRN222\UniSpace\UniSpace.Domain\obj\Debug\net8.0\UniSpace.B224F159.Up2Date
+C:\Users\THANH HOA\Documents\PRN222\UniSpace\UniSpace.Domain\obj\Debug\net8.0\UniSpace.Domain.dll
+C:\Users\THANH HOA\Documents\PRN222\UniSpace\UniSpace.Domain\obj\Debug\net8.0\refint\UniSpace.Domain.dll
+C:\Users\THANH HOA\Documents\PRN222\UniSpace\UniSpace.Domain\obj\Debug\net8.0\UniSpace.Domain.pdb
+C:\Users\THANH HOA\Documents\PRN222\UniSpace\UniSpace.Domain\obj\Debug\net8.0\UniSpace.Domain.genruntimeconfig.cache
+C:\Users\THANH HOA\Documents\PRN222\UniSpace\UniSpace.Domain\obj\Debug\net8.0\ref\UniSpace.Domain.dll
