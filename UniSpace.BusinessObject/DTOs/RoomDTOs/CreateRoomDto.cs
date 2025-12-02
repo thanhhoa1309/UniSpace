@@ -19,6 +19,8 @@ namespace UniSpace.BusinessObject.DTOs.RoomDTOs
         [Range(1, 1000, ErrorMessage = "Capacity must be between 1 and 1000")]
         public int Capacity { get; set; }
 
+        public RoomStatus RoomStatus { get; set; } = RoomStatus.Active;  // Default to Active
+
         [StringLength(500, ErrorMessage = "Description cannot exceed 500 characters")]
         public string Description { get; set; } = string.Empty;
     }

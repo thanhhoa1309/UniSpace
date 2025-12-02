@@ -172,6 +172,7 @@ namespace EVAuctionTrader.Presentation.Helper
                             Type = RoomType.Classroom,
                             Capacity = 40 + (i * 10), // 50, 60, 70, 80, 90
                             CurrentStatus = BookingStatus.Approved, // Available
+                            RoomStatus = RoomStatus.Active,
                             Description = $"Standard classroom with projector and whiteboard. Capacity: {40 + (i * 10)} students.",
                             IsDeleted = false,
                             CreatedAt = DateTime.UtcNow,
@@ -190,6 +191,7 @@ namespace EVAuctionTrader.Presentation.Helper
                             Type = RoomType.Lab,
                             Capacity = 30 + (i * 5), // 35, 40, 45
                             CurrentStatus = BookingStatus.Approved, // Available
+                            RoomStatus = RoomStatus.Active,
                             Description = $"Computer lab equipped with {30 + (i * 5)} workstations. High-speed internet and development software installed.",
                             IsDeleted = false,
                             CreatedAt = DateTime.UtcNow,
@@ -206,6 +208,7 @@ namespace EVAuctionTrader.Presentation.Helper
                         Type = RoomType.Stadium,
                         Capacity = 500,
                         CurrentStatus = BookingStatus.Approved, // Available
+                        RoomStatus = RoomStatus.Active,
                         Description = "Large outdoor stadium suitable for sports events, ceremonies, and large gatherings. Capacity: 500 people.",
                         IsDeleted = false,
                         CreatedAt = DateTime.UtcNow,
@@ -220,6 +223,7 @@ namespace EVAuctionTrader.Presentation.Helper
                         Type = RoomType.Stadium,
                         Capacity = 200,
                         CurrentStatus = BookingStatus.Approved, // Available
+                        RoomStatus = RoomStatus.Active,
                         Description = "Indoor sports facility for basketball, volleyball, and badminton. Capacity: 200 people.",
                         IsDeleted = false,
                         CreatedAt = DateTime.UtcNow,

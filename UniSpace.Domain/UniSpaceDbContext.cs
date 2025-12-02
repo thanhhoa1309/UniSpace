@@ -16,6 +16,8 @@ namespace UniSpace.Domain
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<RoomReport> RoomReports { get; set; }
 
+        public DbSet<Schedule> Schedules { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -32,12 +34,20 @@ namespace UniSpace.Domain
                 .Property(r => r.CurrentStatus)
                 .HasConversion<string>();
 
+            modelBuilder.Entity<Room>()
+                .Property(r => r.RoomStatus)
+                .HasConversion<string>();
+
             modelBuilder.Entity<Booking>()
                 .Property(b => b.Status)
                 .HasConversion<string>();
 
             modelBuilder.Entity<RoomReport>()
                 .Property(rr => rr.Status)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<Schedule>()
+                .Property(s => s.ScheduleType)
                 .HasConversion<string>();
 
             modelBuilder.Entity<Room>()
@@ -70,6 +80,12 @@ namespace UniSpace.Domain
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
+
+            modelBuilder.Entity<Schedule>()
+                .HasOne(s => s.Room)
+                .WithMany(r => r.Schedule)
+                .HasForeignKey(s => s.RoomId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
 

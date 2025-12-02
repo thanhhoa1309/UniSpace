@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.DataProtection;
+﻿using EVAuctionTrader.Presentation.Helper;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;
 using UniSpace.Presentation.Architecture;
-using EVAuctionTrader.Presentation.Helper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -96,7 +96,7 @@ using (var scope = app.Services.CreateScope())
 
         // Seed initial data after migrations
         logger.LogInformation("🌱 Seeding initial data...");
-        
+
         await DbSeeder.SeedUsersAsync(dbContext);
         logger.LogInformation("✓ Users seeded successfully");
 
@@ -111,18 +111,18 @@ using (var scope = app.Services.CreateScope())
     catch (Exception ex)
     {
         logger.LogError(ex, "❌ Error during database initialization");
-        
+
         // Try to recover by running migrations and seeding
         try
         {
             logger.LogWarning("Attempting recovery: Running migrations...");
             app.ApplyMigrations(logger);
-            
+
             logger.LogWarning("Attempting recovery: Seeding data...");
             await DbSeeder.SeedUsersAsync(dbContext);
             await DbSeeder.SeedCampusesAsync(dbContext);
             await DbSeeder.SeedRoomsAsync(dbContext);
-            
+
             logger.LogInformation("✓ Recovery successful");
         }
         catch (Exception recoveryEx)

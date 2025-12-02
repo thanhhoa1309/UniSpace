@@ -13,6 +13,8 @@ namespace UniSpace.BusinessObject.DTOs.RoomDTOs
         public int Capacity { get; set; }
         public BookingStatus CurrentStatus { get; set; }
         public string CurrentStatusDisplay { get; set; } = string.Empty;
+        public RoomStatus RoomStatus { get; set; }
+        public string RoomStatusDisplay { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public int TotalBookings { get; set; }
         public int PendingReports { get; set; }

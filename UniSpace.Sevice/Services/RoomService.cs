@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using UniSpace.BusinessObject.DTOs.RoomDTOs;
 using UniSpace.BusinessObject.Enums;
 using UniSpace.Domain.Entities;
@@ -72,6 +67,7 @@ namespace UniSpace.Service.Services
                     Type = createDto.Type,
                     Capacity = createDto.Capacity,
                     CurrentStatus = BookingStatus.Approved, // Available by default
+                    RoomStatus = createDto.RoomStatus,
                     Description = createDto.Description?.Trim() ?? string.Empty,
                     IsDeleted = false,
                     CreatedAt = currentTime,
@@ -220,8 +216,8 @@ namespace UniSpace.Service.Services
 
                 var rooms = await _unitOfWork.Room
                     .GetAllAsync(
-                        predicate: r => !r.IsDeleted && 
-                            (r.Name.Contains(searchTerm) || 
+                        predicate: r => !r.IsDeleted &&
+                            (r.Name.Contains(searchTerm) ||
                              r.Description.Contains(searchTerm) ||
                              r.Campus.Name.Contains(searchTerm)),
                         includes: new Expression<Func<Room, object>>[] { r => r.Campus, r => r.Bookings, r => r.Reports }
@@ -307,6 +303,7 @@ namespace UniSpace.Service.Services
                 room.Type = updateDto.Type;
                 room.Capacity = updateDto.Capacity;
                 room.CurrentStatus = updateDto.CurrentStatus;
+                room.RoomStatus = updateDto.RoomStatus;
                 room.Description = updateDto.Description?.Trim() ?? string.Empty;
                 room.UpdatedAt = currentTime;
                 room.UpdatedBy = currentUserId;
@@ -383,8 +380,8 @@ namespace UniSpace.Service.Services
                 }
 
                 // Check if room has active bookings
-                var hasActiveBookings = room.Bookings?.Any(b => 
-                    !b.IsDeleted && 
+                var hasActiveBookings = room.Bookings?.Any(b =>
+                    !b.IsDeleted &&
                     (b.Status == BookingStatus.Pending || b.Status == BookingStatus.Approved) &&
                     b.EndTime > DateTime.UtcNow) ?? false;
 
@@ -427,7 +424,7 @@ namespace UniSpace.Service.Services
                 }
 
                 // Check if room has any bookings or reports
-                if ((room.Bookings != null && room.Bookings.Any()) || 
+                if ((room.Bookings != null && room.Bookings.Any()) ||
                     (room.Reports != null && room.Reports.Any()))
                 {
                     _logger.LogWarning($"Cannot delete room with existing bookings or reports: {id}");
@@ -473,8 +470,8 @@ namespace UniSpace.Service.Services
                     return false;
 
                 var rooms = await _unitOfWork.Room
-                    .GetAllAsync(r => !r.IsDeleted && 
-                                     r.CampusId == campusId && 
+                    .GetAllAsync(r => !r.IsDeleted &&
+                                     r.CampusId == campusId &&
                                      r.Name.ToLower() == name.ToLower().Trim());
 
                 if (excludeId.HasValue)
@@ -546,6 +543,8 @@ namespace UniSpace.Service.Services
                 Capacity = room.Capacity,
                 CurrentStatus = room.CurrentStatus,
                 CurrentStatusDisplay = GetStatusDisplay(room.CurrentStatus),
+                RoomStatus = room.RoomStatus,
+                RoomStatusDisplay = GetRoomStatusDisplay(room.RoomStatus),
                 Description = room.Description,
                 TotalBookings = room.Bookings?.Count(b => !b.IsDeleted) ?? 0,
                 PendingReports = room.Reports?.Count(r => !r.IsDeleted && r.Status == ReportStatus.Open) ?? 0,
@@ -573,6 +572,18 @@ namespace UniSpace.Service.Services
                 BookingStatus.Rejected => "Unavailable",
                 BookingStatus.Completed => "Completed",
                 BookingStatus.Cancelled => "Cancelled",
+                _ => status.ToString()
+            };
+        }
+
+        private string GetRoomStatusDisplay(RoomStatus status)
+        {
+            return status switch
+            {
+                RoomStatus.Active => "Active",
+                RoomStatus.UnderMaintenance => "Under Maintenance",
+                RoomStatus.OutOfService => "Out of Service",
+                RoomStatus.Renovating => "Renovating",
                 _ => status.ToString()
             };
         }

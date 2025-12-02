@@ -14,7 +14,6 @@ namespace UniSpace.Domain.Entities
         public string AdminNote { get; set; }
 
 
-
         public User User { get; set; }
         public Room Room { get; set; }
     }

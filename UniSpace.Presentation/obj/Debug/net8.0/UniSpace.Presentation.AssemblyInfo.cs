@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("UniSpace.Presentation")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+69ce2914018e53572dc6e5765f5608c56d1cd3b7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+67dcab15652b9ca4fd3d0fdc54050eeb027b49c4")]
 [assembly: System.Reflection.AssemblyProductAttribute("UniSpace.Presentation")]
 [assembly: System.Reflection.AssemblyTitleAttribute("UniSpace.Presentation")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

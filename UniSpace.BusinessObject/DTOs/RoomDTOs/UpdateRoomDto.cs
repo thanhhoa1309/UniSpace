@@ -22,8 +22,11 @@ namespace UniSpace.BusinessObject.DTOs.RoomDTOs
         [Range(1, 1000, ErrorMessage = "Capacity must be between 1 and 1000")]
         public int Capacity { get; set; }
 
-        [Required(ErrorMessage = "Status is required")]
+        [Required(ErrorMessage = "Current status is required")]
         public BookingStatus CurrentStatus { get; set; }
+
+        [Required(ErrorMessage = "Room status is required")]
+        public RoomStatus RoomStatus { get; set; }
 
         [StringLength(500, ErrorMessage = "Description cannot exceed 500 characters")]
         public string Description { get; set; } = string.Empty;
