@@ -1,0 +1,282 @@
+@page
+@using UniSpace.BusinessObject.Enums
+@model UniSpace.Presentation.Pages.Admin.Room.EditModel
+@{
+    ViewData["Title"] = "Edit Room";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a asp-page="/Admin/Dashboard">
+                            <i class="bi bi-house"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-page="Index">Room Management</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-page="Details" asp-route-id="@Model.Input.Id">
+                            @Model.CurrentRoom?.Name
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active">Edit</li>
+                </ol>
+            </nav>
+
+            <!-- Main Card -->
+            <div class="card shadow-lg">
+                <div class="card-header bg-warning">
+                    <h4 class="mb-0">
+                        <i class="bi bi-pencil-square"></i> Edit Room: @Model.CurrentRoom?.Name
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="bi bi-exclamation-triangle"></i> @Model.ErrorMessage
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <form method="post" id="editForm">
+                        <input type="hidden" asp-for="Input.Id" />
+
+                        <div class="row">
+                            <!-- Campus Selection -->
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="Input.CampusId" class="form-label fw-bold">
+                                    <i class="bi bi-building text-primary"></i> Campus 
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <select asp-for="Input.CampusId" class="form-select form-select-lg">
+                                    @foreach (var option in Model.CampusOptions)
+                                    {
+                                        <option value="@option.Value" selected="@option.Selected">
+                                            @option.Text
+                                        </option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Input.CampusId" class="text-danger"></span>
+                                <div class="form-text">
+                                    <i class="bi bi-info-circle"></i> Select the campus where this room is located
+                                </div>
+                            </div>
+
+                            <!-- Room Name -->
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="Input.Name" class="form-label fw-bold">
+                                    <i class="bi bi-door-open text-success"></i> Room Name 
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="Input.Name" 
+                                       class="form-control form-control-lg" 
+                                       placeholder="e.g., Room 101, Lab A, Main Stadium" />
+                                <span asp-validation-for="Input.Name" class="text-danger"></span>
+                                <div class="form-text">
+                                    <i class="bi bi-info-circle"></i> Enter unique room name (max 100 characters)
+                                </div>
+                            </div>
+
+                            <!-- Room Type -->
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="Input.Type" class="form-label fw-bold">
+                                    <i class="bi bi-tag text-info"></i> Room Type 
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <select asp-for="Input.Type" class="form-select form-select-lg">
+                                    <option value="@((int)RoomType.Classroom)" 
+                                            selected="@(Model.Input.Type == RoomType.Classroom)">
+                                        ?? Classroom
+                                    </option>
+                                    <option value="@((int)RoomType.Lab)" 
+                                            selected="@(Model.Input.Type == RoomType.Lab)">
+                                        ?? Laboratory
+                                    </option>
+                                    <option value="@((int)RoomType.Stadium)" 
+                                            selected="@(Model.Input.Type == RoomType.Stadium)">
+                                        ? Stadium
+                                    </option>
+                                </select>
+                                <span asp-validation-for="Input.Type" class="text-danger"></span>
+                                <div class="form-text">
+                                    <i class="bi bi-info-circle"></i> Select the type of facility
+                                </div>
+                            </div>
+
+                            <!-- Capacity -->
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="Input.Capacity" class="form-label fw-bold">
+                                    <i class="bi bi-people text-warning"></i> Capacity 
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="Input.Capacity" 
+                                       type="number" 
+                                       class="form-control form-control-lg" 
+                                       placeholder="Number of people"
+                                       min="1"
+                                       max="1000" />
+                                <span asp-validation-for="Input.Capacity" class="text-danger"></span>
+                                <div class="form-text">
+                                    <i class="bi bi-info-circle"></i> Enter capacity (1-1000 people)
+                                </div>
+                            </div>
+
+                            <!-- Status -->
+                            <div class="col-md-12 mb-4">
+                                <label asp-for="Input.CurrentStatus" class="form-label fw-bold">
+                                    <i class="bi bi-circle text-info"></i> Room Status 
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-check form-check-inline p-3 border rounded" 
+                                             style="width: 100%;">
+                                            <input class="form-check-input" 
+                                                   type="radio" 
+                                                   asp-for="Input.CurrentStatus" 
+                                                   value="@((int)BookingStatus.Approved)" 
+                                                   id="statusAvailable"
+                                                   checked="@(Model.Input.CurrentStatus == BookingStatus.Approved)" />
+                                            <label class="form-check-label w-100" for="statusAvailable">
+                                                <i class="bi bi-check-circle text-success"></i> 
+                                                <strong>Available</strong>
+                                                <small class="d-block text-muted">Room can be booked</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check form-check-inline p-3 border rounded" 
+                                             style="width: 100%;">
+                                            <input class="form-check-input" 
+                                                   type="radio" 
+                                                   asp-for="Input.CurrentStatus" 
+                                                   value="@((int)BookingStatus.Rejected)" 
+                                                   id="statusUnavailable"
+                                                   checked="@(Model.Input.CurrentStatus == BookingStatus.Rejected)" />
+                                            <label class="form-check-label w-100" for="statusUnavailable">
+                                                <i class="bi bi-x-circle text-danger"></i> 
+                                                <strong>Unavailable</strong>
+                                                <small class="d-block text-muted">Room cannot be booked</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span asp-validation-for="Input.CurrentStatus" class="text-danger"></span>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="col-md-12 mb-4">
+                                <label asp-for="Input.Description" class="form-label fw-bold">
+                                    <i class="bi bi-text-paragraph text-secondary"></i> Description 
+                                    <span class="text-muted">(Optional)</span>
+                                </label>
+                                <textarea asp-for="Input.Description" 
+                                          class="form-control" 
+                                          rows="4"
+                                          placeholder="Enter detailed description, amenities, equipment, etc..."></textarea>
+                                <span asp-validation-for="Input.Description" class="text-danger"></span>
+                                <div class="form-text">
+                                    <i class="bi bi-info-circle"></i> Optional details (max 500 characters)
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Change Summary -->
+                        @if (Model.CurrentRoom != null)
+                        {
+                            <div class="alert alert-info">
+                                <i class="bi bi-clock-history"></i> 
+                                <strong>Original Details:</strong>
+                                <ul class="mb-0 mt-2">
+                                    <li><strong>Created:</strong> @Model.CurrentRoom.CreatedAt.ToString("dd/MM/yyyy HH:mm")</li>
+                                    <li><strong>Campus:</strong> @Model.CurrentRoom.CampusName</li>
+                                    <li><strong>Type:</strong> @Model.CurrentRoom.TypeDisplay</li>
+                                    <li><strong>Capacity:</strong> @Model.CurrentRoom.Capacity seats</li>
+                                    <li><strong>Total Bookings:</strong> @Model.CurrentRoom.TotalBookings</li>
+                                </ul>
+                            </div>
+                        }
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex gap-2 justify-content-between">
+                            <a asp-page="Details" asp-route-id="@Model.Input.Id" 
+                               class="btn btn-outline-secondary btn-lg">
+                                <i class="bi bi-arrow-left"></i> Back to Details
+                            </a>
+                            <div class="d-flex gap-2">
+                                <a asp-page="Index" class="btn btn-outline-secondary btn-lg">
+                                    <i class="bi bi-x-circle"></i> Cancel
+                                </a>
+                                <button type="submit" class="btn btn-warning btn-lg text-white">
+                                    <i class="bi bi-save"></i> Save Changes
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Warning for Active Bookings -->
+            @if (Model.CurrentRoom != null && Model.CurrentRoom.TotalBookings > 0)
+            {
+                <div class="alert alert-warning mt-4">
+                    <i class="bi bi-exclamation-triangle"></i> 
+                    <strong>Notice:</strong> This room has @Model.CurrentRoom.TotalBookings existing booking(s). 
+                    Changing the status to "Unavailable" will not affect existing bookings but will prevent new bookings.
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        // Form validation feedback
+        const form = document.getElementById('editForm');
+        form.addEventListener('submit', function(e) {
+            if (!form.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        });
+
+        // Highlight changes
+        const originalValues = {
+            campus: '@Model.CurrentRoom?.CampusId',
+            name: '@Model.CurrentRoom?.Name',
+            type: '@((int?)Model.CurrentRoom?.Type)',
+            capacity: '@Model.CurrentRoom?.Capacity',
+            status: '@((int?)Model.CurrentRoom?.CurrentStatus)'
+        };
+
+        function highlightChanges() {
+            // Check each field
+            ['CampusId', 'Name', 'Type', 'Capacity', 'CurrentStatus'].forEach(field => {
+                const input = document.querySelector('[name="Input.' + field + '"]');
+                if (input) {
+                    const originalKey = field.charAt(0).toLowerCase() + field.slice(1);
+                    if (input.value !== originalValues[originalKey]) {
+                        input.classList.add('border-warning', 'border-2');
+                    } else {
+                        input.classList.remove('border-warning', 'border-2');
+                    }
+                }
+            });
+        }
+
+        // Listen for changes
+        document.querySelectorAll('input, select, textarea').forEach(element => {
+            element.addEventListener('change', highlightChanges);
+            element.addEventListener('input', highlightChanges);
+        });
+    </script>
+}

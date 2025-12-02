@@ -1,0 +1,91 @@
+@page
+@model UniSpace.Presentation.Pages.DashboardModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">Dashboard</h1>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">User Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Email:</strong> @Model.UserEmail</p>
+                            <p><strong>Role:</strong> <span class="badge bg-info">@Model.UserRole</span></p>
+                            <p><strong>User ID:</strong> @Model.UserId</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Authentication Status:</strong> 
+                                <span class="badge bg-success">Authenticated</span>
+                            </p>
+                            <p><strong>Session Active:</strong> 
+                                <span class="badge bg-success">Yes</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="bi bi-building" style="font-size: 3rem;"></i>
+                    <h5 class="card-title mt-3">Campuses</h5>
+                    <p class="card-text">View and manage campuses</p>
+                    <a href="#" class="btn btn-primary">View Campuses</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="bi bi-door-open" style="font-size: 3rem;"></i>
+                    <h5 class="card-title mt-3">Rooms</h5>
+                    <p class="card-text">Browse available rooms</p>
+                    <a href="#" class="btn btn-primary">View Rooms</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="bi bi-calendar-check" style="font-size: 3rem;"></i>
+                    <h5 class="card-title mt-3">My Bookings</h5>
+                    <p class="card-text">Manage your bookings</p>
+                    <a href="#" class="btn btn-primary">View Bookings</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.UserRole == "Admin" || Model.UserRole == "Lecturer")
+    {
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0">Admin Tools</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="btn-group" role="group">
+                            <a href="#" class="btn btn-outline-secondary">Manage Users</a>
+                            <a href="#" class="btn btn-outline-secondary">View Reports</a>
+                            <a href="#" class="btn btn-outline-secondary">System Settings</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

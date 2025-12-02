@@ -4,11 +4,13 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
 using UniSpace.Domain;
+using UniSpace.Domain.Commons;
 using UniSpace.Domain.Interfaces;
 using UniSpace.Domain.Repository;
+using UniSpace.Service.Interfaces;
+using UniSpace.Service.Services;
 using UniSpace.Services.Interfaces;
 using UniSpace.Services.Services;
-using UniSpace.Domain.Commons;
 
 namespace UniSpace.Presentation.Architecture
 {
@@ -23,7 +25,6 @@ namespace UniSpace.Presentation.Architecture
 
             //Add business services
             services.SetupBusinessServicesLayer();
-
 
             services.SetupJwt();
             return services;
@@ -53,7 +54,6 @@ namespace UniSpace.Presentation.Architecture
         public static IServiceCollection SetupBusinessServicesLayer(this IServiceCollection services)
         {
             // Inject service vào DI container
-
             services.AddHttpContextAccessor();
 
             // Register UnitOfWork
@@ -65,6 +65,8 @@ namespace UniSpace.Presentation.Architecture
 
             // Register Business Services
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<ICampusService, CampusService>();
+            services.AddScoped<IRoomService, RoomService>();
 
             return services;
         }

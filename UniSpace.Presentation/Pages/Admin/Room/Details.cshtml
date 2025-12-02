@@ -1,0 +1,355 @@
+@page
+@using UniSpace.BusinessObject.Enums
+@model UniSpace.Presentation.Pages.Admin.Room.DetailsModel
+@{
+    ViewData["Title"] = "Room Details";
+    var statusBadge = Model.Room.CurrentStatus == BookingStatus.Approved ? "bg-success" : "bg-danger";
+    var typeBadge = Model.Room.Type switch
+    {
+        RoomType.Classroom => "bg-primary",
+        RoomType.Lab => "bg-info",
+        RoomType.Stadium => "bg-warning",
+        _ => "bg-secondary"
+    };
+}
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a asp-page="/Admin/Dashboard">
+                            <i class="bi bi-house"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-page="Index">Room Management</a>
+                    </li>
+                    <li class="breadcrumb-item active">@Model.Room.Name</li>
+                </ol>
+            </nav>
+
+            <!-- Alerts -->
+            @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle"></i> @Model.SuccessMessage
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle"></i> @Model.ErrorMessage
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <!-- Main Content -->
+            <div class="row">
+                <!-- Left Column: Room Details -->
+                <div class="col-lg-8 mb-4">
+                    <!-- Header Card -->
+                    <div class="card shadow-lg mb-4">
+                        <div class="card-header @typeBadge text-white">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h3 class="mb-0">
+                                    <i class="bi bi-door-open"></i> @Model.Room.Name
+                                </h3>
+                                <div>
+                                    <span class="badge @statusBadge" style="font-size: 1em;">
+                                        @Model.Room.CurrentStatusDisplay
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <!-- Campus Info -->
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+                                    <h5 class="text-muted mb-3">
+                                        <i class="bi bi-building"></i> Location
+                                    </h5>
+                                    <div class="alert alert-light border">
+                                        <h5 class="mb-0">
+                                            <i class="bi bi-geo-alt-fill text-primary"></i> 
+                                            @Model.Room.CampusName
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Room Specs -->
+                            <div class="row mb-4">
+                                <div class="col-md-4">
+                                    <div class="card border-0 bg-light text-center p-3">
+                                        <i class="bi bi-tag display-4 @typeBadge.Replace("bg-", "text-")"></i>
+                                        <h6 class="text-muted mt-2">Type</h6>
+                                        <h5 class="mb-0">@Model.Room.TypeDisplay</h5>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card border-0 bg-light text-center p-3">
+                                        <i class="bi bi-people display-4 text-warning"></i>
+                                        <h6 class="text-muted mt-2">Capacity</h6>
+                                        <h5 class="mb-0">@Model.Room.Capacity</h5>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card border-0 bg-light text-center p-3">
+                                        <i class="bi bi-calendar-check display-4 text-info"></i>
+                                        <h6 class="text-muted mt-2">Bookings</h6>
+                                        <h5 class="mb-0">@Model.Room.TotalBookings</h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h5 class="text-muted mb-3">
+                                        <i class="bi bi-text-paragraph"></i> Description
+                                    </h5>
+                                    <div class="card border-0 bg-light p-3">
+                                        @if (!string.IsNullOrWhiteSpace(Model.Room.Description))
+                                        {
+                                            <p class="mb-0">@Model.Room.Description</p>
+                                        }
+                                        else
+                                        {
+                                            <p class="text-muted mb-0">
+                                                <em>No description available</em>
+                                            </p>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Statistics Card -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0">
+                                <i class="bi bi-bar-chart"></i> Room Statistics
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row text-center">
+                                <div class="col-md-3 mb-3">
+                                    <div class="p-3 border rounded">
+                                        <h3 class="text-primary mb-1">@Model.Room.TotalBookings</h3>
+                                        <small class="text-muted">Total Bookings</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <div class="p-3 border rounded">
+                                        <h3 class="text-danger mb-1">@Model.Room.PendingReports</h3>
+                                        <small class="text-muted">Pending Reports</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <div class="p-3 border rounded">
+                                        <h3 class="text-success mb-1">
+                                            @(Model.Room.CurrentStatus == BookingStatus.Approved ? "Yes" : "No")
+                                        </h3>
+                                        <small class="text-muted">Available</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <div class="p-3 border rounded">
+                                        <h3 class="text-info mb-1">@Model.Room.Capacity</h3>
+                                        <small class="text-muted">Max Capacity</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Booking History (Placeholder) -->
+                    <div class="card shadow">
+                        <div class="card-header bg-secondary text-white">
+                            <h5 class="mb-0">
+                                <i class="bi bi-clock-history"></i> Recent Bookings
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            @if (Model.Room.TotalBookings > 0)
+                            {
+                                <div class="alert alert-info">
+                                    <i class="bi bi-info-circle"></i> 
+                                    This room has <strong>@Model.Room.TotalBookings</strong> booking(s).
+                                    <p class="mb-0 mt-2">
+                                        <small>Booking details will be displayed here when the booking system is implemented.</small>
+                                    </p>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="text-center py-4">
+                                    <i class="bi bi-inbox display-4 text-muted"></i>
+                                    <p class="text-muted mt-3">No bookings yet</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Actions & Info -->
+                <div class="col-lg-4 mb-4">
+                    <!-- Action Buttons -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header bg-dark text-white">
+                            <h5 class="mb-0">
+                                <i class="bi bi-lightning"></i> Actions
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-grid gap-2">
+                                <a asp-page="Edit" asp-route-id="@Model.Room.Id" 
+                                   class="btn btn-warning btn-lg">
+                                    <i class="bi bi-pencil-square"></i> Edit Room
+                                </a>
+                                <button type="button" 
+                                        class="btn btn-danger btn-lg" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#deleteModal">
+                                    <i class="bi bi-trash"></i> Delete Room
+                                </button>
+                                <hr />
+                                <a asp-page="Index" class="btn btn-outline-secondary btn-lg">
+                                    <i class="bi bi-arrow-left"></i> Back to List
+                                </a>
+                                <a asp-page="Dashboard" class="btn btn-outline-info btn-lg">
+                                    <i class="bi bi-speedometer2"></i> Dashboard
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Info Card -->
+                    <div class="card shadow mb-4 border-primary">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">
+                                <i class="bi bi-info-circle"></i> Quick Info
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-3 pb-3 border-bottom">
+                                    <strong><i class="bi bi-hash text-muted"></i> Room ID:</strong><br/>
+                                    <small class="text-muted font-monospace">@Model.Room.Id</small>
+                                </li>
+                                <li class="mb-3 pb-3 border-bottom">
+                                    <strong><i class="bi bi-calendar-plus text-muted"></i> Created:</strong><br/>
+                                    <small>@Model.Room.CreatedAt.ToString("dd/MM/yyyy HH:mm")</small>
+                                </li>
+                                <li class="mb-3 pb-3 border-bottom">
+                                    <strong><i class="bi bi-building text-muted"></i> Campus:</strong><br/>
+                                    <small>@Model.Room.CampusName</small>
+                                </li>
+                                <li class="mb-3 pb-3 border-bottom">
+                                    <strong><i class="bi bi-tag text-muted"></i> Type:</strong><br/>
+                                    <span class="badge @typeBadge">@Model.Room.TypeDisplay</span>
+                                </li>
+                                <li class="mb-3 pb-3 border-bottom">
+                                    <strong><i class="bi bi-circle text-muted"></i> Status:</strong><br/>
+                                    <span class="badge @statusBadge">@Model.Room.CurrentStatusDisplay</span>
+                                </li>
+                                <li>
+                                    <strong><i class="bi bi-people text-muted"></i> Capacity:</strong><br/>
+                                    <span class="badge bg-secondary rounded-pill">@Model.Room.Capacity seats</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Reports Card -->
+                    @if (Model.Room.PendingReports > 0)
+                    {
+                        <div class="card shadow border-danger">
+                            <div class="card-header bg-danger text-white">
+                                <h5 class="mb-0">
+                                    <i class="bi bi-exclamation-triangle"></i> Attention Required
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="alert alert-warning mb-0">
+                                    <strong>@Model.Room.PendingReports</strong> pending report(s) require attention.
+                                    <hr />
+                                    <button class="btn btn-sm btn-warning" disabled>
+                                        <i class="bi bi-flag"></i> View Reports (Coming Soon)
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-exclamation-triangle"></i> Confirm Delete
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h5 class="text-danger mb-3">Are you sure?</h5>
+                <p>You are about to delete:</p>
+                <div class="alert alert-light border">
+                    <strong>@Model.Room.Name</strong><br/>
+                    <small class="text-muted">
+                        @Model.Room.CampusName • @Model.Room.TypeDisplay • @Model.Room.Capacity seats
+                    </small>
+                </div>
+                
+                @if (Model.Room.TotalBookings > 0)
+                {
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle"></i> 
+                        <strong>Warning:</strong> This room has @Model.Room.TotalBookings booking(s). 
+                        Only rooms without active bookings can be deleted.
+                    </div>
+                }
+                
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> 
+                    <small>This is a soft delete. The room data will be preserved in the database.</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> Cancel
+                </button>
+                <form method="post" asp-page-handler="Delete" asp-route-id="@Model.Room.Id" class="d-inline">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Delete Room
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Auto-hide alerts
+        setTimeout(function() {
+            var alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                var bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+    </script>
+}

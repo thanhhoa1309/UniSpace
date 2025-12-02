@@ -1,0 +1,439 @@
+@page
+@model UniSpace.Presentation.Pages.Admin.Campus.DashboardModel
+@{
+    ViewData["Title"] = "Campus Dashboard";
+}
+
+<div class="container-fluid mt-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2><i class="bi bi-building"></i> Campus Dashboard</h2>
+                    <p class="text-muted">Comprehensive overview of all campus locations</p>
+                </div>
+                <div>
+                    <a asp-page="Index" class="btn btn-outline-primary">
+                        <i class="bi bi-list"></i> View All
+                    </a>
+                    <a asp-page="Create" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i> Add Campus
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards Row 1 -->
+    <div class="row mb-4">
+        <!-- Total Campuses -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Total Campuses
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @Model.TotalCampuses
+                            </div>
+                            <small class="text-muted">All registered locations</small>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-building" style="font-size: 2.5em; color: #4e73df;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Rooms -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Total Rooms
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @Model.TotalRooms
+                            </div>
+                            <small class="text-muted">Across all campuses</small>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-door-open" style="font-size: 2.5em; color: #1cc88a;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Campuses -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Active Campuses
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @Model.ActiveCampuses
+                            </div>
+                            <small class="text-muted">Currently operational</small>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-check-circle" style="font-size: 2.5em; color: #36b9cc;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campuses with Rooms -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Campuses with Rooms
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @Model.CampusesWithRooms
+                            </div>
+                            <small class="text-muted">Have assigned rooms</small>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-clipboard-check" style="font-size: 2.5em; color: #f6c23e;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards Row 2 -->
+    <div class="row mb-4">
+        <!-- Utilization Rate -->
+        <div class="col-xl-6 col-md-6 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-header bg-primary text-white">
+                    <h6 class="m-0 font-weight-bold">
+                        <i class="bi bi-graph-up"></i> Campus Utilization Rate
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <h4 class="mb-0">@Model.CampusUtilizationRate%</h4>
+                    <p class="text-muted mb-3">Percentage of campuses with assigned rooms</p>
+                    <div class="progress" style="height: 25px;">
+                        <div class="progress-bar bg-primary" role="progressbar" 
+                             style="width: @Model.CampusUtilizationRate%" 
+                             aria-valuenow="@Model.CampusUtilizationRate" 
+                             aria-valuemin="0" 
+                             aria-valuemax="100">
+                            @Model.CampusUtilizationRate%
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <small class="text-muted">
+                            @Model.CampusesWithRooms out of @Model.TotalCampuses campuses have rooms assigned
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Average Rooms -->
+        <div class="col-xl-6 col-md-6 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-header bg-success text-white">
+                    <h6 class="m-0 font-weight-bold">
+                        <i class="bi bi-calculator"></i> Average Rooms per Campus
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <h4 class="mb-0">@Model.AverageRoomsPerCampus</h4>
+                    <p class="text-muted mb-3">Average number of rooms across all campuses</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="text-center">
+                            <i class="bi bi-building text-primary" style="font-size: 2em;"></i>
+                            <p class="mb-0 small">@Model.TotalCampuses Campuses</p>
+                        </div>
+                        <div>
+                            <i class="bi bi-arrow-right" style="font-size: 1.5em;"></i>
+                        </div>
+                        <div class="text-center">
+                            <i class="bi bi-door-open text-success" style="font-size: 2em;"></i>
+                            <p class="mb-0 small">@Model.TotalRooms Rooms</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Campuses and Top Campuses -->
+    <div class="row">
+        <!-- Recent Campuses -->
+        <div class="col-xl-6 col-md-12 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-header bg-info text-white">
+                    <h6 class="m-0 font-weight-bold">
+                        <i class="bi bi-clock-history"></i> Recent Campuses
+                    </h6>
+                </div>
+                <div class="card-body">
+                    @if (Model.RecentCampuses.Any())
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var campus in Model.RecentCampuses)
+                            {
+                                <a asp-page="Details" asp-route-id="@campus.Id" 
+                                   class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1">
+                                                <i class="bi bi-building text-primary"></i> @campus.Name
+                                            </h6>
+                                            <p class="mb-1 small text-muted">
+                                                <i class="bi bi-geo-alt"></i> @campus.Address
+                                            </p>
+                                            <small class="text-muted">
+                                                <i class="bi bi-calendar"></i> Created: @campus.CreatedAt.ToString("dd/MM/yyyy")
+                                            </small>
+                                        </div>
+                                        <div class="text-end">
+                                            <span class="badge bg-info">@campus.TotalRooms rooms</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="bi bi-inbox display-4 text-muted"></i>
+                            <p class="text-muted mt-3">No campuses available</p>
+                            <a asp-page="Create" class="btn btn-primary">
+                                <i class="bi bi-plus-circle"></i> Create First Campus
+                            </a>
+                        </div>
+                    }
+                </div>
+                @if (Model.RecentCampuses.Any())
+                {
+                    <div class="card-footer bg-light">
+                        <a asp-page="Index" class="btn btn-sm btn-outline-primary w-100">
+                            <i class="bi bi-eye"></i> View All Campuses
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Top Campuses by Rooms -->
+        <div class="col-xl-6 col-md-12 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-header bg-warning text-dark">
+                    <h6 class="m-0 font-weight-bold">
+                        <i class="bi bi-trophy"></i> Top Campuses by Rooms
+                    </h6>
+                </div>
+                <div class="card-body">
+                    @if (Model.TopCampusesByRooms.Any())
+                    {
+                        <div class="list-group list-group-flush">
+                            @for (int i = 0; i < Model.TopCampusesByRooms.Count; i++)
+                            {
+                                var campus = Model.TopCampusesByRooms[i];
+                                var badgeClass = i == 0 ? "bg-warning" : i == 1 ? "bg-secondary" : i == 2 ? "bg-info" : "bg-light text-dark";
+                                var trophy = i == 0 ? "??" : i == 1 ? "??" : i == 2 ? "??" : "";
+                                
+                                <a asp-page="Details" asp-route-id="@campus.Id" 
+                                   class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            @if (!string.IsNullOrEmpty(trophy))
+                                            {
+                                                <span class="me-2" style="font-size: 1.5em;">@trophy</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge @badgeClass me-2">@(i + 1)</span>
+                                            }
+                                            <div>
+                                                <h6 class="mb-1">@campus.Name</h6>
+                                                <small class="text-muted">@campus.Address</small>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h5 class="mb-0">
+                                                <span class="badge bg-primary">@campus.TotalRooms</span>
+                                            </h5>
+                                            <small class="text-muted">rooms</small>
+                                        </div>
+                                    </div>
+                                </a>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="bi bi-inbox display-4 text-muted"></i>
+                            <p class="text-muted mt-3">No campuses with rooms yet</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Campus Room Distribution Chart -->
+    @if (Model.CampusRoomDistribution.Any())
+    {
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <div class="card shadow">
+                    <div class="card-header bg-secondary text-white">
+                        <h6 class="m-0 font-weight-bold">
+                            <i class="bi bi-bar-chart"></i> Campus Room Distribution
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="campusRoomChart" style="height: 300px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Quick Actions -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-dark text-white">
+                    <h6 class="m-0 font-weight-bold">
+                        <i class="bi bi-lightning"></i> Quick Actions
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <a asp-page="Create" class="btn btn-primary btn-lg w-100">
+                                <i class="bi bi-plus-circle"></i><br/>
+                                <small>Add New Campus</small>
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a asp-page="Index" class="btn btn-info btn-lg w-100">
+                                <i class="bi bi-list"></i><br/>
+                                <small>View All Campuses</small>
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <button class="btn btn-success btn-lg w-100" disabled>
+                                <i class="bi bi-door-open"></i><br/>
+                                <small>Manage Rooms</small>
+                            </button>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <button class="btn btn-warning btn-lg w-100" disabled>
+                                <i class="bi bi-file-earmark-text"></i><br/>
+                                <small>Generate Report</small>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .border-left-primary {
+        border-left: 0.25rem solid #4e73df !important;
+    }
+    .border-left-success {
+        border-left: 0.25rem solid #1cc88a !important;
+    }
+    .border-left-info {
+        border-left: 0.25rem solid #36b9cc !important;
+    }
+    .border-left-warning {
+        border-left: 0.25rem solid #f6c23e !important;
+    }
+    .text-xs {
+        font-size: 0.7rem;
+    }
+</style>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Campus Room Distribution Chart
+        @if (Model.CampusRoomDistribution.Any())
+        {
+            <text>
+            const ctx = document.getElementById('campusRoomChart');
+            const campusNames = @Html.Raw(Json.Serialize(Model.CampusRoomDistribution.Keys));
+            const roomCounts = @Html.Raw(Json.Serialize(Model.CampusRoomDistribution.Values));
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: campusNames,
+                    datasets: [{
+                        label: 'Number of Rooms',
+                        data: roomCounts,
+                        backgroundColor: [
+                            'rgba(78, 115, 223, 0.8)',
+                            'rgba(28, 200, 138, 0.8)',
+                            'rgba(54, 185, 204, 0.8)',
+                            'rgba(246, 194, 62, 0.8)',
+                            'rgba(231, 74, 59, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(78, 115, 223, 1)',
+                            'rgba(28, 200, 138, 1)',
+                            'rgba(54, 185, 204, 1)',
+                            'rgba(246, 194, 62, 1)',
+                            'rgba(231, 74, 59, 1)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y + ' rooms';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            </text>
+        }
+    </script>
+}

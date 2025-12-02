@@ -1,0 +1,446 @@
+@page
+@using UniSpace.BusinessObject.Enums
+@model UniSpace.Presentation.Pages.Admin.Room.IndexModel
+@{
+    ViewData["Title"] = "Room Management";
+}
+
+<div class="container-fluid mt-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2><i class="bi bi-door-open"></i> Room Management</h2>
+                    <p class="text-muted">Manage all room facilities across campuses</p>
+                </div>
+                <div>
+                    <a asp-page="Dashboard" class="btn btn-info btn-lg me-2">
+                        <i class="bi bi-speedometer2"></i> Dashboard
+                    </a>
+                    <a asp-page="Create" class="btn btn-primary btn-lg">
+                        <i class="bi bi-plus-circle"></i> Add New Room
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alerts -->
+    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle"></i> @Model.SuccessMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle"></i> @Model.ErrorMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- Search and Filter Section -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">
+                <i class="bi bi-funnel"></i> Search & Filter
+            </h5>
+        </div>
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <!-- Search Bar -->
+                <div class="col-md-4">
+                    <label class="form-label">
+                        <i class="bi bi-search"></i> Search
+                    </label>
+                    <input type="text" name="search" class="form-control" 
+                           placeholder="Room name, campus, or description..." 
+                           value="@Model.SearchTerm" />
+                </div>
+
+                <!-- Campus Filter -->
+                <div class="col-md-3">
+                    <label class="form-label">
+                        <i class="bi bi-building"></i> Campus
+                    </label>
+                    <select name="campusId" class="form-select">
+                        @foreach (var option in Model.CampusOptions)
+                        {
+                            <option value="@option.Value" selected="@option.Selected">
+                                @option.Text
+                            </option>
+                        }
+                    </select>
+                </div>
+
+                <!-- Type Filter -->
+                <div class="col-md-2">
+                    <label class="form-label">
+                        <i class="bi bi-tag"></i> Type
+                    </label>
+                    <select name="type" class="form-select">
+                        <option value="">All Types</option>
+                        <option value="@((int)RoomType.Classroom)" 
+                                selected="@(Model.FilterType == RoomType.Classroom)">
+                            Classroom
+                        </option>
+                        <option value="@((int)RoomType.Lab)" 
+                                selected="@(Model.FilterType == RoomType.Lab)">
+                            Laboratory
+                        </option>
+                        <option value="@((int)RoomType.Stadium)" 
+                                selected="@(Model.FilterType == RoomType.Stadium)">
+                            Stadium
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Status Filter -->
+                <div class="col-md-2">
+                    <label class="form-label">
+                        <i class="bi bi-circle"></i> Status
+                    </label>
+                    <select name="status" class="form-select">
+                        <option value="">All Status</option>
+                        <option value="@((int)BookingStatus.Approved)" 
+                                selected="@(Model.FilterStatus == BookingStatus.Approved)">
+                            Available
+                        </option>
+                        <option value="@((int)BookingStatus.Rejected)" 
+                                selected="@(Model.FilterStatus == BookingStatus.Rejected)">
+                            Unavailable
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="col-md-1 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+                <div class="col-md-12 text-end">
+                    @if (!string.IsNullOrEmpty(Model.SearchTerm) || Model.FilterCampusId.HasValue || 
+                         Model.FilterType.HasValue || Model.FilterStatus.HasValue)
+                    {
+                        <a asp-page="Index" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle"></i> Clear Filters
+                        </a>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Rooms Table/Grid -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="bi bi-list-ul"></i> Room List 
+                        <span class="badge bg-light text-dark ms-2">@Model.Rooms.Count</span>
+                    </h5>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-sm btn-light active" id="viewTable">
+                            <i class="bi bi-table"></i> Table
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-light" id="viewGrid">
+                            <i class="bi bi-grid-3x3"></i> Grid
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    @if (Model.Rooms.Any())
+                    {
+                        <!-- Table View -->
+                        <div id="tableView">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 5%">#</th>
+                                            <th style="width: 20%">
+                                                <i class="bi bi-door-open"></i> Room Name
+                                            </th>
+                                            <th style="width: 20%">
+                                                <i class="bi bi-building"></i> Campus
+                                            </th>
+                                            <th style="width: 10%">
+                                                <i class="bi bi-tag"></i> Type
+                                            </th>
+                                            <th style="width: 10%" class="text-center">
+                                                <i class="bi bi-people"></i> Capacity
+                                            </th>
+                                            <th style="width: 10%" class="text-center">
+                                                <i class="bi bi-circle"></i> Status
+                                            </th>
+                                            <th style="width: 10%" class="text-center">
+                                                <i class="bi bi-calendar-check"></i> Bookings
+                                            </th>
+                                            <th style="width: 15%" class="text-center">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (int i = 0; i < Model.Rooms.Count; i++)
+                                        {
+                                            var room = Model.Rooms[i];
+                                            var statusBadge = room.CurrentStatus == BookingStatus.Approved 
+                                                ? "bg-success" : "bg-danger";
+                                            var typeBadge = room.Type switch
+                                            {
+                                                RoomType.Classroom => "bg-primary",
+                                                RoomType.Lab => "bg-info",
+                                                RoomType.Stadium => "bg-warning",
+                                                _ => "bg-secondary"
+                                            };
+                                            
+                                            <tr>
+                                                <td><strong>@(i + 1)</strong></td>
+                                                <td>
+                                                    <strong class="text-primary">@room.Name</strong>
+                                                </td>
+                                                <td>
+                                                    <i class="bi bi-building text-muted"></i> @room.CampusName
+                                                </td>
+                                                <td>
+                                                    <span class="badge @typeBadge">@room.TypeDisplay</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="badge bg-secondary rounded-pill">
+                                                        @room.Capacity
+                                                    </span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="badge @statusBadge">
+                                                        @room.CurrentStatusDisplay
+                                                    </span>
+                                                </td>
+                                                <td class="text-center">
+                                                    @if (room.TotalBookings > 0)
+                                                    {
+                                                        <span class="badge bg-info rounded-pill">
+                                                            @room.TotalBookings
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="text-muted">0</span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group btn-group-sm" role="group">
+                                                        <a asp-page="Details" asp-route-id="@room.Id" 
+                                                           class="btn btn-info" title="View Details">
+                                                            <i class="bi bi-eye"></i>
+                                                        </a>
+                                                        <a asp-page="Edit" asp-route-id="@room.Id" 
+                                                           class="btn btn-warning" title="Edit">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </a>
+                                                        <button type="button" class="btn btn-danger" 
+                                                                onclick="confirmDelete('@room.Id', '@room.Name')" 
+                                                                title="Delete">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Grid View (Hidden by default) -->
+                        <div id="gridView" class="p-3" style="display: none;">
+                            <div class="row g-3">
+                                @foreach (var room in Model.Rooms)
+                                {
+                                    var statusBadge = room.CurrentStatus == BookingStatus.Approved 
+                                        ? "bg-success" : "bg-danger";
+                                    var typeBadge = room.Type switch
+                                    {
+                                        RoomType.Classroom => "bg-primary",
+                                        RoomType.Lab => "bg-info",
+                                        RoomType.Stadium => "bg-warning",
+                                        _ => "bg-secondary"
+                                    };
+                                    
+                                    <div class="col-md-6 col-lg-4 col-xl-3">
+                                        <div class="card h-100 shadow-sm hover-shadow">
+                                            <div class="card-header @typeBadge text-white">
+                                                <h6 class="mb-0">
+                                                    <i class="bi bi-door-open"></i> @room.Name
+                                                </h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <p class="mb-2">
+                                                    <i class="bi bi-building text-muted"></i> 
+                                                    <small>@room.CampusName</small>
+                                                </p>
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <span class="badge @typeBadge">@room.TypeDisplay</span>
+                                                    <span class="badge @statusBadge">@room.CurrentStatusDisplay</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <span>
+                                                        <i class="bi bi-people"></i> Capacity:
+                                                    </span>
+                                                    <strong>@room.Capacity</strong>
+                                                </div>
+                                                <div class="d-flex justify-content-between">
+                                                    <span>
+                                                        <i class="bi bi-calendar-check"></i> Bookings:
+                                                    </span>
+                                                    <strong>@room.TotalBookings</strong>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer bg-light">
+                                                <div class="d-flex gap-2">
+                                                    <a asp-page="Details" asp-route-id="@room.Id" 
+                                                       class="btn btn-sm btn-info flex-fill">
+                                                        <i class="bi bi-eye"></i> View
+                                                    </a>
+                                                    <a asp-page="Edit" asp-route-id="@room.Id" 
+                                                       class="btn btn-sm btn-warning flex-fill">
+                                                        <i class="bi bi-pencil"></i> Edit
+                                                    </a>
+                                                    <button type="button" 
+                                                            class="btn btn-sm btn-danger flex-fill"
+                                                            onclick="confirmDelete('@room.Id', '@room.Name')">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="bi bi-inbox display-1 text-muted"></i>
+                            <h4 class="text-muted mt-3">
+                                @if (!string.IsNullOrEmpty(Model.SearchTerm) || Model.FilterCampusId.HasValue || 
+                                     Model.FilterType.HasValue || Model.FilterStatus.HasValue)
+                                {
+                                    <text>No rooms found matching your filters</text>
+                                }
+                                else
+                                {
+                                    <text>No rooms available</text>
+                                }
+                            </h4>
+                            @if (string.IsNullOrEmpty(Model.SearchTerm) && !Model.FilterCampusId.HasValue)
+                            {
+                                <p class="text-muted">Get started by creating your first room</p>
+                                <a asp-page="Create" class="btn btn-primary btn-lg mt-3">
+                                    <i class="bi bi-plus-circle"></i> Create First Room
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-page="Index" class="btn btn-outline-secondary mt-3">
+                                    <i class="bi bi-x-circle"></i> Clear Filters
+                                </a>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-exclamation-triangle"></i> Confirm Delete
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-3">
+                    Are you sure you want to delete room <strong id="roomName" class="text-danger"></strong>?
+                </p>
+                <div class="alert alert-warning">
+                    <i class="bi bi-info-circle"></i> 
+                    <small>This action cannot be undone. The room will be soft deleted.</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> Cancel
+                </button>
+                <form method="post" asp-page-handler="Delete" class="d-inline">
+                    <input type="hidden" name="id" id="roomId" />
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Delete Room
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover-shadow:hover {
+        transform: translateY(-5px);
+        transition: all 0.3s ease;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        // Delete confirmation
+        function confirmDelete(roomId, roomName) {
+            document.getElementById('roomId').value = roomId;
+            document.getElementById('roomName').textContent = roomName;
+            var modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            modal.show();
+        }
+
+        // View toggle
+        document.getElementById('viewTable').addEventListener('click', function() {
+            document.getElementById('tableView').style.display = 'block';
+            document.getElementById('gridView').style.display = 'none';
+            this.classList.add('active');
+            this.classList.remove('btn-outline-light');
+            this.classList.add('btn-light');
+            document.getElementById('viewGrid').classList.remove('active');
+            document.getElementById('viewGrid').classList.add('btn-outline-light');
+            document.getElementById('viewGrid').classList.remove('btn-light');
+        });
+
+        document.getElementById('viewGrid').addEventListener('click', function() {
+            document.getElementById('tableView').style.display = 'none';
+            document.getElementById('gridView').style.display = 'block';
+            this.classList.add('active');
+            this.classList.remove('btn-outline-light');
+            this.classList.add('btn-light');
+            document.getElementById('viewTable').classList.remove('active');
+            document.getElementById('viewTable').classList.add('btn-outline-light');
+            document.getElementById('viewTable').classList.remove('btn-light');
+        });
+
+        // Auto-hide alerts
+        setTimeout(function() {
+            var alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                var bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+    </script>
+}

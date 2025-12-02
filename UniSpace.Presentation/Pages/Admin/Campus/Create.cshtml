@@ -1,0 +1,160 @@
+@page
+@model UniSpace.Presentation.Pages.Admin.Campus.CreateModel
+@{
+    ViewData["Title"] = "Create Campus";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a asp-page="/Admin/Dashboard">
+                            <i class="bi bi-house"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-page="Index">Campus Management</a>
+                    </li>
+                    <li class="breadcrumb-item active">Create Campus</li>
+                </ol>
+            </nav>
+
+            <!-- Main Card -->
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-plus-circle"></i> Create New Campus
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="bi bi-exclamation-triangle"></i> @Model.ErrorMessage
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <form method="post" id="createForm">
+                        <!-- Campus Name -->
+                        <div class="mb-4">
+                            <label asp-for="Input.Name" class="form-label fw-bold">
+                                <i class="bi bi-building text-primary"></i> Campus Name 
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="Input.Name" 
+                                   class="form-control form-control-lg" 
+                                   placeholder="e.g., FPT University - Hoa Lac Campus"
+                                   autofocus 
+                                   id="campusName" />
+                            <span asp-validation-for="Input.Name" class="text-danger"></span>
+                            <div class="form-text">
+                                <i class="bi bi-info-circle"></i> Enter a unique campus name (max 100 characters)
+                            </div>
+                        </div>
+
+                        <!-- Address -->
+                        <div class="mb-4">
+                            <label asp-for="Input.Address" class="form-label fw-bold">
+                                <i class="bi bi-geo-alt text-success"></i> Address 
+                                <span class="text-danger">*</span>
+                            </label>
+                            <textarea asp-for="Input.Address" 
+                                      class="form-control" 
+                                      rows="3"
+                                      placeholder="Enter complete address including street, district, city..."
+                                      id="campusAddress"></textarea>
+                            <span asp-validation-for="Input.Address" class="text-danger"></span>
+                            <div class="form-text">
+                                <i class="bi bi-info-circle"></i> Provide detailed address (max 200 characters)
+                            </div>
+                        </div>
+
+                        <!-- Info Alert -->
+                        <div class="alert alert-info">
+                            <i class="bi bi-lightbulb"></i> 
+                            <strong>Tip:</strong> After creating the campus, you can add rooms to it from the campus details page.
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a asp-page="Index" class="btn btn-outline-secondary btn-lg">
+                                <i class="bi bi-x-circle"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-save"></i> Create Campus
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Live Preview Card -->
+            <div class="card shadow-lg mt-4" id="previewCard" style="display: none;">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="bi bi-eye text-info"></i> Live Preview
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-start">
+                        <i class="bi bi-building text-primary me-3" style="font-size: 2.5em;"></i>
+                        <div>
+                            <h5 id="previewName" class="text-primary mb-2">Campus Name</h5>
+                            <p id="previewAddress" class="text-muted mb-0">
+                                <i class="bi bi-geo-alt"></i> Address
+                            </p>
+                            <small class="text-muted">
+                                <i class="bi bi-calendar"></i> Created: @DateTime.Now.ToString("dd MMM yyyy")
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        // Live preview functionality
+        const nameInput = document.getElementById('campusName');
+        const addressInput = document.getElementById('campusAddress');
+        const previewCard = document.getElementById('previewCard');
+        const previewName = document.getElementById('previewName');
+        const previewAddress = document.getElementById('previewAddress');
+
+        function updatePreview() {
+            const name = nameInput.value.trim();
+            const address = addressInput.value.trim();
+
+            if (name || address) {
+                previewCard.style.display = 'block';
+                previewName.textContent = name || 'Campus Name';
+                
+                const addressIcon = '<i class="bi bi-geo-alt"></i> ';
+                previewAddress.innerHTML = addressIcon + (address || 'Address');
+            } else {
+                previewCard.style.display = 'none';
+            }
+        }
+
+        nameInput.addEventListener('input', updatePreview);
+        addressInput.addEventListener('input', updatePreview);
+
+        // Form validation feedback
+        const form = document.getElementById('createForm');
+        form.addEventListener('submit', function(e) {
+            if (!form.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        });
+    </script>
+}

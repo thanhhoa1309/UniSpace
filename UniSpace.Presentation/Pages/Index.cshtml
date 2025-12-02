@@ -1,0 +1,56 @@
+@page
+@model UniSpace.Presentation.Pages.IndexModel
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to UniSpace</h1>
+    <p class="lead">University Space Management System</p>
+    
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <div class="mt-4">
+            <h3>Hello, @User.Identity.Name!</h3>
+            <p>You are successfully logged in.</p>
+            <a asp-page="/Dashboard" class="btn btn-primary btn-lg">Go to Dashboard</a>
+        </div>
+    }
+    else
+    {
+        <div class="mt-4">
+            <p>Manage campus rooms, bookings, and reports efficiently.</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a asp-page="/Auth/Login" class="btn btn-primary btn-lg">Login</a>
+                <a asp-page="/Auth/Register" class="btn btn-outline-primary btn-lg">Register</a>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Room Management</h5>
+                <p class="card-text">Browse and manage available rooms across different campuses.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Booking System</h5>
+                <p class="card-text">Book rooms for classes, meetings, and events easily.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Report Issues</h5>
+                <p class="card-text">Report and track room maintenance issues efficiently.</p>
+            </div>
+        </div>
+    </div>
+</div>

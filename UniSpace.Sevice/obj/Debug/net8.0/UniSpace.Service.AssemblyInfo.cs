@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("UniSpace.Service")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8d02033ab120362f03cd74fba32686c8d66e8f1d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+69ce2914018e53572dc6e5765f5608c56d1cd3b7")]
 [assembly: System.Reflection.AssemblyProductAttribute("UniSpace.Service")]
 [assembly: System.Reflection.AssemblyTitleAttribute("UniSpace.Service")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

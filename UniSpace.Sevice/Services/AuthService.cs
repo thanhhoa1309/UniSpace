@@ -85,16 +85,33 @@ namespace UniSpace.Services.Services
             }
         }
 
-        public async Task<UserDto?> RegisterUserAsync(UserRegistrationDto registrationDto)
+        public async Task<UserDto?> RegisterUserAsync(UserRegistrationDto registrationDto, RoleType role = RoleType.Student)
         {
             try
             {
-                _logger.LogInformation("Registering new user");
+                _logger.LogInformation($"Registering new user with role: {role}");
 
+                // Validate registration data
+                if (string.IsNullOrWhiteSpace(registrationDto.Email) ||
+                    string.IsNullOrWhiteSpace(registrationDto.Password) ||
+                    string.IsNullOrWhiteSpace(registrationDto.FullName))
+                {
+                    _logger.LogWarning("Registration failed: missing required fields");
+                    throw ErrorHelper.BadRequest("All fields are required.");
+                }
+
+                // Check if user already exists
                 if (await UserExistsAsync(registrationDto.Email))
                 {
                     _logger.LogWarning($"Registration failed: email {registrationDto.Email} already in use.");
                     throw ErrorHelper.Conflict("Email already in use.");
+                }
+
+                // Validate role (only Student and Lecturer can register)
+                if (role != RoleType.Student && role != RoleType.Lecturer)
+                {
+                    _logger.LogWarning($"Registration failed: invalid role {role}");
+                    throw ErrorHelper.BadRequest("Invalid role. Only Student and Lecturer can register.");
                 }
 
                 var hashedPassword = new PasswordHasher().HashPassword(registrationDto.Password);
@@ -103,14 +120,14 @@ namespace UniSpace.Services.Services
                 {
                     FullName = registrationDto.FullName,
                     Email = registrationDto.Email,
-                    Role = RoleType.Student,
+                    Role = role, // Use the provided role instead of hardcoded Student
                     PasswordHash = hashedPassword ?? throw ErrorHelper.Internal("Password hashing failed."),
                     IsActive = true
                 };
 
                 await _unitOfWork.User.AddAsync(user);
                 await _unitOfWork.SaveChangesAsync();
-                _logger.LogInformation($"User {user.Email} registered successfully");
+                _logger.LogInformation($"User {user.Email} registered successfully as {role}");
 
                 var userDto = new UserDto
                 {

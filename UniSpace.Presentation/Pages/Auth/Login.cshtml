@@ -1,0 +1,51 @@
+@page
+@model UniSpace.Presentation.Pages.Auth.LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Login to UniSpace</h2>
+
+                @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        @Model.ErrorMessage
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                <form method="post">
+                    <div class="mb-3">
+                        <label asp-for="LoginRequest.Email" class="form-label">Email address</label>
+                        <input asp-for="LoginRequest.Email" class="form-control" placeholder="Enter email" />
+                        <span asp-validation-for="LoginRequest.Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="LoginRequest.Password" class="form-label">Password</label>
+                        <input asp-for="LoginRequest.Password" type="password" class="form-control" placeholder="Password" />
+                        <span asp-validation-for="LoginRequest.Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">Login</button>
+                    </div>
+
+                    <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+                </form>
+
+                <div class="text-center mt-3">
+                    <p>Don't have an account? <a asp-page="Register">Register here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

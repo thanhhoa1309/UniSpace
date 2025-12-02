@@ -1,6 +1,8 @@
-using Microsoft.AspNetCore.DataProtection;
+﻿using Microsoft.AspNetCore.DataProtection;
+using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;
 using UniSpace.Presentation.Architecture;
+using EVAuctionTrader.Presentation.Helper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,18 +11,22 @@ builder.Configuration
   .AddJsonFile("appsettings.json", true, true)
     .AddEnvironmentVariables();
 
-
-
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages(options =>
+{
+    // Configure authorization for specific pages
+    options.Conventions.AuthorizePage("/Dashboard");
+    options.Conventions.AuthorizeFolder("/Admin", "AdminPolicy");
+    options.Conventions.AllowAnonymousToPage("/Index");
+    options.Conventions.AllowAnonymousToFolder("/Auth");
+});
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-builder.WebHost.UseUrls("http://0.0.0.0:5000");
+builder.WebHost.UseUrls("http://localhost:5000");
 builder.Services.AddDistributedMemoryCache();
-// Configure data protection key persistence. Keys will be written to a folder
-// mounted into the container (e.g. host ./data/keys -> container /keys).
-// The path can be overridden via configuration: DataProtection:KeyPath or env DATA_PROTECTION_KEY_PATH.
+
+// Configure data protection key persistence
 var dataProtectionPath = builder.Configuration["DataProtection:KeyPath"]
  ?? Environment.GetEnvironmentVariable("DATA_PROTECTION_KEY_PATH")
         ?? "/keys";
@@ -38,7 +44,6 @@ try
 }
 catch (Exception ex)
 {
-    // If key storage cannot be configured (e.g., missing permissions), continue with default ephemeral keys but warn in logs at runtime.
     Console.WriteLine($"Warning: could not configure persistent data protection keys at '{dataProtectionPath}': {ex.Message}");
 }
 
@@ -53,20 +58,88 @@ builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
-// Apply database migrations
+// Apply database migrations and seed data
 var logger = app.Services.GetRequiredService<ILogger<Program>>();
-app.ApplyMigrations(logger);
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<UniSpace.Domain.UniSpaceDbContext>();
+
+    try
+    {
+        logger.LogInformation("=== Database Initialization Started ===");
+
+        // Kiểm tra xem database có tồn tại không
+        bool databaseExists = dbContext.Database.CanConnect();
+
+        if (databaseExists)
+        {
+            // Kiểm tra xem có migration nào chưa được apply không
+            var pendingMigrations = dbContext.Database.GetPendingMigrations();
+
+            if (pendingMigrations.Any())
+            {
+                logger.LogInformation("⚠ Database exists but has pending migrations. Running migrations...");
+                app.ApplyMigrations(logger);
+            }
+            else
+            {
+                logger.LogInformation("✓ Database already exists and is up to date. Skipping migrations.");
+            }
+        }
+        else
+        {
+            // Database chưa tồn tại, cần chạy migration
+            logger.LogInformation("⚠ Database does not exist. Creating and running migrations...");
+            app.ApplyMigrations(logger);
+        }
+
+        // Seed initial data after migrations
+        logger.LogInformation("🌱 Seeding initial data...");
+        
+        await DbSeeder.SeedUsersAsync(dbContext);
+        logger.LogInformation("✓ Users seeded successfully");
+
+        await DbSeeder.SeedCampusesAsync(dbContext);
+        logger.LogInformation("✓ Campuses seeded successfully");
+
+        await DbSeeder.SeedRoomsAsync(dbContext);
+        logger.LogInformation("✓ Rooms seeded successfully");
+
+        logger.LogInformation("=== Database Initialization Completed ===");
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "❌ Error during database initialization");
+        
+        // Try to recover by running migrations and seeding
+        try
+        {
+            logger.LogWarning("Attempting recovery: Running migrations...");
+            app.ApplyMigrations(logger);
+            
+            logger.LogWarning("Attempting recovery: Seeding data...");
+            await DbSeeder.SeedUsersAsync(dbContext);
+            await DbSeeder.SeedCampusesAsync(dbContext);
+            await DbSeeder.SeedRoomsAsync(dbContext);
+            
+            logger.LogInformation("✓ Recovery successful");
+        }
+        catch (Exception recoveryEx)
+        {
+            logger.LogError(recoveryEx, "❌ Recovery failed - Manual intervention may be required");
+        }
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
     app.UseHttpsRedirection();
 }
 
-//app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
@@ -74,8 +147,6 @@ app.UseRouting();
 app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapGet("/", () => Results.Redirect("/Home/LandingPage"));
 
 app.MapRazorPages();
 

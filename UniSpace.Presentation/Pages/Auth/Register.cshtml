@@ -1,0 +1,157 @@
+@page
+@model UniSpace.Presentation.Pages.Auth.RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/register.css" asp-append-version="true" />
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Create Account</h2>
+
+                @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        @Model.ErrorMessage
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        @Model.SuccessMessage
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                <!-- Tabs for User Type Selection -->
+                <ul class="nav nav-pills nav-justified mb-4" id="registrationTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="student-tab" data-bs-toggle="pill" 
+                                data-bs-target="#student-content" type="button" role="tab" 
+                                aria-controls="student-content" aria-selected="true">
+                            <i class="bi bi-person"></i> Student
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="lecturer-tab" data-bs-toggle="pill" 
+                                data-bs-target="#lecturer-content" type="button" role="tab" 
+                                aria-controls="lecturer-content" aria-selected="false">
+                            <i class="bi bi-person-badge"></i> Lecturer
+                        </button>
+                    </li>
+                </ul>
+
+                <form method="post" id="registrationForm">
+                    <!-- Hidden field to store selected role -->
+                    <input type="hidden" asp-for="SelectedRole" id="selectedRoleInput" value="Student" />
+
+                    <!-- Tab Content -->
+                    <div class="tab-content" id="registrationTabContent">
+                        <!-- Student Tab Content -->
+                        <div class="tab-pane fade show active" id="student-content" role="tabpanel" aria-labelledby="student-tab">
+                            <div class="alert alert-info">
+                                <small><i class="bi bi-info-circle"></i> Register as a Student to book rooms and report issues.</small>
+                            </div>
+                        </div>
+
+                        <!-- Lecturer Tab Content -->
+                        <div class="tab-pane fade" id="lecturer-content" role="tabpanel" aria-labelledby="lecturer-tab">
+                            <div class="alert alert-warning">
+                                <small><i class="bi bi-exclamation-triangle"></i> Register as a Lecturer to manage bookings and access advanced features.</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Common Registration Fields -->
+                    <div class="mb-3">
+                        <label asp-for="RegistrationRequest.FullName" class="form-label">Full Name</label>
+                        <input asp-for="RegistrationRequest.FullName" class="form-control"
+                               placeholder="Enter your full name" required />
+                        <span asp-validation-for="RegistrationRequest.FullName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="RegistrationRequest.Email" class="form-label">Email address</label>
+                        <input asp-for="RegistrationRequest.Email" type="email" class="form-control" 
+                               placeholder="Enter email" required />
+                        <span asp-validation-for="RegistrationRequest.Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="RegistrationRequest.Phone" class="form-label">Phone Number</label>
+                        <input asp-for="RegistrationRequest.Phone" class="form-control"
+                               placeholder="Enter phone number" required />
+                        <span asp-validation-for="RegistrationRequest.Phone" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="RegistrationRequest.Password" class="form-label">Password</label>
+                        <input asp-for="RegistrationRequest.Password" type="password" class="form-control"
+                               placeholder="Password" required />
+                        <span asp-validation-for="RegistrationRequest.Password" class="text-danger"></span>
+                        <small class="form-text text-muted">Password must be at least 6 characters.</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
+                        <input asp-for="ConfirmPassword" type="password" class="form-control"
+                               placeholder="Confirm password" required />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <!-- Display Selected Role -->
+                    <div class="mb-3">
+                        <div class="alert alert-light border">
+                            <strong>Registering as:</strong> <span id="roleDisplay" class="badge bg-primary">Student</span>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-person-plus"></i> Register
+                        </button>
+                    </div>
+                </form>
+
+                <div class="text-center mt-3">
+                    <p>Already have an account? <a asp-page="Login">Login here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+    
+    <script>
+        // Handle tab switching and update hidden role field
+        document.addEventListener('DOMContentLoaded', function() {
+            const studentTab = document.getElementById('student-tab');
+            const lecturerTab = document.getElementById('lecturer-tab');
+            const roleInput = document.getElementById('selectedRoleInput');
+            const roleDisplay = document.getElementById('roleDisplay');
+
+            // Student tab click
+            studentTab.addEventListener('click', function() {
+                roleInput.value = 'Student';
+                roleDisplay.textContent = 'Student';
+                roleDisplay.className = 'badge bg-primary';
+            });
+
+            // Lecturer tab click
+            lecturerTab.addEventListener('click', function() {
+                roleInput.value = 'Lecturer';
+                roleDisplay.textContent = 'Lecturer';
+                roleDisplay.className = 'badge bg-warning text-dark';
+            });
+        });
+    </script>
+}

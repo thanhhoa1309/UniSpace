@@ -1,0 +1,283 @@
+@page
+@using UniSpace.BusinessObject.Enums
+@model UniSpace.Presentation.Pages.Admin.Room.CreateModel
+@{
+    ViewData["Title"] = "Create Room";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a asp-page="/Admin/Dashboard">
+                            <i class="bi bi-house"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-page="Index">Room Management</a>
+                    </li>
+                    <li class="breadcrumb-item active">Create Room</li>
+                </ol>
+            </nav>
+
+            <!-- Main Card -->
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-plus-circle"></i> Create New Room
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="bi bi-exclamation-triangle"></i> @Model.ErrorMessage
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <form method="post" id="createForm">
+                        <div class="row">
+                            <!-- Campus Selection -->
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="Input.CampusId" class="form-label fw-bold">
+                                    <i class="bi bi-building text-primary"></i> Campus 
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <select asp-for="Input.CampusId" class="form-select form-select-lg">
+                                    @foreach (var option in Model.CampusOptions)
+                                    {
+                                        <option value="@option.Value" selected="@option.Selected">
+                                            @option.Text
+                                        </option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Input.CampusId" class="text-danger"></span>
+                                <div class="form-text">
+                                    <i class="bi bi-info-circle"></i> Select the campus where this room is located
+                                </div>
+                            </div>
+
+                            <!-- Room Name -->
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="Input.Name" class="form-label fw-bold">
+                                    <i class="bi bi-door-open text-success"></i> Room Name 
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="Input.Name" 
+                                       class="form-control form-control-lg" 
+                                       placeholder="e.g., Room 101, Lab A, Main Stadium"
+                                       id="roomName" />
+                                <span asp-validation-for="Input.Name" class="text-danger"></span>
+                                <div class="form-text">
+                                    <i class="bi bi-info-circle"></i> Enter unique room name (max 100 characters)
+                                </div>
+                            </div>
+
+                            <!-- Room Type -->
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="Input.Type" class="form-label fw-bold">
+                                    <i class="bi bi-tag text-info"></i> Room Type 
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <select asp-for="Input.Type" class="form-select form-select-lg" id="roomType">
+                                    <option value="">-- Select Type --</option>
+                                    <option value="@((int)RoomType.Classroom)">
+                                        ?? Classroom
+                                    </option>
+                                    <option value="@((int)RoomType.Lab)">
+                                        ?? Laboratory
+                                    </option>
+                                    <option value="@((int)RoomType.Stadium)">
+                                        ? Stadium
+                                    </option>
+                                </select>
+                                <span asp-validation-for="Input.Type" class="text-danger"></span>
+                                <div class="form-text">
+                                    <i class="bi bi-info-circle"></i> Select the type of facility
+                                </div>
+                            </div>
+
+                            <!-- Capacity -->
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="Input.Capacity" class="form-label fw-bold">
+                                    <i class="bi bi-people text-warning"></i> Capacity 
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="Input.Capacity" 
+                                       type="number" 
+                                       class="form-control form-control-lg" 
+                                       placeholder="Number of people"
+                                       min="1"
+                                       max="1000"
+                                       id="roomCapacity" />
+                                <span asp-validation-for="Input.Capacity" class="text-danger"></span>
+                                <div class="form-text">
+                                    <i class="bi bi-info-circle"></i> Enter capacity (1-1000 people)
+                                </div>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="col-md-12 mb-4">
+                                <label asp-for="Input.Description" class="form-label fw-bold">
+                                    <i class="bi bi-text-paragraph text-secondary"></i> Description 
+                                    <span class="text-muted">(Optional)</span>
+                                </label>
+                                <textarea asp-for="Input.Description" 
+                                          class="form-control" 
+                                          rows="4"
+                                          placeholder="Enter detailed description, amenities, equipment, etc..."
+                                          id="roomDescription"></textarea>
+                                <span asp-validation-for="Input.Description" class="text-danger"></span>
+                                <div class="form-text">
+                                    <i class="bi bi-info-circle"></i> Optional details (max 500 characters)
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Info Alert -->
+                        <div class="alert alert-info">
+                            <i class="bi bi-lightbulb"></i> 
+                            <strong>Tips:</strong>
+                            <ul class="mb-0 mt-2">
+                                <li>Room names must be unique within each campus</li>
+                                <li>The room will be available for booking by default</li>
+                                <li>You can update room status later from the edit page</li>
+                            </ul>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a asp-page="Index" class="btn btn-outline-secondary btn-lg">
+                                <i class="bi bi-x-circle"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-save"></i> Create Room
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Live Preview Card -->
+            <div class="card shadow-lg mt-4" id="previewCard" style="display: none;">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="bi bi-eye text-info"></i> Live Preview
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h4 id="previewName" class="text-primary mb-2">
+                                <i class="bi bi-door-open"></i> Room Name
+                            </h4>
+                            <p class="mb-2">
+                                <i class="bi bi-building text-muted"></i> 
+                                <span id="previewCampus">Campus</span>
+                            </p>
+                            <p id="previewDescription" class="text-muted mb-2">Description</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <div class="mb-2">
+                                <span class="badge" id="previewType" style="font-size: 1em;">Type</span>
+                            </div>
+                            <div class="mb-2">
+                                <span class="badge bg-secondary" id="previewCapacity" style="font-size: 1em;">
+                                    <i class="bi bi-people"></i> 0 seats
+                                </span>
+                            </div>
+                            <div>
+                                <span class="badge bg-success" style="font-size: 1em;">
+                                    <i class="bi bi-check-circle"></i> Available
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        // Live preview functionality
+        const nameInput = document.getElementById('roomName');
+        const campusSelect = document.getElementById('Input_CampusId');
+        const typeSelect = document.getElementById('roomType');
+        const capacityInput = document.getElementById('roomCapacity');
+        const descriptionInput = document.getElementById('roomDescription');
+        const previewCard = document.getElementById('previewCard');
+        const previewName = document.getElementById('previewName');
+        const previewCampus = document.getElementById('previewCampus');
+        const previewType = document.getElementById('previewType');
+        const previewCapacity = document.getElementById('previewCapacity');
+        const previewDescription = document.getElementById('previewDescription');
+
+        function updatePreview() {
+            const name = nameInput.value.trim();
+            const campus = campusSelect.options[campusSelect.selectedIndex].text;
+            const typeValue = typeSelect.value;
+            const capacity = capacityInput.value;
+            const description = descriptionInput.value.trim();
+
+            if (name || capacity || description) {
+                previewCard.style.display = 'block';
+                
+                // Update name
+                previewName.innerHTML = '<i class="bi bi-door-open"></i> ' + (name || 'Room Name');
+                
+                // Update campus
+                previewCampus.textContent = campus !== '-- Select Campus --' ? campus : 'Campus';
+                
+                // Update type
+                let typeBadgeClass = 'bg-secondary';
+                let typeText = 'Type';
+                
+                if (typeValue === '0') {
+                    typeBadgeClass = 'bg-primary';
+                    typeText = '?? Classroom';
+                } else if (typeValue === '1') {
+                    typeBadgeClass = 'bg-info';
+                    typeText = '?? Laboratory';
+                } else if (typeValue === '2') {
+                    typeBadgeClass = 'bg-warning';
+                    typeText = '? Stadium';
+                }
+                
+                previewType.className = 'badge ' + typeBadgeClass;
+                previewType.textContent = typeText;
+                
+                // Update capacity
+                previewCapacity.innerHTML = '<i class="bi bi-people"></i> ' + (capacity || '0') + ' seats';
+                
+                // Update description
+                previewDescription.textContent = description || 'No description';
+            } else {
+                previewCard.style.display = 'none';
+            }
+        }
+
+        nameInput.addEventListener('input', updatePreview);
+        campusSelect.addEventListener('change', updatePreview);
+        typeSelect.addEventListener('change', updatePreview);
+        capacityInput.addEventListener('input', updatePreview);
+        descriptionInput.addEventListener('input', updatePreview);
+
+        // Form validation feedback
+        const form = document.getElementById('createForm');
+        form.addEventListener('submit', function(e) {
+            if (!form.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        });
+    </script>
+}

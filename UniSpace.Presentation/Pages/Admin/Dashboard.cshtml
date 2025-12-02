@@ -1,0 +1,266 @@
+@page
+@model UniSpace.Presentation.Pages.Admin.DashboardModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container-fluid mt-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2><i class="bi bi-speedometer2"></i> Admin Dashboard</h2>
+            <p class="text-muted">Welcome back, @User.Identity?.Name</p>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <!-- Total Campuses -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Total Campuses
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @Model.TotalCampuses
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-building" style="font-size: 2em; color: #4e73df;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-light">
+                    <a asp-page="/Admin/Campus/Index" class="small text-primary">
+                        View Details <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Rooms -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Total Rooms
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @Model.TotalRooms
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-door-open" style="font-size: 2em; color: #1cc88a;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-light">
+                    <a href="#" class="small text-success">View Details <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Bookings -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Total Bookings
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @Model.TotalBookings
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-calendar-check" style="font-size: 2em; color: #36b9cc;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-light">
+                    <a href="#" class="small text-info">View Details <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Reports -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Pending Reports
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @Model.PendingReports
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-exclamation-triangle" style="font-size: 2em; color: #f6c23e;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-light">
+                    <a href="#" class="small text-warning">View Details <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions & Campus Overview -->
+    <div class="row">
+        <!-- Quick Actions -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-lightning"></i> Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        <a asp-page="/Admin/Campus/Create" class="list-group-item list-group-item-action">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-plus-circle text-primary me-3" style="font-size: 1.5em;"></i>
+                                <div>
+                                    <strong>Add New Campus</strong>
+                                    <p class="mb-0 small text-muted">Create a new campus location</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-door-open text-success me-3" style="font-size: 1.5em;"></i>
+                                <div>
+                                    <strong>Add New Room</strong>
+                                    <p class="mb-0 small text-muted">Register a new room</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a asp-page="/Admin/Campus/Index" class="list-group-item list-group-item-action">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-building text-info me-3" style="font-size: 1.5em;"></i>
+                                <div>
+                                    <strong>Manage Campuses</strong>
+                                    <p class="mb-0 small text-muted">View and edit campus information</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-people text-warning me-3" style="font-size: 1.5em;"></i>
+                                <div>
+                                    <strong>Manage Users</strong>
+                                    <p class="mb-0 small text-muted">View and manage user accounts</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Status -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="bi bi-activity"></i> System Status</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Campus Occupancy</span>
+                            <span><strong>75%</strong></span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" style="width: 75%"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Room Availability</span>
+                            <span><strong>60%</strong></span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-info" style="width: 60%"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Booking Rate</span>
+                            <span><strong>85%</strong></span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-warning" style="width: 85%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>System Health</span>
+                            <span><strong class="text-success">Healthy</strong></span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Campus Overview -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0"><i class="bi bi-building"></i> Campus Overview</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.TotalCampuses > 0)
+                    {
+                        <p>You are managing <strong>@Model.TotalCampuses campus(es)</strong> with a total of <strong>@Model.TotalRooms room(s)</strong>.</p>
+                        <a asp-page="/Admin/Campus/Index" class="btn btn-primary">
+                            <i class="bi bi-eye"></i> View All Campuses
+                        </a>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="bi bi-inbox display-4 text-muted"></i>
+                            <p class="text-muted mt-3">No campuses yet. Start by creating your first campus!</p>
+                            <a asp-page="/Admin/Campus/Create" class="btn btn-primary btn-lg">
+                                <i class="bi bi-plus-circle"></i> Create First Campus
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .border-left-primary {
+        border-left: 0.25rem solid #4e73df !important;
+    }
+    .border-left-success {
+        border-left: 0.25rem solid #1cc88a !important;
+    }
+    .border-left-info {
+        border-left: 0.25rem solid #36b9cc !important;
+    }
+    .border-left-warning {
+        border-left: 0.25rem solid #f6c23e !important;
+    }
+    .text-xs {
+        font-size: 0.7rem;
+    }
+</style>
