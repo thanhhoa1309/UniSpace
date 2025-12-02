@@ -3,8 +3,140 @@
   "WorkspaceRootPath": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.domain\\migrations\\20251202114721_iinitdb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|solutionrelative:unispace.domain\\migrations\\20251202114721_iinitdb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CE022F7C-4794-41EB-9880-B34B968D8586}|UniSpace.Presentation\\UniSpace.Presentation.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.presentation\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CE022F7C-4794-41EB-9880-B34B968D8586}|UniSpace.Presentation\\UniSpace.Presentation.csproj|solutionrelative:unispace.presentation\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CE022F7C-4794-41EB-9880-B34B968D8586}|UniSpace.Presentation\\UniSpace.Presentation.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.presentation\\architecture\\migrationextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CE022F7C-4794-41EB-9880-B34B968D8586}|UniSpace.Presentation\\UniSpace.Presentation.csproj|solutionrelative:unispace.presentation\\architecture\\migrationextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CE022F7C-4794-41EB-9880-B34B968D8586}|UniSpace.Presentation\\UniSpace.Presentation.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.presentation\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{CE022F7C-4794-41EB-9880-B34B968D8586}|UniSpace.Presentation\\UniSpace.Presentation.csproj|solutionrelative:unispace.presentation\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.domain\\commons\\currenttime.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|solutionrelative:unispace.domain\\commons\\currenttime.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.domain\\commons\\claimsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|solutionrelative:unispace.domain\\commons\\claimsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.domain\\utils\\authentools.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|solutionrelative:unispace.domain\\utils\\authentools.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CE022F7C-4794-41EB-9880-B34B968D8586}|UniSpace.Presentation\\UniSpace.Presentation.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.presentation\\architecture\\ioccontainer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CE022F7C-4794-41EB-9880-B34B968D8586}|UniSpace.Presentation\\UniSpace.Presentation.csproj|solutionrelative:unispace.presentation\\architecture\\ioccontainer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.domain\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|solutionrelative:unispace.domain\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.domain\\unispace.domain.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|solutionrelative:unispace.domain\\unispace.domain.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.domain\\repository\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|solutionrelative:unispace.domain\\repository\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.domain\\unispacedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|solutionrelative:unispace.domain\\unispacedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.domain\\interfaces\\igenericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|solutionrelative:unispace.domain\\interfaces\\igenericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.domain\\interfaces\\icurrenttime.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|solutionrelative:unispace.domain\\interfaces\\icurrenttime.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.domain\\interfaces\\iclaimsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|solutionrelative:unispace.domain\\interfaces\\iclaimsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.domain\\entities\\baseentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|solutionrelative:unispace.domain\\entities\\baseentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{282EDE88-1613-4D35-9993-4BBD40963F8D}|UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.businessobject\\unispace.businessobject.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{282EDE88-1613-4D35-9993-4BBD40963F8D}|UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj|solutionrelative:unispace.businessobject\\unispace.businessobject.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{86C089EC-9178-4522-AB41-3A56410C2FE9}|UniSpace.Sevice\\UniSpace.Service.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.sevice\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{86C089EC-9178-4522-AB41-3A56410C2FE9}|UniSpace.Sevice\\UniSpace.Service.csproj|solutionrelative:unispace.sevice\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{86C089EC-9178-4522-AB41-3A56410C2FE9}|UniSpace.Sevice\\UniSpace.Service.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.sevice\\interfaces\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{86C089EC-9178-4522-AB41-3A56410C2FE9}|UniSpace.Sevice\\UniSpace.Service.csproj|solutionrelative:unispace.sevice\\interfaces\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{86C089EC-9178-4522-AB41-3A56410C2FE9}|UniSpace.Sevice\\UniSpace.Service.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.sevice\\utils\\errorhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{86C089EC-9178-4522-AB41-3A56410C2FE9}|UniSpace.Sevice\\UniSpace.Service.csproj|solutionrelative:unispace.sevice\\utils\\errorhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{86C089EC-9178-4522-AB41-3A56410C2FE9}|UniSpace.Sevice\\UniSpace.Service.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.sevice\\utils\\jwtutils.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{86C089EC-9178-4522-AB41-3A56410C2FE9}|UniSpace.Sevice\\UniSpace.Service.csproj|solutionrelative:unispace.sevice\\utils\\jwtutils.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{86C089EC-9178-4522-AB41-3A56410C2FE9}|UniSpace.Sevice\\UniSpace.Service.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.sevice\\utils\\pagination.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{86C089EC-9178-4522-AB41-3A56410C2FE9}|UniSpace.Sevice\\UniSpace.Service.csproj|solutionrelative:unispace.sevice\\utils\\pagination.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.domain\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|solutionrelative:unispace.domain\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.domain\\interfaces\\iunitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{719167AE-A37A-429B-9BCE-0ECBED6982C2}|UniSpace.Domain\\UniSpace.Domain.csproj|solutionrelative:unispace.domain\\interfaces\\iunitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{86C089EC-9178-4522-AB41-3A56410C2FE9}|UniSpace.Sevice\\UniSpace.Service.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.sevice\\unispace.service.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{86C089EC-9178-4522-AB41-3A56410C2FE9}|UniSpace.Sevice\\UniSpace.Service.csproj|solutionrelative:unispace.sevice\\unispace.service.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CE022F7C-4794-41EB-9880-B34B968D8586}|UniSpace.Presentation\\UniSpace.Presentation.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.presentation\\unispace.presentation.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{CE022F7C-4794-41EB-9880-B34B968D8586}|UniSpace.Presentation\\UniSpace.Presentation.csproj|solutionrelative:unispace.presentation\\unispace.presentation.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{282EDE88-1613-4D35-9993-4BBD40963F8D}|UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.businessobject\\dtos\\userdtos\\listnameemployeedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{282EDE88-1613-4D35-9993-4BBD40963F8D}|UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj|solutionrelative:unispace.businessobject\\dtos\\userdtos\\listnameemployeedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{282EDE88-1613-4D35-9993-4BBD40963F8D}|UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.businessobject\\dtos\\userdtos\\getemployeedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{282EDE88-1613-4D35-9993-4BBD40963F8D}|UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj|solutionrelative:unispace.businessobject\\dtos\\userdtos\\getemployeedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{282EDE88-1613-4D35-9993-4BBD40963F8D}|UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.businessobject\\dtos\\userdtos\\createemployeedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{282EDE88-1613-4D35-9993-4BBD40963F8D}|UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj|solutionrelative:unispace.businessobject\\dtos\\userdtos\\createemployeedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{282EDE88-1613-4D35-9993-4BBD40963F8D}|UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.businessobject\\dtos\\authdtos\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{282EDE88-1613-4D35-9993-4BBD40963F8D}|UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj|solutionrelative:unispace.businessobject\\dtos\\authdtos\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{282EDE88-1613-4D35-9993-4BBD40963F8D}|UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.businessobject\\dtos\\authdtos\\userregistrationdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{282EDE88-1613-4D35-9993-4BBD40963F8D}|UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj|solutionrelative:unispace.businessobject\\dtos\\authdtos\\userregistrationdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{86C089EC-9178-4522-AB41-3A56410C2FE9}|UniSpace.Sevice\\UniSpace.Service.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.sevice\\utils\\passwordhasher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{86C089EC-9178-4522-AB41-3A56410C2FE9}|UniSpace.Sevice\\UniSpace.Service.csproj|solutionrelative:unispace.sevice\\utils\\passwordhasher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{282EDE88-1613-4D35-9993-4BBD40963F8D}|UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.businessobject\\dtos\\authdtos\\loginresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{282EDE88-1613-4D35-9993-4BBD40963F8D}|UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj|solutionrelative:unispace.businessobject\\dtos\\authdtos\\loginresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{282EDE88-1613-4D35-9993-4BBD40963F8D}|UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj|c:\\users\\thanh hoa\\documents\\prn222\\unispace\\unispace.businessobject\\dtos\\authdtos\\loginrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{282EDE88-1613-4D35-9993-4BBD40963F8D}|UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj|solutionrelative:unispace.businessobject\\dtos\\authdtos\\loginrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -315,14 +447,443 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "20251202114721_IinitDb.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\Migrations\\20251202114721_IinitDb.cs",
+              "RelativeDocumentMoniker": "UniSpace.Domain\\Migrations\\20251202114721_IinitDb.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\Migrations\\20251202114721_IinitDb.cs",
+              "RelativeToolTip": "UniSpace.Domain\\Migrations\\20251202114721_IinitDb.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T11:47:21.962Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Presentation\\Program.cs",
+              "RelativeDocumentMoniker": "UniSpace.Presentation\\Program.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Presentation\\Program.cs",
+              "RelativeToolTip": "UniSpace.Presentation\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T11:21:55.16Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MigrationExtensions.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Presentation\\Architecture\\MigrationExtensions.cs",
+              "RelativeDocumentMoniker": "UniSpace.Presentation\\Architecture\\MigrationExtensions.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Presentation\\Architecture\\MigrationExtensions.cs",
+              "RelativeToolTip": "UniSpace.Presentation\\Architecture\\MigrationExtensions.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T11:17:16.999Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Presentation\\appsettings.json",
+              "RelativeDocumentMoniker": "UniSpace.Presentation\\appsettings.json",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Presentation\\appsettings.json",
+              "RelativeToolTip": "UniSpace.Presentation\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-02T11:12:19.885Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "UnitOfWork.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\UnitOfWork.cs",
+              "RelativeDocumentMoniker": "UniSpace.Domain\\UnitOfWork.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\UnitOfWork.cs",
+              "RelativeToolTip": "UniSpace.Domain\\UnitOfWork.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T08:48:51.813Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "CurrentTime.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\Commons\\CurrentTime.cs",
+              "RelativeDocumentMoniker": "UniSpace.Domain\\Commons\\CurrentTime.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\Commons\\CurrentTime.cs",
+              "RelativeToolTip": "UniSpace.Domain\\Commons\\CurrentTime.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T11:01:53.686Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "IocContainer.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Presentation\\Architecture\\IocContainer.cs",
+              "RelativeDocumentMoniker": "UniSpace.Presentation\\Architecture\\IocContainer.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Presentation\\Architecture\\IocContainer.cs",
+              "RelativeToolTip": "UniSpace.Presentation\\Architecture\\IocContainer.cs",
+              "ViewState": "AgIAACYAAAAAAAAAAAArwJAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T11:08:07.116Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AuthenTools.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\Utils\\AuthenTools.cs",
+              "RelativeDocumentMoniker": "UniSpace.Domain\\Utils\\AuthenTools.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\Utils\\AuthenTools.cs",
+              "RelativeToolTip": "UniSpace.Domain\\Utils\\AuthenTools.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T11:16:41.622Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ClaimsService.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\Commons\\ClaimsService.cs",
+              "RelativeDocumentMoniker": "UniSpace.Domain\\Commons\\ClaimsService.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\Commons\\ClaimsService.cs",
+              "RelativeToolTip": "UniSpace.Domain\\Commons\\ClaimsService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T11:01:45.312Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "UniSpaceDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\UniSpaceDbContext.cs",
+              "RelativeDocumentMoniker": "UniSpace.Domain\\UniSpaceDbContext.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\UniSpaceDbContext.cs",
+              "RelativeToolTip": "UniSpace.Domain\\UniSpaceDbContext.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAADwvw4AAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T08:17:04.973Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
               "Title": "GenericRepository.cs",
               "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\Repository\\GenericRepository.cs",
               "RelativeDocumentMoniker": "UniSpace.Domain\\Repository\\GenericRepository.cs",
               "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\Repository\\GenericRepository.cs",
               "RelativeToolTip": "UniSpace.Domain\\Repository\\GenericRepository.cs",
-              "ViewState": "AgIAAE8AAAAAAAAAAAAwwAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAAwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-01T16:13:36.077Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "UniSpace.Domain",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\UniSpace.Domain.csproj",
+              "RelativeDocumentMoniker": "UniSpace.Domain\\UniSpace.Domain.csproj",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\UniSpace.Domain.csproj",
+              "RelativeToolTip": "UniSpace.Domain\\UniSpace.Domain.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-12-02T10:59:08.066Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "IGenericRepository.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\Interfaces\\IGenericRepository.cs",
+              "RelativeDocumentMoniker": "UniSpace.Domain\\Interfaces\\IGenericRepository.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\Interfaces\\IGenericRepository.cs",
+              "RelativeToolTip": "UniSpace.Domain\\Interfaces\\IGenericRepository.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T08:59:55.669Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ICurrentTime.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\Interfaces\\ICurrentTime.cs",
+              "RelativeDocumentMoniker": "UniSpace.Domain\\Interfaces\\ICurrentTime.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\Interfaces\\ICurrentTime.cs",
+              "RelativeToolTip": "UniSpace.Domain\\Interfaces\\ICurrentTime.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T11:02:00.527Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "IClaimsService.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\Interfaces\\IClaimsService.cs",
+              "RelativeDocumentMoniker": "UniSpace.Domain\\Interfaces\\IClaimsService.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\Interfaces\\IClaimsService.cs",
+              "RelativeToolTip": "UniSpace.Domain\\Interfaces\\IClaimsService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T11:01:58.389Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "BaseEntity.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\Entities\\BaseEntity.cs",
+              "RelativeDocumentMoniker": "UniSpace.Domain\\Entities\\BaseEntity.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\Entities\\BaseEntity.cs",
+              "RelativeToolTip": "UniSpace.Domain\\Entities\\BaseEntity.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T11:01:55.829Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "UniSpace.BusinessObject.csproj",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj",
+              "RelativeDocumentMoniker": "UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj",
+              "RelativeToolTip": "UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-12-02T08:29:15.519Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "Pagination.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Sevice\\Utils\\Pagination.cs",
+              "RelativeDocumentMoniker": "UniSpace.Sevice\\Utils\\Pagination.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Sevice\\Utils\\Pagination.cs",
+              "RelativeToolTip": "UniSpace.Sevice\\Utils\\Pagination.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T08:35:57.654Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\Entities\\User.cs",
+              "RelativeDocumentMoniker": "UniSpace.Domain\\Entities\\User.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\Entities\\User.cs",
+              "RelativeToolTip": "UniSpace.Domain\\Entities\\User.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T08:51:56.846Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "JwtUtils.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Sevice\\Utils\\JwtUtils.cs",
+              "RelativeDocumentMoniker": "UniSpace.Sevice\\Utils\\JwtUtils.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Sevice\\Utils\\JwtUtils.cs",
+              "RelativeToolTip": "UniSpace.Sevice\\Utils\\JwtUtils.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAArwAYAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T08:35:50.367Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "ErrorHelper.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Sevice\\Utils\\ErrorHelper.cs",
+              "RelativeDocumentMoniker": "UniSpace.Sevice\\Utils\\ErrorHelper.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Sevice\\Utils\\ErrorHelper.cs",
+              "RelativeToolTip": "UniSpace.Sevice\\Utils\\ErrorHelper.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAewAAAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T08:35:42.761Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "IAuthService.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Sevice\\Interfaces\\IAuthService.cs",
+              "RelativeDocumentMoniker": "UniSpace.Sevice\\Interfaces\\IAuthService.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Sevice\\Interfaces\\IAuthService.cs",
+              "RelativeToolTip": "UniSpace.Sevice\\Interfaces\\IAuthService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T08:30:20.8Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "AuthService.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Sevice\\Services\\AuthService.cs",
+              "RelativeDocumentMoniker": "UniSpace.Sevice\\Services\\AuthService.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Sevice\\Services\\AuthService.cs",
+              "RelativeToolTip": "UniSpace.Sevice\\Services\\AuthService.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAA0wCIAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T09:01:28.179Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "UniSpace.Service.csproj",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Sevice\\UniSpace.Service.csproj",
+              "RelativeDocumentMoniker": "UniSpace.Sevice\\UniSpace.Service.csproj",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Sevice\\UniSpace.Service.csproj",
+              "RelativeToolTip": "UniSpace.Sevice\\UniSpace.Service.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-12-02T08:28:08.246Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "IUnitOfWork.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\Interfaces\\IUnitOfWork.cs",
+              "RelativeDocumentMoniker": "UniSpace.Domain\\Interfaces\\IUnitOfWork.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Domain\\Interfaces\\IUnitOfWork.cs",
+              "RelativeToolTip": "UniSpace.Domain\\Interfaces\\IUnitOfWork.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T08:56:10.333Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "UniSpace.Presentation.csproj",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Presentation\\UniSpace.Presentation.csproj",
+              "RelativeDocumentMoniker": "UniSpace.Presentation\\UniSpace.Presentation.csproj",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Presentation\\UniSpace.Presentation.csproj",
+              "RelativeToolTip": "UniSpace.Presentation\\UniSpace.Presentation.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-12-02T09:00:38.825Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "ListNameEmployeeDto.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.BusinessObject\\DTOs\\UserDTOs\\ListNameEmployeeDto.cs",
+              "RelativeDocumentMoniker": "UniSpace.BusinessObject\\DTOs\\UserDTOs\\ListNameEmployeeDto.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.BusinessObject\\DTOs\\UserDTOs\\ListNameEmployeeDto.cs",
+              "RelativeToolTip": "UniSpace.BusinessObject\\DTOs\\UserDTOs\\ListNameEmployeeDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T08:31:34.373Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "GetEmployeeDto.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.BusinessObject\\DTOs\\UserDTOs\\GetEmployeeDto.cs",
+              "RelativeDocumentMoniker": "UniSpace.BusinessObject\\DTOs\\UserDTOs\\GetEmployeeDto.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.BusinessObject\\DTOs\\UserDTOs\\GetEmployeeDto.cs",
+              "RelativeToolTip": "UniSpace.BusinessObject\\DTOs\\UserDTOs\\GetEmployeeDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T08:31:16.585Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "CreateEmployeeDto.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.BusinessObject\\DTOs\\UserDTOs\\CreateEmployeeDto.cs",
+              "RelativeDocumentMoniker": "UniSpace.BusinessObject\\DTOs\\UserDTOs\\CreateEmployeeDto.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.BusinessObject\\DTOs\\UserDTOs\\CreateEmployeeDto.cs",
+              "RelativeToolTip": "UniSpace.BusinessObject\\DTOs\\UserDTOs\\CreateEmployeeDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T08:31:00.971Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "UserDto.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.BusinessObject\\DTOs\\AuthDTOs\\UserDto.cs",
+              "RelativeDocumentMoniker": "UniSpace.BusinessObject\\DTOs\\AuthDTOs\\UserDto.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.BusinessObject\\DTOs\\AuthDTOs\\UserDto.cs",
+              "RelativeToolTip": "UniSpace.BusinessObject\\DTOs\\AuthDTOs\\UserDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T08:29:47.981Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "UserRegistrationDto.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.BusinessObject\\DTOs\\AuthDTOs\\UserRegistrationDto.cs",
+              "RelativeDocumentMoniker": "UniSpace.BusinessObject\\DTOs\\AuthDTOs\\UserRegistrationDto.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.BusinessObject\\DTOs\\AuthDTOs\\UserRegistrationDto.cs",
+              "RelativeToolTip": "UniSpace.BusinessObject\\DTOs\\AuthDTOs\\UserRegistrationDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T08:29:59.292Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "PasswordHasher.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Sevice\\Utils\\PasswordHasher.cs",
+              "RelativeDocumentMoniker": "UniSpace.Sevice\\Utils\\PasswordHasher.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Sevice\\Utils\\PasswordHasher.cs",
+              "RelativeToolTip": "UniSpace.Sevice\\Utils\\PasswordHasher.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T08:36:01.863Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "LoginRequestDto.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.BusinessObject\\DTOs\\AuthDTOs\\LoginRequestDto.cs",
+              "RelativeDocumentMoniker": "UniSpace.BusinessObject\\DTOs\\AuthDTOs\\LoginRequestDto.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.BusinessObject\\DTOs\\AuthDTOs\\LoginRequestDto.cs",
+              "RelativeToolTip": "UniSpace.BusinessObject\\DTOs\\AuthDTOs\\LoginRequestDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T08:29:44.849Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "LoginResponseDto.cs",
+              "DocumentMoniker": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.BusinessObject\\DTOs\\AuthDTOs\\LoginResponseDto.cs",
+              "RelativeDocumentMoniker": "UniSpace.BusinessObject\\DTOs\\AuthDTOs\\LoginResponseDto.cs",
+              "ToolTip": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.BusinessObject\\DTOs\\AuthDTOs\\LoginResponseDto.cs",
+              "RelativeToolTip": "UniSpace.BusinessObject\\DTOs\\AuthDTOs\\LoginResponseDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-02T08:29:47.034Z",
               "EditorCaption": ""
             }
           ]

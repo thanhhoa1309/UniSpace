@@ -1,6 +1,6 @@
 ﻿using UniSpace.Domain.Interfaces;
 
-namespace EVAuctionTrader.DataAccess.Commons
+namespace UniSpace.Domain.Commons
 {
     public class CurrentTime : ICurrentTime
     {

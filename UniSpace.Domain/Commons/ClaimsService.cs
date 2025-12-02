@@ -1,9 +1,9 @@
-﻿using EVDealerSales.DataAccess.Utils;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using UniSpace.Domain.Interfaces;
+using UniSpace.Domain.Utils;
 
-namespace EVAuctionTrader.DataAccess.Commons
+namespace UniSpace.Domain.Commons
 {
     public class ClaimsService : IClaimsService
     {

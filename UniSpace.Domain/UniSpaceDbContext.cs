@@ -10,7 +10,7 @@ namespace UniSpace.Domain
         public UniSpaceDbContext(DbContextOptions<UniSpaceDbContext> options)
             : base(options) { }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> User { get; set; }
         public DbSet<Campus> Campuses { get; set; }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Booking> Bookings { get; set; }

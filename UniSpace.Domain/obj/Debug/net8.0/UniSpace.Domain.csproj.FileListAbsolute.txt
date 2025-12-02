@@ -15,3 +15,4 @@ C:\Users\THANH HOA\Documents\PRN222\UniSpace\UniSpace.Domain\obj\Debug\net8.0\re
 C:\Users\THANH HOA\Documents\PRN222\UniSpace\UniSpace.Domain\obj\Debug\net8.0\UniSpace.Domain.pdb
 C:\Users\THANH HOA\Documents\PRN222\UniSpace\UniSpace.Domain\obj\Debug\net8.0\UniSpace.Domain.genruntimeconfig.cache
 C:\Users\THANH HOA\Documents\PRN222\UniSpace\UniSpace.Domain\obj\Debug\net8.0\ref\UniSpace.Domain.dll
+C:\Users\THANH HOA\Documents\PRN222\UniSpace\UniSpace.Domain\obj\Debug\net8.0\UniSpace.Domain.sourcelink.json

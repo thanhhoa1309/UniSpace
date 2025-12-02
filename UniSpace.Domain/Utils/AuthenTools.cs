@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace EVDealerSales.DataAccess.Utils
+namespace UniSpace.Domain.Utils
 {
     public static class AuthenTools
     {

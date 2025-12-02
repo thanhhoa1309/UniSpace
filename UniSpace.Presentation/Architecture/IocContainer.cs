@@ -6,6 +6,9 @@ using System.Text;
 using UniSpace.Domain;
 using UniSpace.Domain.Interfaces;
 using UniSpace.Domain.Repository;
+using UniSpace.Services.Interfaces;
+using UniSpace.Services.Services;
+using UniSpace.Domain.Commons;
 
 namespace UniSpace.Presentation.Architecture
 {
@@ -37,7 +40,7 @@ namespace UniSpace.Presentation.Architecture
             // Get the connection string from "DefaultConnection"
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-            // Đăng ký DbContext với Npgsql - Postgres
+            // Register DbContext with SQL Server
             services.AddDbContext<UniSpaceDbContext>(options =>
                 options.UseSqlServer(connectionString,
                     sql => sql.MigrationsAssembly(typeof(UniSpaceDbContext).Assembly.FullName)
@@ -52,6 +55,16 @@ namespace UniSpace.Presentation.Architecture
             // Inject service vào DI container
 
             services.AddHttpContextAccessor();
+
+            // Register UnitOfWork
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            // Register Domain Services
+            services.AddScoped<IClaimsService, ClaimsService>();
+            services.AddScoped<ICurrentTime, CurrentTime>();
+
+            // Register Business Services
+            services.AddScoped<IAuthService, AuthService>();
 
             return services;
         }

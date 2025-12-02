@@ -12,7 +12,7 @@ using UniSpace.Domain;
 namespace UniSpace.Domain.Migrations
 {
     [DbContext(typeof(UniSpaceDbContext))]
-    [Migration("20251201160502_IinitDb")]
+    [Migration("20251202114721_IinitDb")]
     partial class IinitDb
     {
         /// <inheritdoc />
@@ -261,6 +261,9 @@ namespace UniSpace.Domain.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -283,7 +286,7 @@ namespace UniSpace.Domain.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("UniSpace.Domain.Entities.Booking", b =>

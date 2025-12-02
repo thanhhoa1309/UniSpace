@@ -34,7 +34,7 @@ try
 
     builder.Services.AddDataProtection()
      .PersistKeysToFileSystem(new DirectoryInfo(dataProtectionPath))
-        .SetApplicationName("EVAuctionTrader");
+        .SetApplicationName("UniSpace");
 }
 catch (Exception ex)
 {
@@ -52,6 +52,10 @@ builder.Services.AddSession(options =>
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
+
+// Apply database migrations
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
+app.ApplyMigrations(logger);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
