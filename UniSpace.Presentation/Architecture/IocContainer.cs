@@ -41,9 +41,9 @@ namespace UniSpace.Presentation.Architecture
             // Get the connection string from "DefaultConnection"
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-            // Register DbContext with SQL Server
+            // Register DbContext with PostgreSQL (Npgsql)
             services.AddDbContext<UniSpaceDbContext>(options =>
-                options.UseSqlServer(connectionString,
+                options.UseNpgsql(connectionString,
                     sql => sql.MigrationsAssembly(typeof(UniSpaceDbContext).Assembly.FullName)
                 )
             );

@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\THANH HOA\\Documents\\UniSpace\\UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj": {}
+    "D:\\Project\\Semester7\\UniSpace\\UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj": {}
   },
   "projects": {
-    "C:\\Users\\THANH HOA\\Documents\\UniSpace\\UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj": {
+    "D:\\Project\\Semester7\\UniSpace\\UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\THANH HOA\\Documents\\UniSpace\\UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj",
+        "projectUniqueName": "D:\\Project\\Semester7\\UniSpace\\UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj",
         "projectName": "UniSpace.BusinessObject",
-        "projectPath": "C:\\Users\\THANH HOA\\Documents\\UniSpace\\UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj",
-        "packagesPath": "C:\\Users\\THANH HOA\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\THANH HOA\\Documents\\UniSpace\\UniSpace.BusinessObject\\obj\\",
+        "projectPath": "D:\\Project\\Semester7\\UniSpace\\UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj",
+        "packagesPath": "C:\\Users\\vieta\\.nuget\\packages\\",
+        "outputPath": "D:\\Project\\Semester7\\UniSpace\\UniSpace.BusinessObject\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\THANH HOA\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\vieta\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -25,7 +25,6 @@
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
@@ -66,7 +65,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
