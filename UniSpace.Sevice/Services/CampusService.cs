@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using UniSpace.BusinessObject.DTOs.CampusDTOs;
 using UniSpace.Domain.Entities;
 using UniSpace.Domain.Interfaces;
@@ -78,26 +79,50 @@ namespace UniSpace.Service.Services
 
         #region Read
 
-        public async Task<List<CampusDto>> GetAllCampusesAsync()
+        public async Task<Pagination<CampusDto>> GetCampusesAsync(
+            int pageNumber = 1,
+            int pageSize = 20,
+            string? searchTerm = null)
         {
             try
             {
-                _logger.LogInformation("Retrieving all campuses");
+                _logger.LogInformation($"Retrieving campuses - Page {pageNumber}, Size {pageSize}, Search: '{searchTerm}'");
 
-                var campuses = await _unitOfWork.Campus
-                    .GetAllAsync(
-                        predicate: c => !c.IsDeleted,
-                        includes: c => c.Rooms
-                    );
+                // Start with base query
+                IQueryable<Campus> query = _unitOfWork.Campus
+                    .GetQueryable()
+                    .Where(c => !c.IsDeleted)
+                    .Include(c => c.Rooms);
 
+                // Apply search filter
+                if (!string.IsNullOrWhiteSpace(searchTerm))
+                {
+                    query = query.Where(c =>
+                        c.Name.Contains(searchTerm) ||
+                        c.Address.Contains(searchTerm));
+                }
+
+                // Order by name for consistency
+                query = query.OrderBy(c => c.Name);
+
+                // Get total count before pagination
+                var totalCount = await query.CountAsync();
+
+                // Apply pagination
+                var campuses = await query
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                // Map to DTOs
                 var campusDtos = campuses.Select(MapToDto).ToList();
 
-                _logger.LogInformation($"Retrieved {campusDtos.Count} campuses");
-                return campusDtos;
+                _logger.LogInformation($"Retrieved {campusDtos.Count} of {totalCount} campuses");
+                return new Pagination<CampusDto>(campusDtos, totalCount, pageNumber, pageSize);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error retrieving all campuses");
+                _logger.LogError(ex, "Error retrieving paginated campuses");
                 throw;
             }
         }
@@ -122,32 +147,6 @@ namespace UniSpace.Service.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error retrieving campus: {id}");
-                throw;
-            }
-        }
-
-        public async Task<List<CampusDto>> GetCampusesByNameAsync(string name)
-        {
-            try
-            {
-                _logger.LogInformation($"Searching campuses by name: {name}");
-
-                if (string.IsNullOrWhiteSpace(name))
-                {
-                    return await GetAllCampusesAsync();
-                }
-
-                var campuses = await _unitOfWork.Campus
-                    .GetAllAsync(
-                        predicate: c => !c.IsDeleted && c.Name.Contains(name),
-                        includes: c => c.Rooms
-                    );
-
-                return campuses.Select(MapToDto).ToList();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error searching campuses by name: {name}");
                 throw;
             }
         }

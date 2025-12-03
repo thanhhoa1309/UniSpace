@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UniSpace.BusinessObject.DTOs.CampusDTOs;
+using UniSpace.Services.Utils;
 
 namespace UniSpace.Service.Interfaces
 {
@@ -12,10 +13,13 @@ namespace UniSpace.Service.Interfaces
         // Create
         Task<CampusDto?> CreateCampusAsync(CreateCampusDto createDto);
 
-        // Read
-        Task<List<CampusDto>> GetAllCampusesAsync();
+        // Read - Unified method with filters
+        Task<Pagination<CampusDto>> GetCampusesAsync(
+            int pageNumber = 1,
+            int pageSize = 20,
+            string? searchTerm = null);
+
         Task<CampusDto?> GetCampusByIdAsync(Guid id);
-        Task<List<CampusDto>> GetCampusesByNameAsync(string name);
 
         // Update
         Task<CampusDto?> UpdateCampusAsync(UpdateCampusDto updateDto);

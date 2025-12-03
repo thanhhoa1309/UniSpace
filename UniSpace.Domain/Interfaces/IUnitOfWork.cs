@@ -7,6 +7,7 @@ namespace UniSpace.Domain.Interfaces
         IGenericRepository<User> User { get; }
         IGenericRepository<Campus> Campus { get; }
         IGenericRepository<Room> Room { get; }
+        IGenericRepository<Schedule> Schedule { get; }
         Task<int> SaveChangesAsync();
     }
 }

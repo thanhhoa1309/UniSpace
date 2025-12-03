@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using UniSpace.BusinessObject.DTOs.CampusDTOs;
 using UniSpace.Service.Interfaces;
+using UniSpace.Services.Utils;
 
 namespace UniSpace.Presentation.Pages.Admin.Campus
 {
@@ -18,25 +19,22 @@ namespace UniSpace.Presentation.Pages.Admin.Campus
             _logger = logger;
         }
 
-        public List<CampusDto> Campuses { get; set; } = new();
+        public Pagination<CampusDto> Campuses { get; set; } = new Pagination<CampusDto>(new List<CampusDto>(), 0, 1, 20);
         public string? SearchTerm { get; set; }
         public string? SuccessMessage { get; set; }
         public string? ErrorMessage { get; set; }
 
-        public async Task OnGetAsync(string? search)
+        public async Task OnGetAsync(int pageNumber = 1, int pageSize = 20, string? search = null)
         {
             try
             {
                 SearchTerm = search;
                 
-                if (!string.IsNullOrWhiteSpace(search))
-                {
-                    Campuses = await _campusService.GetCampusesByNameAsync(search);
-                }
-                else
-                {
-                    Campuses = await _campusService.GetAllCampusesAsync();
-                }
+                // Use unified GetCampusesAsync method
+                Campuses = await _campusService.GetCampusesAsync(
+                    pageNumber: pageNumber,
+                    pageSize: pageSize,
+                    searchTerm: search);
 
                 if (TempData["SuccessMessage"] != null)
                 {
@@ -52,7 +50,7 @@ namespace UniSpace.Presentation.Pages.Admin.Campus
             {
                 _logger.LogError(ex, "Error loading campuses");
                 ErrorMessage = "Error loading campuses. Please try again.";
-                Campuses = new List<CampusDto>();
+                Campuses = new Pagination<CampusDto>(new List<CampusDto>(), 0, 1, 20);
             }
         }
 

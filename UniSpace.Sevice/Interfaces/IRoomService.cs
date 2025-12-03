@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UniSpace.BusinessObject.DTOs.RoomDTOs;
 using UniSpace.BusinessObject.Enums;
+using UniSpace.Services.Utils;
 
 namespace UniSpace.Service.Interfaces
 {
@@ -11,14 +12,18 @@ namespace UniSpace.Service.Interfaces
         // Create
         Task<RoomDto?> CreateRoomAsync(CreateRoomDto createDto);
 
-        // Read
-        Task<List<RoomDto>> GetAllRoomsAsync();
+        // Read - Single unified method with filters
+        Task<Pagination<RoomDto>> GetRoomsAsync(
+            int pageNumber = 1, 
+            int pageSize = 20,
+            string? searchTerm = null,
+            Guid? campusId = null,
+            RoomType? type = null,
+            BookingStatus? status = null,
+            DateTime? availableFrom = null,
+            DateTime? availableTo = null);
+        
         Task<RoomDto?> GetRoomByIdAsync(Guid id);
-        Task<List<RoomDto>> GetRoomsByCampusAsync(Guid campusId);
-        Task<List<RoomDto>> GetRoomsByTypeAsync(RoomType type);
-        Task<List<RoomDto>> GetRoomsByStatusAsync(BookingStatus status);
-        Task<List<RoomDto>> SearchRoomsAsync(string searchTerm);
-        Task<List<RoomDto>> GetAvailableRoomsAsync(DateTime startTime, DateTime endTime);
 
         // Update
         Task<RoomDto?> UpdateRoomAsync(UpdateRoomDto updateDto);

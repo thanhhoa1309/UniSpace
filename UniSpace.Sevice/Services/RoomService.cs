@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
 using UniSpace.BusinessObject.DTOs.RoomDTOs;
 using UniSpace.BusinessObject.Enums;
@@ -92,26 +93,97 @@ namespace UniSpace.Service.Services
 
         #region Read
 
-        public async Task<List<RoomDto>> GetAllRoomsAsync()
+        public async Task<Pagination<RoomDto>> GetRoomsAsync(
+            int pageNumber = 1,
+            int pageSize = 20,
+            string? searchTerm = null,
+            Guid? campusId = null,
+            RoomType? type = null,
+            BookingStatus? status = null,
+            DateTime? availableFrom = null,
+            DateTime? availableTo = null)
         {
             try
             {
-                _logger.LogInformation("Retrieving all rooms");
+                _logger.LogInformation($"Retrieving rooms - Page {pageNumber}, Size {pageSize}, Filters: Search='{searchTerm}', Campus={campusId}, Type={type}, Status={status}");
 
-                var rooms = await _unitOfWork.Room
-                    .GetAllAsync(
-                        predicate: r => !r.IsDeleted,
-                        includes: new Expression<Func<Room, object>>[] { r => r.Campus, r => r.Bookings, r => r.Reports }
-                    );
+                // Start with base query
+                IQueryable<Room> query = _unitOfWork.Room
+                    .GetQueryable()
+                    .Where(r => !r.IsDeleted)
+                    .Include(r => r.Campus)
+                    .Include(r => r.Bookings)
+                    .Include(r => r.Reports);
 
+                // Apply search filter
+                if (!string.IsNullOrWhiteSpace(searchTerm))
+                {
+                    query = query.Where(r =>
+                        r.Name.Contains(searchTerm) ||
+                        r.Description.Contains(searchTerm) ||
+                        r.Campus.Name.Contains(searchTerm));
+                }
+
+                // Apply campus filter
+                if (campusId.HasValue && campusId != Guid.Empty)
+                {
+                    query = query.Where(r => r.CampusId == campusId.Value);
+                }
+
+                // Apply type filter
+                if (type.HasValue)
+                {
+                    query = query.Where(r => r.Type == type.Value);
+                }
+
+                // Apply status filter
+                if (status.HasValue)
+                {
+                    query = query.Where(r => r.CurrentStatus == status.Value);
+                }
+
+                // Order by name for consistency
+                query = query.OrderBy(r => r.Name);
+
+                // Get total count before pagination
+                var totalCount = await query.CountAsync();
+
+                // Apply pagination
+                var rooms = await query
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                // Map to DTOs
                 var roomDtos = rooms.Select(MapToDto).ToList();
 
-                _logger.LogInformation($"Retrieved {roomDtos.Count} rooms");
-                return roomDtos;
+                // Apply availability filter if specified (post-query filter)
+                if (availableFrom.HasValue && availableTo.HasValue)
+                {
+                    var availableRoomIds = new List<Guid>();
+                    
+                    foreach (var roomDto in roomDtos)
+                    {
+                        if (await IsRoomAvailableAsync(roomDto.Id, availableFrom.Value, availableTo.Value))
+                        {
+                            availableRoomIds.Add(roomDto.Id);
+                        }
+                    }
+
+                    roomDtos = roomDtos.Where(r => availableRoomIds.Contains(r.Id)).ToList();
+                    
+                    // Note: When using availability filter, total count might not be accurate
+                    // as we're filtering after pagination. For accurate count, we'd need to check
+                    // all rooms which would be expensive. This is a trade-off for performance.
+                    totalCount = roomDtos.Count;
+                }
+
+                _logger.LogInformation($"Retrieved {roomDtos.Count} of {totalCount} rooms with applied filters");
+                return new Pagination<RoomDto>(roomDtos, totalCount, pageNumber, pageSize);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error retrieving all rooms");
+                _logger.LogError(ex, "Error retrieving paginated rooms with filters");
                 throw;
             }
         }
@@ -136,129 +208,6 @@ namespace UniSpace.Service.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error retrieving room: {id}");
-                throw;
-            }
-        }
-
-        public async Task<List<RoomDto>> GetRoomsByCampusAsync(Guid campusId)
-        {
-            try
-            {
-                _logger.LogInformation($"Retrieving rooms for campus: {campusId}");
-
-                var rooms = await _unitOfWork.Room
-                    .GetAllAsync(
-                        predicate: r => !r.IsDeleted && r.CampusId == campusId,
-                        includes: new Expression<Func<Room, object>>[] { r => r.Campus, r => r.Bookings, r => r.Reports }
-                    );
-
-                return rooms.Select(MapToDto).ToList();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error retrieving rooms for campus: {campusId}");
-                throw;
-            }
-        }
-
-        public async Task<List<RoomDto>> GetRoomsByTypeAsync(RoomType type)
-        {
-            try
-            {
-                _logger.LogInformation($"Retrieving rooms by type: {type}");
-
-                var rooms = await _unitOfWork.Room
-                    .GetAllAsync(
-                        predicate: r => !r.IsDeleted && r.Type == type,
-                        includes: new Expression<Func<Room, object>>[] { r => r.Campus, r => r.Bookings, r => r.Reports }
-                    );
-
-                return rooms.Select(MapToDto).ToList();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error retrieving rooms by type: {type}");
-                throw;
-            }
-        }
-
-        public async Task<List<RoomDto>> GetRoomsByStatusAsync(BookingStatus status)
-        {
-            try
-            {
-                _logger.LogInformation($"Retrieving rooms by status: {status}");
-
-                var rooms = await _unitOfWork.Room
-                    .GetAllAsync(
-                        predicate: r => !r.IsDeleted && r.CurrentStatus == status,
-                        includes: new Expression<Func<Room, object>>[] { r => r.Campus, r => r.Bookings, r => r.Reports }
-                    );
-
-                return rooms.Select(MapToDto).ToList();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error retrieving rooms by status: {status}");
-                throw;
-            }
-        }
-
-        public async Task<List<RoomDto>> SearchRoomsAsync(string searchTerm)
-        {
-            try
-            {
-                _logger.LogInformation($"Searching rooms: {searchTerm}");
-
-                if (string.IsNullOrWhiteSpace(searchTerm))
-                {
-                    return await GetAllRoomsAsync();
-                }
-
-                var rooms = await _unitOfWork.Room
-                    .GetAllAsync(
-                        predicate: r => !r.IsDeleted &&
-                            (r.Name.Contains(searchTerm) ||
-                             r.Description.Contains(searchTerm) ||
-                             r.Campus.Name.Contains(searchTerm)),
-                        includes: new Expression<Func<Room, object>>[] { r => r.Campus, r => r.Bookings, r => r.Reports }
-                    );
-
-                return rooms.Select(MapToDto).ToList();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error searching rooms: {searchTerm}");
-                throw;
-            }
-        }
-
-        public async Task<List<RoomDto>> GetAvailableRoomsAsync(DateTime startTime, DateTime endTime)
-        {
-            try
-            {
-                _logger.LogInformation($"Retrieving available rooms from {startTime} to {endTime}");
-
-                var allRooms = await _unitOfWork.Room
-                    .GetAllAsync(
-                        predicate: r => !r.IsDeleted && r.CurrentStatus == BookingStatus.Approved,
-                        includes: new Expression<Func<Room, object>>[] { r => r.Campus, r => r.Bookings, r => r.Reports }
-                    );
-
-                var availableRooms = new List<Room>();
-
-                foreach (var room in allRooms)
-                {
-                    if (await IsRoomAvailableAsync(room.Id, startTime, endTime))
-                    {
-                        availableRooms.Add(room);
-                    }
-                }
-
-                return availableRooms.Select(MapToDto).ToList();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error retrieving available rooms");
                 throw;
             }
         }

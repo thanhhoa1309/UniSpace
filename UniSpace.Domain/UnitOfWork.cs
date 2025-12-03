@@ -11,17 +11,20 @@ namespace UniSpace.Domain
             UniSpaceDbContext dbContext,
             IGenericRepository<User> userRepository,
             IGenericRepository<Campus> campusRepository,
-            IGenericRepository<Room> roomRepository)
+            IGenericRepository<Room> roomRepository,
+            IGenericRepository<Schedule> scheduleRepository)
         {
             _dbContext = dbContext;
             User = userRepository;
             Campus = campusRepository;
             Room = roomRepository;
+            Schedule = scheduleRepository;
         }
 
         public IGenericRepository<User> User { get; }
         public IGenericRepository<Campus> Campus { get; }
         public IGenericRepository<Room> Room { get; }
+        public IGenericRepository<Schedule> Schedule { get; }
 
         public void Dispose()
         {

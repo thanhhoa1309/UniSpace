@@ -67,6 +67,7 @@ namespace UniSpace.Presentation.Architecture
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ICampusService, CampusService>();
             services.AddScoped<IRoomService, RoomService>();
+            services.AddScoped<IScheduleService, ScheduleService>();
 
             return services;
         }

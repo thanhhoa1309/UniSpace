@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using UniSpace.BusinessObject.DTOs.RoomDTOs;
 using UniSpace.BusinessObject.Enums;
 using UniSpace.Service.Interfaces;
+using UniSpace.Services.Utils;
 
 namespace UniSpace.Presentation.Pages.Admin.Room
 {
@@ -25,7 +26,7 @@ namespace UniSpace.Presentation.Pages.Admin.Room
             _logger = logger;
         }
 
-        public List<RoomDto> Rooms { get; set; } = new();
+        public Pagination<RoomDto> Rooms { get; set; } = new Pagination<RoomDto>(new List<RoomDto>(), 0, 1, 20);
         public string? SearchTerm { get; set; }
         public Guid? FilterCampusId { get; set; }
         public RoomType? FilterType { get; set; }
@@ -35,10 +36,12 @@ namespace UniSpace.Presentation.Pages.Admin.Room
         public string? ErrorMessage { get; set; }
 
         public async Task OnGetAsync(
-            string? search,
-            Guid? campusId,
-            RoomType? type,
-            BookingStatus? status)
+            int pageNumber = 1,
+            int pageSize = 20,
+            string? search = null,
+            Guid? campusId = null,
+            RoomType? type = null,
+            BookingStatus? status = null)
         {
             try
             {
@@ -47,31 +50,14 @@ namespace UniSpace.Presentation.Pages.Admin.Room
                 FilterType = type;
                 FilterStatus = status;
 
-                // Get all rooms
-                var allRooms = await _roomService.GetAllRoomsAsync();
-
-                // Apply filters
-                if (!string.IsNullOrWhiteSpace(SearchTerm))
-                {
-                    allRooms = await _roomService.SearchRoomsAsync(SearchTerm);
-                }
-
-                if (FilterCampusId.HasValue && FilterCampusId != Guid.Empty)
-                {
-                    allRooms = allRooms.Where(r => r.CampusId == FilterCampusId.Value).ToList();
-                }
-
-                if (FilterType.HasValue)
-                {
-                    allRooms = allRooms.Where(r => r.Type == FilterType.Value).ToList();
-                }
-
-                if (FilterStatus.HasValue)
-                {
-                    allRooms = allRooms.Where(r => r.CurrentStatus == FilterStatus.Value).ToList();
-                }
-
-                Rooms = allRooms;
+                // Use the unified GetRoomsAsync method with all filters
+                Rooms = await _roomService.GetRoomsAsync(
+                    pageNumber: pageNumber,
+                    pageSize: pageSize,
+                    searchTerm: search,
+                    campusId: campusId,
+                    type: type,
+                    status: status);
 
                 // Load campus options for filter
                 var campuses = await _campusService.GetAllCampusesAsync();
@@ -104,7 +90,7 @@ namespace UniSpace.Presentation.Pages.Admin.Room
             {
                 _logger.LogError(ex, "Error loading rooms");
                 ErrorMessage = "Error loading rooms. Please try again.";
-                Rooms = new List<RoomDto>();
+                Rooms = new Pagination<RoomDto>(new List<RoomDto>(), 0, 1, 20);
             }
         }
 

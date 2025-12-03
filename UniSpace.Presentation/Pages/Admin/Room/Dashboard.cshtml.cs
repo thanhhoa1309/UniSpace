@@ -53,11 +53,12 @@ namespace UniSpace.Presentation.Pages.Admin.Room
         {
             try
             {
-                // Get all rooms
-                var allRooms = await _roomService.GetAllRoomsAsync();
+                // Get all rooms using the unified method with large page size for statistics
+                var roomsPagination = await _roomService.GetRoomsAsync(pageNumber: 1, pageSize: 10000);
+                var allRooms = roomsPagination.ToList();
 
                 // Basic statistics
-                TotalRooms = allRooms.Count;
+                TotalRooms = roomsPagination.TotalCount;
                 AvailableRooms = allRooms.Count(r => r.CurrentStatus == BookingStatus.Approved);
                 UnavailableRooms = allRooms.Count(r => r.CurrentStatus != BookingStatus.Approved);
                 TotalCapacity = allRooms.Sum(r => r.Capacity);
