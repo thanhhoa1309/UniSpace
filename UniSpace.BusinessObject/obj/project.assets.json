@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj",
+      "projectUniqueName": "C:\\Users\\THANH HOA\\Documents\\UniSpace\\UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj",
       "projectName": "UniSpace.BusinessObject",
-      "projectPath": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj",
+      "projectPath": "C:\\Users\\THANH HOA\\Documents\\UniSpace\\UniSpace.BusinessObject\\UniSpace.BusinessObject.csproj",
       "packagesPath": "C:\\Users\\THANH HOA\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.BusinessObject\\obj\\",
+      "outputPath": "C:\\Users\\THANH HOA\\Documents\\UniSpace\\UniSpace.BusinessObject\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

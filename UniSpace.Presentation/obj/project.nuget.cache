@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "MEtXe6DUKNk=",
+  "dgSpecHash": "vl3dvV/SjE4=",
   "success": true,
-  "projectFilePath": "C:\\Users\\THANH HOA\\Documents\\PRN222\\UniSpace\\UniSpace.Presentation\\UniSpace.Presentation.csproj",
+  "projectFilePath": "C:\\Users\\THANH HOA\\Documents\\UniSpace\\UniSpace.Presentation\\UniSpace.Presentation.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\THANH HOA\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\THANH HOA\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
