@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UniSpace.BusinessObject.DTOs.ScheduleDTOs;
 using UniSpace.BusinessObject.Enums;
+using UniSpace.Services.Utils;
 
 namespace UniSpace.Service.Interfaces
 {
@@ -19,6 +20,15 @@ namespace UniSpace.Service.Interfaces
         Task<List<ScheduleDto>> GetSchedulesByDateRangeAsync(DateTime startDate, DateTime endDate);
         Task<List<ScheduleDto>> GetSchedulesByDayOfWeekAsync(int dayOfWeek);
         Task<List<ScheduleDto>> GetSchedulesForRoomOnDateAsync(Guid roomId, DateTime date);
+        
+        // Pagination
+        Task<Pagination<ScheduleDto>> GetSchedulesAsync(
+            int pageNumber = 1,
+            int pageSize = 20,
+            string? searchTerm = null,
+            Guid? roomId = null,
+            ScheduleType? scheduleType = null,
+            int? dayOfWeek = null);
 
         // Update
         Task<ScheduleDto?> UpdateScheduleAsync(UpdateScheduleDto updateDto);

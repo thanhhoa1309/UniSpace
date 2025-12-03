@@ -234,6 +234,10 @@
                                                 </td>
                                                 <td>
                                                     <div class="btn-group btn-group-sm" role="group">
+                                                        <a asp-page="RoomSchedules" asp-route-id="@room.Id" 
+                                                           class="btn btn-primary" title="View Schedules">
+                                                            <i class="bi bi-calendar-week"></i>
+                                                        </a>
                                                         <a asp-page="Details" asp-route-id="@room.Id" 
                                                            class="btn btn-info" title="View Details">
                                                             <i class="bi bi-eye"></i>

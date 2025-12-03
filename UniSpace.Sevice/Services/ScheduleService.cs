@@ -298,6 +298,78 @@ namespace UniSpace.Service.Services
             }
         }
 
+        public async Task<Pagination<ScheduleDto>> GetSchedulesAsync(
+            int pageNumber = 1,
+            int pageSize = 20,
+            string? searchTerm = null,
+            Guid? roomId = null,
+            ScheduleType? scheduleType = null,
+            int? dayOfWeek = null)
+        {
+            try
+            {
+                _logger.LogInformation("Retrieving schedules with pagination. Page: {Page}, Size: {Size}", pageNumber, pageSize);
+
+                var query = _unitOfWork.Schedule.GetQueryable()
+                    .Where(s => !s.IsDeleted);
+
+                // Apply filters
+                if (!string.IsNullOrWhiteSpace(searchTerm))
+                {
+                    var lowerSearch = searchTerm.ToLower();
+                    query = query.Where(s =>
+                        s.Title.ToLower().Contains(lowerSearch) ||
+                        s.Room.Name.ToLower().Contains(lowerSearch) ||
+                        s.Room.Campus.Name.ToLower().Contains(lowerSearch));
+                }
+
+                if (roomId.HasValue)
+                {
+                    query = query.Where(s => s.RoomId == roomId.Value);
+                }
+
+                if (scheduleType.HasValue)
+                {
+                    query = query.Where(s => s.ScheduleType == scheduleType.Value);
+                }
+
+                if (dayOfWeek.HasValue)
+                {
+                    query = query.Where(s => s.DayOfWeek == dayOfWeek.Value);
+                }
+
+                // Get total count before pagination
+                var totalCount = query.Count();
+
+                // Apply sorting
+                query = query.OrderBy(s => s.DayOfWeek)
+                    .ThenBy(s => s.StartTime);
+
+                // Apply pagination
+                var schedules = query
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .Select(s => new
+                    {
+                        Schedule = s,
+                        RoomName = s.Room.Name,
+                        CampusName = s.Room.Campus.Name
+                    })
+                    .ToList();
+
+                var scheduleDtos = schedules.Select(s => MapToDto(s.Schedule)).ToList();
+
+                _logger.LogInformation("Retrieved {Count} schedules for page {Page}", scheduleDtos.Count, pageNumber);
+
+                return new Pagination<ScheduleDto>(scheduleDtos, totalCount, pageNumber, pageSize);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving schedules with pagination");
+                throw;
+            }
+        }
+
         #endregion
 
         #region Update

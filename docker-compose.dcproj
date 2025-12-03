@@ -17,9 +17,12 @@
     <None Include=".dockerignore" />
     <None Include="HUONG_DAN_GET_ROOMS_THONG_NHAT.md" />
     <None Include="HUONG_DAN_PAGINATION.md" />
+    <None Include="HUONG_DAN_SCHEDULE_CRUD.md" />
     <None Include="HUONG_DAN_SU_DUNG_SCHEDULE.md" />
     <None Include="ROOM_PAGINATION_SUMMARY.md" />
     <None Include="ROOM_SERVICE_PAGINATION_GUIDE.md" />
+    <None Include="SCHEDULE_CRUD_GUIDE.md" />
+    <None Include="SCHEDULE_IMPLEMENTATION_COMPLETE.md" />
     <None Include="SCHEDULE_IMPLEMENTATION_SUMMARY.md" />
     <None Include="SCHEDULE_SERVICE_DOCUMENTATION.md" />
     <None Include="SCHEDULE_VISUAL_ARCHITECTURE.md" />

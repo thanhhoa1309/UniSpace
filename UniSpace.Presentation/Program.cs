@@ -1,7 +1,7 @@
 ﻿using EVAuctionTrader.Presentation.Helper;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;
+using UniSpace.Domain;
 using UniSpace.Presentation.Architecture;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -63,81 +63,24 @@ var app = builder.Build();
 // Apply database migrations and seed data
 var logger = app.Services.GetRequiredService<ILogger<Program>>();
 
-using (var scope = app.Services.CreateScope())
+try
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<UniSpace.Domain.UniSpaceDbContext>();
+    app.ApplyMigrations(app.Logger);
 
-    try
+    // Seed data
+    using (var scope = app.Services.CreateScope())
     {
-        logger.LogInformation("=== Database Initialization Started ===");
-
-        // Kiểm tra xem database có tồn tại không
-        bool databaseExists = dbContext.Database.CanConnect();
-
-        if (databaseExists)
-        {
-            // Kiểm tra xem có migration nào chưa được apply không
-            var pendingMigrations = dbContext.Database.GetPendingMigrations();
-
-            if (pendingMigrations.Any())
-            {
-                logger.LogInformation("⚠ Database exists but has pending migrations. Running migrations...");
-                app.ApplyMigrations(logger);
-            }
-            else
-            {
-                logger.LogInformation("✓ Database already exists and is up to date. Skipping migrations.");
-            }
-        }
-        else
-        {
-            // Database chưa tồn tại, cần chạy migration
-            logger.LogInformation("⚠ Database does not exist. Creating and running migrations...");
-            app.ApplyMigrations(logger);
-        }
-
-        // Seed initial data after migrations
-        logger.LogInformation("🌱 Seeding initial data...");
-
+        var dbContext = scope.ServiceProvider.GetRequiredService<UniSpaceDbContext>();
         await DbSeeder.SeedUsersAsync(dbContext);
-        logger.LogInformation("✓ Users seeded successfully");
-
         await DbSeeder.SeedCampusesAsync(dbContext);
-        logger.LogInformation("✓ Campuses seeded successfully");
-
         await DbSeeder.SeedRoomsAsync(dbContext);
-        logger.LogInformation("✓ Rooms seeded successfully");
-
         await DbSeeder.SeedSchedulesAsync(dbContext);
-        logger.LogInformation("✓ Schedules seeded successfully");
-
-        logger.LogInformation("=== Database Initialization Completed ===");
-    }
-    catch (Exception ex)
-    {
-        logger.LogError(ex, "❌ Error during database initialization");
-
-        // Try to recover by running migrations and seeding
-        try
-        {
-            logger.LogWarning("Attempting recovery: Running migrations...");
-            app.ApplyMigrations(logger);
-
-            logger.LogWarning("Attempting recovery: Seeding data...");
-            await DbSeeder.SeedUsersAsync(dbContext);
-            await DbSeeder.SeedCampusesAsync(dbContext);
-            await DbSeeder.SeedRoomsAsync(dbContext);
-            await DbSeeder.SeedSchedulesAsync(dbContext);
-
-            logger.LogInformation("✓ Recovery successful");
-        }
-        catch (Exception recoveryEx)
-        {
-            logger.LogError(recoveryEx, "❌ Recovery failed - Manual intervention may be required");
-        }
     }
 }
-
+catch (Exception e)
+{
+    app.Logger.LogError(e, "An problem occurred during migration!");
+}
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

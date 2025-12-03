@@ -1,0 +1,256 @@
+@page
+@using UniSpace.BusinessObject.Enums
+@model UniSpace.Presentation.Pages.Admin.Schedule.EditModel
+@{
+    ViewData["Title"] = "Edit Schedule";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a asp-page="/Admin/Dashboard">
+                            <i class="bi bi-house"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-page="Index">Schedule Management</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-page="Details" asp-route-id="@Model.Input.Id">
+                            @Model.CurrentSchedule?.Title
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active">Edit</li>
+                </ol>
+            </nav>
+
+            <!-- Main Card -->
+            <div class="card shadow-lg">
+                <div class="card-header bg-warning">
+                    <h4 class="mb-0">
+                        <i class="bi bi-pencil-square"></i> Edit Schedule: @Model.CurrentSchedule?.Title
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="bi bi-exclamation-triangle"></i> @Model.ErrorMessage
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <form method="post" id="editForm">
+                        <input type="hidden" asp-for="Input.Id" />
+
+                        <div class="row">
+                            <!-- Room Selection -->
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="Input.RoomId" class="form-label fw-bold">
+                                    <i class="bi bi-door-closed text-primary"></i> Room 
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <select asp-for="Input.RoomId" class="form-select form-select-lg">
+                                    @foreach (var option in Model.RoomOptions)
+                                    {
+                                        <option value="@option.Value" selected="@option.Selected">
+                                            @option.Text
+                                        </option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Input.RoomId" class="text-danger"></span>
+                            </div>
+
+                            <!-- Schedule Type -->
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="Input.ScheduleType" class="form-label fw-bold">
+                                    <i class="bi bi-tag text-info"></i> Schedule Type 
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <select asp-for="Input.ScheduleType" class="form-select form-select-lg">
+                                    <option value="@((int)ScheduleType.Academic_Course)" 
+                                            selected="@(Model.Input.ScheduleType == ScheduleType.Academic_Course)">
+                                        ?? Academic Course
+                                    </option>
+                                    <option value="@((int)ScheduleType.Recurring_Maintenance)" 
+                                            selected="@(Model.Input.ScheduleType == ScheduleType.Recurring_Maintenance)">
+                                        ?? Recurring Maintenance
+                                    </option>
+                                </select>
+                                <span asp-validation-for="Input.ScheduleType" class="text-danger"></span>
+                            </div>
+
+                            <!-- Title -->
+                            <div class="col-md-12 mb-4">
+                                <label asp-for="Input.Title" class="form-label fw-bold">
+                                    <i class="bi bi-card-text text-success"></i> Title 
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="Input.Title" 
+                                       class="form-control form-control-lg" 
+                                       placeholder="e.g., PRN221 - Advanced C# Programming" />
+                                <span asp-validation-for="Input.Title" class="text-danger"></span>
+                            </div>
+
+                            <!-- Day of Week -->
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="Input.DayOfWeek" class="form-label fw-bold">
+                                    <i class="bi bi-calendar3 text-warning"></i> Day of Week 
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <select asp-for="Input.DayOfWeek" class="form-select form-select-lg">
+                                    <option value="0" selected="@(Model.Input.DayOfWeek == 0)">Sunday</option>
+                                    <option value="1" selected="@(Model.Input.DayOfWeek == 1)">Monday</option>
+                                    <option value="2" selected="@(Model.Input.DayOfWeek == 2)">Tuesday</option>
+                                    <option value="3" selected="@(Model.Input.DayOfWeek == 3)">Wednesday</option>
+                                    <option value="4" selected="@(Model.Input.DayOfWeek == 4)">Thursday</option>
+                                    <option value="5" selected="@(Model.Input.DayOfWeek == 5)">Friday</option>
+                                    <option value="6" selected="@(Model.Input.DayOfWeek == 6)">Saturday</option>
+                                </select>
+                                <span asp-validation-for="Input.DayOfWeek" class="text-danger"></span>
+                            </div>
+
+                            <!-- Placeholder for alignment -->
+                            <div class="col-md-6 mb-4"></div>
+
+                            <!-- Time Range -->
+                            <div class="col-md-12 mb-4">
+                                <label class="form-label fw-bold">
+                                    <i class="bi bi-clock text-primary"></i> Time Range 
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="startTime" class="form-label">Start Time</label>
+                                        <input asp-for="Input.StartTime" 
+                                               type="time" 
+                                               class="form-control form-control-lg" />
+                                        <span asp-validation-for="Input.StartTime" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="endTime" class="form-label">End Time</label>
+                                        <input asp-for="Input.EndTime" 
+                                               type="time" 
+                                               class="form-control form-control-lg" />
+                                        <span asp-validation-for="Input.EndTime" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Date Range -->
+                            <div class="col-md-12 mb-4">
+                                <label class="form-label fw-bold">
+                                    <i class="bi bi-calendar-range text-success"></i> Date Range 
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="startDate" class="form-label">Start Date</label>
+                                        <input asp-for="Input.StartDate" 
+                                               type="date" 
+                                               class="form-control form-control-lg" />
+                                        <span asp-validation-for="Input.StartDate" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="endDate" class="form-label">End Date</label>
+                                        <input asp-for="Input.EndDate" 
+                                               type="date" 
+                                               class="form-control form-control-lg" />
+                                        <span asp-validation-for="Input.EndDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Change Summary -->
+                        @if (Model.CurrentSchedule != null)
+                        {
+                            <div class="alert alert-info">
+                                <i class="bi bi-clock-history"></i> 
+                                <strong>Original Details:</strong>
+                                <ul class="mb-0 mt-2">
+                                    <li><strong>Room:</strong> @Model.CurrentSchedule.RoomName</li>
+                                    <li><strong>Type:</strong> @Model.CurrentSchedule.ScheduleTypeDisplay</li>
+                                    <li><strong>Day:</strong> @Model.CurrentSchedule.DayOfWeekDisplay</li>
+                                    <li><strong>Time:</strong> @Model.CurrentSchedule.StartTime.ToString(@"hh\:mm") - @Model.CurrentSchedule.EndTime.ToString(@"hh\:mm")</li>
+                                    <li><strong>Period:</strong> @Model.CurrentSchedule.StartDate.ToString("MMM dd, yyyy") - @Model.CurrentSchedule.EndDate.ToString("MMM dd, yyyy")</li>
+                                </ul>
+                            </div>
+                        }
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex gap-2 justify-content-between">
+                            <a asp-page="Details" asp-route-id="@Model.Input.Id" 
+                               class="btn btn-outline-secondary btn-lg">
+                                <i class="bi bi-arrow-left"></i> Back to Details
+                            </a>
+                            <div class="d-flex gap-2">
+                                <a asp-page="Index" class="btn btn-outline-secondary btn-lg">
+                                    <i class="bi bi-x-circle"></i> Cancel
+                                </a>
+                                <button type="submit" class="btn btn-warning btn-lg text-white">
+                                    <i class="bi bi-save"></i> Save Changes
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Warning -->
+            <div class="alert alert-warning mt-4">
+                <i class="bi bi-exclamation-triangle"></i> 
+                <strong>Notice:</strong> Changing the schedule may affect existing bookings or room availability.
+                Please verify there are no conflicts with other schedules.
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        // Form validation
+        const form = document.getElementById('editForm');
+        form.addEventListener('submit', function(e) {
+            if (!form.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        });
+
+        // Highlight changes
+        const originalValues = {
+            roomId: '@Model.CurrentSchedule?.RoomId',
+            type: '@((int?)Model.CurrentSchedule?.ScheduleType)',
+            title: '@Model.CurrentSchedule?.Title',
+            dayOfWeek: '@Model.CurrentSchedule?.DayOfWeek'
+        };
+
+        function highlightChanges() {
+            ['RoomId', 'ScheduleType', 'Title', 'DayOfWeek'].forEach(field => {
+                const input = document.querySelector('[name="Input.' + field + '"]');
+                if (input) {
+                    const originalKey = field.charAt(0).toLowerCase() + field.slice(1);
+                    if (input.value !== originalValues[originalKey]) {
+                        input.classList.add('border-warning', 'border-2');
+                    } else {
+                        input.classList.remove('border-warning', 'border-2');
+                    }
+                }
+            });
+        }
+
+        // Listen for changes
+        document.querySelectorAll('input, select').forEach(element => {
+            element.addEventListener('change', highlightChanges);
+            element.addEventListener('input', highlightChanges);
+        });
+    </script>
+}

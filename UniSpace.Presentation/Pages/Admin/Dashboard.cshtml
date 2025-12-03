@@ -60,18 +60,46 @@
                     </div>
                 </div>
                 <div class="card-footer bg-light">
-                    <a href="#" class="small text-success">View Details <i class="bi bi-arrow-right"></i></a>
+                    <a asp-page="/Admin/Room/Index" class="small text-success">
+                        View Details <i class="bi bi-arrow-right"></i>
+                    </a>
                 </div>
             </div>
         </div>
 
-        <!-- Total Bookings -->
+        <!-- Total Schedules -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-info shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Total Schedules
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @Model.TotalSchedules
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-calendar-week" style="font-size: 2em; color: #36b9cc;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-light">
+                    <a asp-page="/Admin/Schedule/Dashboard" class="small text-info">
+                        View Dashboard <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Bookings -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                 Total Bookings
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
@@ -79,31 +107,7 @@
                             </div>
                         </div>
                         <div class="col-auto">
-                            <i class="bi bi-calendar-check" style="font-size: 2em; color: #36b9cc;"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer bg-light">
-                    <a href="#" class="small text-info">View Details <i class="bi bi-arrow-right"></i></a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pending Reports -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Pending Reports
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                @Model.PendingReports
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-exclamation-triangle" style="font-size: 2em; color: #f6c23e;"></i>
+                            <i class="bi bi-calendar-check" style="font-size: 2em; color: #f6c23e;"></i>
                         </div>
                     </div>
                 </div>
@@ -114,7 +118,63 @@
         </div>
     </div>
 
-    <!-- Quick Actions & Campus Overview -->
+    <!-- Module Dashboards -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-gradient-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-grid-3x3-gap"></i> Module Dashboards</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <!-- Campus Dashboard -->
+                        <div class="col-md-4">
+                            <div class="card h-100 hover-shadow">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-building display-4 text-primary mb-3"></i>
+                                    <h5 class="card-title">Campus Management</h5>
+                                    <p class="card-text text-muted">Manage campuses, locations, and facilities</p>
+                                    <a asp-page="/Admin/Campus/Dashboard" class="btn btn-primary">
+                                        <i class="bi bi-speedometer2"></i> View Dashboard
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Room Dashboard -->
+                        <div class="col-md-4">
+                            <div class="card h-100 hover-shadow">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-door-open display-4 text-success mb-3"></i>
+                                    <h5 class="card-title">Room Management</h5>
+                                    <p class="card-text text-muted">Manage rooms, capacity, and availability</p>
+                                    <a asp-page="/Admin/Room/Dashboard" class="btn btn-success">
+                                        <i class="bi bi-speedometer2"></i> View Dashboard
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Schedule Dashboard -->
+                        <div class="col-md-4">
+                            <div class="card h-100 hover-shadow">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-calendar-week display-4 text-info mb-3"></i>
+                                    <h5 class="card-title">Schedule Management</h5>
+                                    <p class="card-text text-muted">Manage schedules, courses, and maintenance</p>
+                                    <a asp-page="/Admin/Schedule/Dashboard" class="btn btn-info">
+                                        <i class="bi bi-speedometer2"></i> View Dashboard
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions & System Status -->
     <div class="row">
         <!-- Quick Actions -->
         <div class="col-lg-6 mb-4">
@@ -133,7 +193,7 @@
                                 </div>
                             </div>
                         </a>
-                        <a href="#" class="list-group-item list-group-item-action">
+                        <a asp-page="/Admin/Room/Create" class="list-group-item list-group-item-action">
                             <div class="d-flex align-items-center">
                                 <i class="bi bi-door-open text-success me-3" style="font-size: 1.5em;"></i>
                                 <div>
@@ -142,21 +202,21 @@
                                 </div>
                             </div>
                         </a>
-                        <a asp-page="/Admin/Campus/Index" class="list-group-item list-group-item-action">
+                        <a asp-page="/Admin/Schedule/Create" class="list-group-item list-group-item-action">
                             <div class="d-flex align-items-center">
-                                <i class="bi bi-building text-info me-3" style="font-size: 1.5em;"></i>
+                                <i class="bi bi-calendar-plus text-info me-3" style="font-size: 1.5em;"></i>
                                 <div>
-                                    <strong>Manage Campuses</strong>
-                                    <p class="mb-0 small text-muted">View and edit campus information</p>
+                                    <strong>Add New Schedule</strong>
+                                    <p class="mb-0 small text-muted">Create a new schedule</p>
                                 </div>
                             </div>
                         </a>
-                        <a href="#" class="list-group-item list-group-item-action">
+                        <a asp-page="/Admin/Campus/Index" class="list-group-item list-group-item-action">
                             <div class="d-flex align-items-center">
-                                <i class="bi bi-people text-warning me-3" style="font-size: 1.5em;"></i>
+                                <i class="bi bi-list text-secondary me-3" style="font-size: 1.5em;"></i>
                                 <div>
-                                    <strong>Manage Users</strong>
-                                    <p class="mb-0 small text-muted">View and manage user accounts</p>
+                                    <strong>View All Records</strong>
+                                    <p class="mb-0 small text-muted">Browse all campuses, rooms, and schedules</p>
                                 </div>
                             </div>
                         </a>
@@ -194,7 +254,7 @@
 
                     <div class="mb-3">
                         <div class="d-flex justify-content-between mb-1">
-                            <span>Booking Rate</span>
+                            <span>Schedule Coverage</span>
                             <span><strong>85%</strong></span>
                         </div>
                         <div class="progress">
@@ -216,31 +276,30 @@
         </div>
     </div>
 
-    <!-- Campus Overview -->
+    <!-- Overview Section -->
     <div class="row">
         <div class="col-md-12">
             <div class="card shadow">
                 <div class="card-header bg-secondary text-white">
-                    <h5 class="mb-0"><i class="bi bi-building"></i> Campus Overview</h5>
+                    <h5 class="mb-0"><i class="bi bi-info-circle"></i> System Overview</h5>
                 </div>
                 <div class="card-body">
-                    @if (Model.TotalCampuses > 0)
-                    {
-                        <p>You are managing <strong>@Model.TotalCampuses campus(es)</strong> with a total of <strong>@Model.TotalRooms room(s)</strong>.</p>
-                        <a asp-page="/Admin/Campus/Index" class="btn btn-primary">
-                            <i class="bi bi-eye"></i> View All Campuses
+                    <p>
+                        You are managing <strong>@Model.TotalCampuses campus(es)</strong> with 
+                        <strong>@Model.TotalRooms room(s)</strong> and 
+                        <strong>@Model.TotalSchedules schedule(s)</strong>.
+                    </p>
+                    <div class="btn-group" role="group">
+                        <a asp-page="/Admin/Campus/Index" class="btn btn-outline-primary">
+                            <i class="bi bi-building"></i> Campuses
                         </a>
-                    }
-                    else
-                    {
-                        <div class="text-center py-4">
-                            <i class="bi bi-inbox display-4 text-muted"></i>
-                            <p class="text-muted mt-3">No campuses yet. Start by creating your first campus!</p>
-                            <a asp-page="/Admin/Campus/Create" class="btn btn-primary btn-lg">
-                                <i class="bi bi-plus-circle"></i> Create First Campus
-                            </a>
-                        </div>
-                    }
+                        <a asp-page="/Admin/Room/Index" class="btn btn-outline-success">
+                            <i class="bi bi-door-open"></i> Rooms
+                        </a>
+                        <a asp-page="/Admin/Schedule/Index" class="btn btn-outline-info">
+                            <i class="bi bi-calendar-week"></i> Schedules
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -262,5 +321,13 @@
     }
     .text-xs {
         font-size: 0.7rem;
+    }
+    .hover-shadow:hover {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        transform: translateY(-2px);
+        transition: all 0.3s ease;
+    }
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
     }
 </style>

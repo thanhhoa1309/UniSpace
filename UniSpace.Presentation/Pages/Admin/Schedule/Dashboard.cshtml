@@ -1,0 +1,604 @@
+@page
+@model UniSpace.Presentation.Pages.Admin.Schedule.DashboardModel
+@{
+    ViewData["Title"] = "Schedule Dashboard";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid px-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
+        <div>
+            <h1 class="h3 mb-0">
+                <i class="bi bi-calendar-week me-2"></i>Schedule Dashboard
+            </h1>
+            <p class="text-muted mb-0">Manage and monitor room schedules</p>
+        </div>
+        <div>
+            <a asp-page="Create" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-1"></i>New Schedule
+            </a>
+            <a asp-page="Index" class="btn btn-outline-secondary">
+                <i class="bi bi-list me-1"></i>View All
+            </a>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row g-3 mb-4">
+        <!-- Total Schedules -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-muted mb-2 text-uppercase" style="font-size: 0.75rem; font-weight: 600;">
+                                Total Schedules
+                            </h6>
+                            <h2 class="mb-0 fw-bold">@Model.TotalSchedules</h2>
+                            <small class="text-success">
+                                <i class="bi bi-arrow-up"></i> @Model.TotalSchedules schedules
+                            </small>
+                        </div>
+                        <div class="bg-primary bg-opacity-10 p-3 rounded">
+                            <i class="bi bi-calendar3 fs-2 text-primary"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <a asp-page="Index" class="text-decoration-none small">
+                        View All <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Academic Courses -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-muted mb-2 text-uppercase" style="font-size: 0.75rem; font-weight: 600;">
+                                Academic Courses
+                            </h6>
+                            <h2 class="mb-0 fw-bold">@Model.AcademicCourses</h2>
+                            <small class="text-info">
+                                <i class="bi bi-book"></i> @(Model.TotalSchedules > 0 ? Math.Round((double)Model.AcademicCourses / Model.TotalSchedules * 100, 1) : 0)%
+                            </small>
+                        </div>
+                        <div class="bg-info bg-opacity-10 p-3 rounded">
+                            <i class="bi bi-book fs-2 text-info"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <a asp-page="Index" asp-route-type="Academic_Course" class="text-decoration-none small">
+                        View Courses <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Maintenance Schedules -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-muted mb-2 text-uppercase" style="font-size: 0.75rem; font-weight: 600;">
+                                Maintenance
+                            </h6>
+                            <h2 class="mb-0 fw-bold">@Model.MaintenanceSchedules</h2>
+                            <small class="text-warning">
+                                <i class="bi bi-tools"></i> @(Model.TotalSchedules > 0 ? Math.Round((double)Model.MaintenanceSchedules / Model.TotalSchedules * 100, 1) : 0)%
+                            </small>
+                        </div>
+                        <div class="bg-warning bg-opacity-10 p-3 rounded">
+                            <i class="bi bi-tools fs-2 text-warning"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <a asp-page="Index" asp-route-type="Recurring_Maintenance" class="text-decoration-none small">
+                        View Maintenance <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Schedules -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-muted mb-2 text-uppercase" style="font-size: 0.75rem; font-weight: 600;">
+                                Active Now
+                            </h6>
+                            <h2 class="mb-0 fw-bold">@Model.ActiveSchedules</h2>
+                            <small class="text-success">
+                                <i class="bi bi-check-circle"></i> Currently running
+                            </small>
+                        </div>
+                        <div class="bg-success bg-opacity-10 p-3 rounded">
+                            <i class="bi bi-clock-history fs-2 text-success"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <span class="text-muted small">
+                        Real-time status
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row g-3 mb-4">
+        <!-- Schedules by Day Chart -->
+        <div class="col-xl-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="bi bi-bar-chart-line me-2"></i>
+                            Schedules by Day of Week
+                        </h5>
+                        <span class="badge bg-primary">Weekly Distribution</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="dayChart" height="80"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schedules by Type Chart -->
+        <div class="col-xl-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="mb-0">
+                        <i class="bi bi-pie-chart me-2"></i>
+                        Type Distribution
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="typeChart" height="200"></canvas>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <div class="d-flex justify-content-between small">
+                        <span><i class="bi bi-circle-fill text-primary me-1"></i> Academic</span>
+                        <span><i class="bi bi-circle-fill text-warning me-1"></i> Maintenance</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent and Upcoming Schedules -->
+    <div class="row g-3 mb-4">
+        <!-- Recent Schedules -->
+        <div class="col-xl-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="bi bi-clock-history me-2"></i>
+                            Recent Schedules
+                        </h5>
+                        <a asp-page="Index" class="btn btn-sm btn-outline-primary">View All</a>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    @if (Model.RecentSchedules.Any())
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var schedule in Model.RecentSchedules.Take(5))
+                            {
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between align-items-start">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-1">@schedule.Title</h6>
+                                            <div class="d-flex gap-2 mb-1">
+                                                <span class="badge bg-secondary">
+                                                    <i class="bi bi-door-closed me-1"></i>@schedule.RoomName
+                                                </span>
+                                                @if (schedule.ScheduleType == UniSpace.BusinessObject.Enums.ScheduleType.Academic_Course)
+                                                {
+                                                    <span class="badge bg-primary">
+                                                        <i class="bi bi-book me-1"></i>Academic
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-warning">
+                                                        <i class="bi bi-tools me-1"></i>Maintenance
+                                                    </span>
+                                                }
+                                            </div>
+                                            <small class="text-muted">
+                                                <i class="bi bi-clock me-1"></i>
+                                                @schedule.StartTime.ToString(@"hh\:mm") - @schedule.EndTime.ToString(@"hh\:mm")
+                                            </small>
+                                        </div>
+                                        <small class="text-muted">
+                                            @schedule.CreatedAt.ToString("MMM dd")
+                                        </small>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="bi bi-calendar-x display-4 text-muted"></i>
+                            <p class="text-muted mt-2">No recent schedules</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Schedules -->
+        <div class="col-xl-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="bi bi-calendar-event me-2"></i>
+                            Upcoming Schedules
+                        </h5>
+                        <span class="badge bg-info">Next 5</span>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    @if (Model.UpcomingSchedules.Any())
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var schedule in Model.UpcomingSchedules.Take(5))
+                            {
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between align-items-start">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-1">@schedule.Title</h6>
+                                            <div class="d-flex gap-2 mb-1">
+                                                <span class="badge bg-secondary">
+                                                    <i class="bi bi-door-closed me-1"></i>@schedule.RoomName
+                                                </span>
+                                                @if (schedule.ScheduleType == UniSpace.BusinessObject.Enums.ScheduleType.Academic_Course)
+                                                {
+                                                    <span class="badge bg-primary">Academic</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-warning">Maintenance</span>
+                                                }
+                                            </div>
+                                            <small class="text-muted">
+                                                <i class="bi bi-clock me-1"></i>
+                                                @schedule.StartTime.ToString(@"hh\:mm") - @schedule.EndTime.ToString(@"hh\:mm")
+                                            </small>
+                                        </div>
+                                        <small class="text-muted">
+                                            @schedule.StartDate.ToString("MMM dd")
+                                        </small>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="bi bi-calendar-check display-4 text-muted"></i>
+                            <p class="text-muted mt-2">No upcoming schedules</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Rooms by Schedule Count -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white border-0 py-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="bi bi-trophy me-2"></i>
+                    Top Rooms by Schedule Count
+                </h5>
+                <span class="badge bg-secondary">Top 10</span>
+            </div>
+        </div>
+        <div class="card-body">
+            @if (Model.SchedulesByRoom.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th width="60">#</th>
+                                <th>Room Name</th>
+                                <th width="120" class="text-center">Count</th>
+                                <th width="300">Distribution</th>
+                                <th width="100" class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int rank = 1;
+                                var maxCount = Model.SchedulesByRoom.Any() ? Model.SchedulesByRoom.Values.Max() : 1;
+                            }
+                            @foreach (var room in Model.SchedulesByRoom)
+                            {
+                                var percentage = (room.Value * 100.0 / maxCount);
+                                var badgeClass = rank == 1 ? "bg-success" : rank == 2 ? "bg-info" : rank == 3 ? "bg-warning" : "bg-secondary";
+                                var progressClass = rank == 1 ? "bg-success" : rank == 2 ? "bg-info" : rank == 3 ? "bg-warning" : "bg-secondary";
+                                
+                                <tr>
+                                    <td>
+                                        <span class="badge @badgeClass">@rank</span>
+                                    </td>
+                                    <td>
+                                        <strong>@room.Key</strong>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-primary">@room.Value</span>
+                                    </td>
+                                    <td>
+                                        <div class="progress" style="height: 25px;">
+                                            <div class="progress-bar @progressClass" 
+                                                 role="progressbar" 
+                                                 style="width: @percentage%"
+                                                 aria-valuenow="@room.Value" 
+                                                 aria-valuemin="0" 
+                                                 aria-valuemax="@maxCount">
+                                                @percentage.ToString("F1")%
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-end">
+                                        <a asp-page="Index" asp-route-search="@room.Key" 
+                                           class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                rank++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="bi bi-building display-4 text-muted"></i>
+                    <p class="text-muted mt-2">No room data available</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center h-100">
+                <div class="card-body py-4">
+                    <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">
+                        <i class="bi bi-plus-circle fs-1 text-primary"></i>
+                    </div>
+                    <h6 class="mb-2">Create Schedule</h6>
+                    <p class="text-muted small mb-3">Add new academic or maintenance schedule</p>
+                    <a asp-page="Create" class="btn btn-primary btn-sm">
+                        <i class="bi bi-plus me-1"></i>Create Now
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center h-100">
+                <div class="card-body py-4">
+                    <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">
+                        <i class="bi bi-list-ul fs-1 text-info"></i>
+                    </div>
+                    <h6 class="mb-2">View All Schedules</h6>
+                    <p class="text-muted small mb-3">Browse and manage all schedules</p>
+                    <a asp-page="Index" class="btn btn-info btn-sm">
+                        <i class="bi bi-list me-1"></i>View List
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center h-100">
+                <div class="card-body py-4">
+                    <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">
+                        <i class="bi bi-funnel fs-1 text-warning"></i>
+                    </div>
+                    <h6 class="mb-2">Filter Schedules</h6>
+                    <p class="text-muted small mb-3">Search by room, type, or day</p>
+                    <a asp-page="Index" class="btn btn-warning btn-sm">
+                        <i class="bi bi-search me-1"></i>Filter
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center h-100">
+                <div class="card-body py-4">
+                    <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">
+                        <i class="bi bi-download fs-1 text-success"></i>
+                    </div>
+                    <h6 class="mb-2">Export Data</h6>
+                    <p class="text-muted small mb-3">Download schedules report</p>
+                    <button class="btn btn-success btn-sm" onclick="alert('Export feature coming soon!')">
+                        <i class="bi bi-download me-1"></i>Export
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        }
+
+        .progress {
+            border-radius: 0.5rem;
+        }
+
+        .progress-bar {
+            border-radius: 0.5rem;
+        }
+
+        .list-group-item {
+            transition: background-color 0.2s;
+        }
+
+        .list-group-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        canvas {
+            max-height: 300px;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Schedules by Day Chart
+        var dayCtx = document.getElementById('dayChart').getContext('2d');
+        var dayChart = new Chart(dayCtx, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.SchedulesByDay.Keys)),
+                datasets: [{
+                    label: 'Number of Schedules',
+                    data: @Html.Raw(Json.Serialize(Model.SchedulesByDay.Values)),
+                    backgroundColor: 'rgba(13, 110, 253, 0.8)',
+                    borderColor: 'rgba(13, 110, 253, 1)',
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    hoverBackgroundColor: 'rgba(13, 110, 253, 1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        titleFont: {
+                            size: 14
+                        },
+                        bodyFont: {
+                            size: 13
+                        },
+                        borderColor: 'rgba(13, 110, 253, 1)',
+                        borderWidth: 1
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        },
+                        grid: {
+                            display: true,
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Schedules by Type Chart
+        var typeCtx = document.getElementById('typeChart').getContext('2d');
+        var typeChart = new Chart(typeCtx, {
+            type: 'doughnut',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.SchedulesByType.Keys)),
+                datasets: [{
+                    data: @Html.Raw(Json.Serialize(Model.SchedulesByType.Values)),
+                    backgroundColor: [
+                        'rgba(13, 110, 253, 0.8)',
+                        'rgba(255, 193, 7, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(13, 110, 253, 1)',
+                        'rgba(255, 193, 7, 1)'
+                    ],
+                    borderWidth: 2,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            font: {
+                                size: 12
+                            },
+                            usePointStyle: true
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        titleFont: {
+                            size: 14
+                        },
+                        bodyFont: {
+                            size: 13
+                        },
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                let value = context.parsed || 0;
+                                let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                let percentage = ((value / total) * 100).toFixed(1);
+                                return label + ': ' + value + ' (' + percentage + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Auto-refresh statistics every 5 minutes
+        setTimeout(function() {
+            location.reload();
+        }, 300000); // 5 minutes
+    </script>
+}

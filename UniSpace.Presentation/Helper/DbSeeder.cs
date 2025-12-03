@@ -15,11 +15,15 @@ namespace EVAuctionTrader.Presentation.Helper
                 var passwordHasher = new PasswordHasher();
                 var admin = new User
                 {
+                    Id = Guid.NewGuid(),
                     FullName = "Admin User",
                     Email = "admin@gmail.com",
                     PasswordHash = passwordHasher.HashPassword("1@"),
                     Role = RoleType.Admin,
-                    IsActive = true
+                    IsActive = true,
+                    IsDeleted = false,
+                    CreatedAt = DateTime.UtcNow,
+                    CreatedBy = Guid.Empty
                 };
 
                 await context.User.AddAsync(admin);
@@ -32,19 +36,27 @@ namespace EVAuctionTrader.Presentation.Helper
                 {
                     new User
                     {
+                        Id = Guid.NewGuid(),
                         FullName = "Student 1",
                         Email = "student1@gmail.com",
                         PasswordHash = passwordHasher.HashPassword("1@"),
                         Role = RoleType.Student,
-                        IsActive = true
+                        IsActive = true,
+                        IsDeleted = false,
+                        CreatedAt = DateTime.UtcNow,
+                        CreatedBy = Guid.Empty
                     },
                     new User
                     {
+                        Id = Guid.NewGuid(),
                         FullName = "Student 2",
                         Email = "student2@gmail.com",
                         PasswordHash = passwordHasher.HashPassword("1@"),
                         Role = RoleType.Student,
-                        IsActive = true
+                        IsActive = true,
+                        IsDeleted = false,
+                        CreatedAt = DateTime.UtcNow,
+                        CreatedBy = Guid.Empty
                     }
                 };
                 await context.User.AddRangeAsync(students);
@@ -57,19 +69,27 @@ namespace EVAuctionTrader.Presentation.Helper
                 {
                     new User
                     {
+                        Id = Guid.NewGuid(),
                         FullName = "Lecturer 1",
                         Email = "lecturer1@gmail.com",
                         PasswordHash = passwordHasher.HashPassword("1@"),
                         Role = RoleType.Lecturer,
-                        IsActive = true
+                        IsActive = true,
+                        IsDeleted = false,
+                        CreatedAt = DateTime.UtcNow,
+                        CreatedBy = Guid.Empty
                     },
                     new User
                     {
+                        Id = Guid.NewGuid(),
                         FullName = "Lecturer 2",
                         Email = "lecturer2@gmail.com",
                         PasswordHash = passwordHasher.HashPassword("1@"),
                         Role = RoleType.Lecturer,
-                        IsActive = true
+                        IsActive = true,
+                        IsDeleted = false,
+                        CreatedAt = DateTime.UtcNow,
+                        CreatedBy = Guid.Empty
                     }
                 };
                 await context.User.AddRangeAsync(lecturers);
@@ -146,22 +166,18 @@ namespace EVAuctionTrader.Presentation.Helper
                 var admin = await context.User.FirstOrDefaultAsync(u => u.Role == RoleType.Admin);
                 var adminId = admin?.Id ?? Guid.Empty;
 
-                // Get all campuses
                 var campuses = await context.Campuses.ToListAsync();
 
                 if (!campuses.Any())
                 {
-                    // If no campuses exist, seed them first
                     await SeedCampusesAsync(context);
                     campuses = await context.Campuses.ToListAsync();
                 }
 
                 var rooms = new List<Room>();
 
-                // Seed rooms for each campus
                 foreach (var campus in campuses)
                 {
-                    // Classrooms (5 per campus)
                     for (int i = 1; i <= 5; i++)
                     {
                         rooms.Add(new Room
@@ -170,8 +186,8 @@ namespace EVAuctionTrader.Presentation.Helper
                             CampusId = campus.Id,
                             Name = $"Room {i}01",
                             Type = RoomType.Classroom,
-                            Capacity = 40 + (i * 10), // 50, 60, 70, 80, 90
-                            CurrentStatus = BookingStatus.Approved, // Available
+                            Capacity = 40 + (i * 10),
+                            CurrentStatus = BookingStatus.Approved,
                             RoomStatus = RoomStatus.Active,
                             Description = $"Standard classroom with projector and whiteboard. Capacity: {40 + (i * 10)} students.",
                             IsDeleted = false,
@@ -180,7 +196,6 @@ namespace EVAuctionTrader.Presentation.Helper
                         });
                     }
 
-                    // Labs (3 per campus)
                     for (int i = 1; i <= 3; i++)
                     {
                         rooms.Add(new Room
@@ -189,8 +204,8 @@ namespace EVAuctionTrader.Presentation.Helper
                             CampusId = campus.Id,
                             Name = $"Lab {i}",
                             Type = RoomType.Lab,
-                            Capacity = 30 + (i * 5), // 35, 40, 45
-                            CurrentStatus = BookingStatus.Approved, // Available
+                            Capacity = 30 + (i * 5),
+                            CurrentStatus = BookingStatus.Approved,
                             RoomStatus = RoomStatus.Active,
                             Description = $"Computer lab equipped with {30 + (i * 5)} workstations. High-speed internet and development software installed.",
                             IsDeleted = false,
@@ -199,7 +214,6 @@ namespace EVAuctionTrader.Presentation.Helper
                         });
                     }
 
-                    // Stadiums (1-2 per campus)
                     rooms.Add(new Room
                     {
                         Id = Guid.NewGuid(),
@@ -207,7 +221,7 @@ namespace EVAuctionTrader.Presentation.Helper
                         Name = "Main Stadium",
                         Type = RoomType.Stadium,
                         Capacity = 500,
-                        CurrentStatus = BookingStatus.Approved, // Available
+                        CurrentStatus = BookingStatus.Approved,
                         RoomStatus = RoomStatus.Active,
                         Description = "Large outdoor stadium suitable for sports events, ceremonies, and large gatherings. Capacity: 500 people.",
                         IsDeleted = false,
@@ -222,7 +236,7 @@ namespace EVAuctionTrader.Presentation.Helper
                         Name = "Indoor Sports Hall",
                         Type = RoomType.Stadium,
                         Capacity = 200,
-                        CurrentStatus = BookingStatus.Approved, // Available
+                        CurrentStatus = BookingStatus.Approved,
                         RoomStatus = RoomStatus.Active,
                         Description = "Indoor sports facility for basketball, volleyball, and badminton. Capacity: 200 people.",
                         IsDeleted = false,
@@ -231,7 +245,6 @@ namespace EVAuctionTrader.Presentation.Helper
                     });
                 }
 
-                // Add all rooms to database
                 await context.Rooms.AddRangeAsync(rooms);
                 await context.SaveChangesAsync();
             }
@@ -244,12 +257,10 @@ namespace EVAuctionTrader.Presentation.Helper
                 var admin = await context.User.FirstOrDefaultAsync(u => u.Role == RoleType.Admin);
                 var adminId = admin?.Id ?? Guid.Empty;
 
-                // Get all rooms
                 var rooms = await context.Rooms.Where(r => !r.IsDeleted).ToListAsync();
 
                 if (!rooms.Any())
                 {
-                    // If no rooms exist, seed them first
                     await SeedRoomsAsync(context);
                     rooms = await context.Rooms.Where(r => !r.IsDeleted).ToListAsync();
                 }
@@ -257,41 +268,53 @@ namespace EVAuctionTrader.Presentation.Helper
                 var schedules = new List<Schedule>();
                 var currentDate = DateTime.UtcNow.Date;
 
-                // Academic semester dates
-                var semesterStart = new DateTime(currentDate.Year, 9, 1); // September 1st
-                var semesterEnd = new DateTime(currentDate.Year, 12, 20); // December 20th
-
-                // If current date is past semester end, use next year
-                if (currentDate > semesterEnd)
+                // Calculate semester dates - IMPORTANT: Use DateTime.SpecifyKind to set UTC
+                var fallStart = DateTime.SpecifyKind(new DateTime(currentDate.Year, 9, 1), DateTimeKind.Utc);
+                var fallEnd = DateTime.SpecifyKind(new DateTime(currentDate.Year, 12, 20), DateTimeKind.Utc);
+                
+                if (currentDate > fallEnd)
                 {
-                    semesterStart = new DateTime(currentDate.Year + 1, 9, 1);
-                    semesterEnd = new DateTime(currentDate.Year + 1, 12, 20);
+                    fallStart = DateTime.SpecifyKind(new DateTime(currentDate.Year + 1, 9, 1), DateTimeKind.Utc);
+                    fallEnd = DateTime.SpecifyKind(new DateTime(currentDate.Year + 1, 12, 20), DateTimeKind.Utc);
                 }
 
-                // Seed Academic Course Schedules
+                var springStart = DateTime.SpecifyKind(new DateTime(currentDate.Year, 1, 15), DateTimeKind.Utc);
+                var springEnd = DateTime.SpecifyKind(new DateTime(currentDate.Year, 5, 30), DateTimeKind.Utc);
+
                 var classrooms = rooms.Where(r => r.Type == RoomType.Classroom).ToList();
                 var labs = rooms.Where(r => r.Type == RoomType.Lab).ToList();
+                var stadiums = rooms.Where(r => r.Type == RoomType.Stadium).ToList();
 
-                // Sample courses for classrooms
-                var courses = new[]
+                // Academic courses for Fall semester
+                var fallCourses = new[]
                 {
-                    new { Name = "PRN221 - Advanced C# Programming", Time = (new TimeSpan(7, 30, 0), new TimeSpan(9, 30, 0)), Day = 2 }, // Monday 7:30-9:30
-                    new { Name = "PRN222 - ASP.NET Core Development", Time = (new TimeSpan(9, 45, 0), new TimeSpan(11, 45, 0)), Day = 2 }, // Monday 9:45-11:45
-                    new { Name = "SWP391 - Software Project Management", Time = (new TimeSpan(13, 0, 0), new TimeSpan(15, 0, 0)), Day = 3 }, // Tuesday 13:00-15:00
-                    new { Name = "PRN212 - Basics of C# Programming", Time = (new TimeSpan(15, 15, 0), new TimeSpan(17, 15, 0)), Day = 3 }, // Tuesday 15:15-17:15
-                    new { Name = "SWR302 - Software Requirements", Time = (new TimeSpan(7, 30, 0), new TimeSpan(9, 30, 0)), Day = 4 }, // Wednesday 7:30-9:30
-                    new { Name = "SWT301 - Software Testing", Time = (new TimeSpan(13, 0, 0), new TimeSpan(15, 0, 0)), Day = 4 }, // Wednesday 13:00-15:00
-                    new { Name = "PRN231 - Web API Development", Time = (new TimeSpan(9, 45, 0), new TimeSpan(11, 45, 0)), Day = 5 }, // Thursday 9:45-11:45
-                    new { Name = "IOT102 - Internet of Things", Time = (new TimeSpan(15, 15, 0), new TimeSpan(17, 15, 0)), Day = 5 }, // Thursday 15:15-17:15
-                    new { Name = "SWD392 - SW Architecture & Design", Time = (new TimeSpan(7, 30, 0), new TimeSpan(9, 30, 0)), Day = 6 }, // Friday 7:30-9:30
-                    new { Name = "MLN111 - Machine Learning Basics", Time = (new TimeSpan(13, 0, 0), new TimeSpan(15, 0, 0)), Day = 6 } // Friday 13:00-15:00
+                    new { Name = "PRN221 - Advanced C# Programming", Start = new TimeSpan(7, 30, 0), End = new TimeSpan(9, 30, 0), Day = 2 },
+                    new { Name = "PRN222 - ASP.NET Core Development", Start = new TimeSpan(9, 45, 0), End = new TimeSpan(11, 45, 0), Day = 2 },
+                    new { Name = "SWP391 - Software Project Management", Start = new TimeSpan(13, 0, 0), End = new TimeSpan(15, 0, 0), Day = 3 },
+                    new { Name = "PRN212 - Basics of C# Programming", Start = new TimeSpan(15, 15, 0), End = new TimeSpan(17, 15, 0), Day = 3 },
+                    new { Name = "SWR302 - Software Requirements", Start = new TimeSpan(7, 30, 0), End = new TimeSpan(9, 30, 0), Day = 4 },
+                    new { Name = "SWT301 - Software Testing", Start = new TimeSpan(13, 0, 0), End = new TimeSpan(15, 0, 0), Day = 4 },
+                    new { Name = "PRN231 - Web API Development", Start = new TimeSpan(9, 45, 0), End = new TimeSpan(11, 45, 0), Day = 5 },
+                    new { Name = "IOT102 - Internet of Things", Start = new TimeSpan(15, 15, 0), End = new TimeSpan(17, 15, 0), Day = 5 },
+                    new { Name = "SWD392 - SW Architecture & Design", Start = new TimeSpan(7, 30, 0), End = new TimeSpan(9, 30, 0), Day = 6 },
+                    new { Name = "MLN111 - Machine Learning Basics", Start = new TimeSpan(13, 0, 0), End = new TimeSpan(15, 0, 0), Day = 6 }
                 };
 
-                // Assign courses to classrooms
-                for (int i = 0; i < Math.Min(classrooms.Count, courses.Length); i++)
+                // Spring courses
+                var springCourses = new[]
+                {
+                    new { Name = "PRN231 - Building Large-scale Web Apps", Start = new TimeSpan(7, 30, 0), End = new TimeSpan(9, 30, 0), Day = 2 },
+                    new { Name = "SWD392 - Advanced Software Design", Start = new TimeSpan(13, 0, 0), End = new TimeSpan(15, 0, 0), Day = 3 },
+                    new { Name = "DBM301 - Database Management", Start = new TimeSpan(9, 45, 0), End = new TimeSpan(11, 45, 0), Day = 4 },
+                    new { Name = "MLN121 - Deep Learning", Start = new TimeSpan(15, 15, 0), End = new TimeSpan(17, 15, 0), Day = 5 },
+                    new { Name = "IOT201 - Advanced IoT Systems", Start = new TimeSpan(7, 30, 0), End = new TimeSpan(9, 30, 0), Day = 6 }
+                };
+
+                // Seed Fall courses to classrooms
+                for (int i = 0; i < Math.Min(classrooms.Count, fallCourses.Length); i++)
                 {
                     var classroom = classrooms[i];
-                    var course = courses[i];
+                    var course = fallCourses[i];
 
                     schedules.Add(new Schedule
                     {
@@ -299,42 +322,74 @@ namespace EVAuctionTrader.Presentation.Helper
                         RoomId = classroom.Id,
                         ScheduleType = ScheduleType.Academic_Course,
                         Title = course.Name,
-                        StartTime = course.Time.Item1,
-                        EndTime = course.Time.Item2,
+                        StartTime = course.Start,
+                        EndTime = course.End,
                         DayOfWeek = course.Day,
-                        StartDate = semesterStart,
-                        EndDate = semesterEnd,
+                        StartDate = fallStart,
+                        EndDate = fallEnd,
                         IsDeleted = false,
                         CreatedAt = DateTime.UtcNow,
                         CreatedBy = adminId
                     });
                 }
 
-                // Lab courses
-                var labCourses = new[]
+                // Seed Spring courses to remaining classrooms
+                int springClassroomStart = Math.Min(classrooms.Count, fallCourses.Length);
+                for (int i = 0; i < Math.Min(classrooms.Count - springClassroomStart, springCourses.Length); i++)
                 {
-                    new { Name = "PRN221 - Lab Session A", Time = (new TimeSpan(7, 30, 0), new TimeSpan(10, 30, 0)), Day = 2 },
-                    new { Name = "PRN221 - Lab Session B", Time = (new TimeSpan(13, 0, 0), new TimeSpan(16, 0, 0)), Day = 2 },
-                    new { Name = "PRN222 - Lab Session A", Time = (new TimeSpan(7, 30, 0), new TimeSpan(10, 30, 0)), Day = 4 },
-                    new { Name = "PRN222 - Lab Session B", Time = (new TimeSpan(13, 0, 0), new TimeSpan(16, 0, 0)), Day = 4 },
-                    new { Name = "IOT102 - Hardware Lab", Time = (new TimeSpan(7, 30, 0), new TimeSpan(10, 30, 0)), Day = 6 }
+                    if (springClassroomStart + i < classrooms.Count)
+                    {
+                        var classroom = classrooms[springClassroomStart + i];
+                        var course = springCourses[i];
+
+                        schedules.Add(new Schedule
+                        {
+                            Id = Guid.NewGuid(),
+                            RoomId = classroom.Id,
+                            ScheduleType = ScheduleType.Academic_Course,
+                            Title = course.Name,
+                            StartTime = course.Start,
+                            EndTime = course.End,
+                            DayOfWeek = course.Day,
+                            StartDate = springStart,
+                            EndDate = springEnd,
+                            IsDeleted = false,
+                            CreatedAt = DateTime.UtcNow,
+                            CreatedBy = adminId
+                        });
+                    }
+                }
+
+                // Lab sessions
+                var labSessions = new[]
+                {
+                    new { Name = "PRN221 - Lab Session A", Start = new TimeSpan(7, 30, 0), End = new TimeSpan(10, 30, 0), Day = 2, IsFall = true },
+                    new { Name = "PRN221 - Lab Session B", Start = new TimeSpan(13, 0, 0), End = new TimeSpan(16, 0, 0), Day = 2, IsFall = true },
+                    new { Name = "PRN222 - Lab Session A", Start = new TimeSpan(7, 30, 0), End = new TimeSpan(10, 30, 0), Day = 4, IsFall = true },
+                    new { Name = "PRN222 - Lab Session B", Start = new TimeSpan(13, 0, 0), End = new TimeSpan(16, 0, 0), Day = 4, IsFall = true },
+                    new { Name = "IOT102 - Hardware Lab", Start = new TimeSpan(7, 30, 0), End = new TimeSpan(10, 30, 0), Day = 6, IsFall = true },
+                    new { Name = "PRN231 - Web Development Lab", Start = new TimeSpan(7, 30, 0), End = new TimeSpan(10, 30, 0), Day = 3, IsFall = false },
+                    new { Name = "DBM301 - Database Lab", Start = new TimeSpan(13, 0, 0), End = new TimeSpan(16, 0, 0), Day = 5, IsFall = false },
+                    new { Name = "MLN121 - AI Lab Session", Start = new TimeSpan(7, 30, 0), End = new TimeSpan(10, 30, 0), Day = 6, IsFall = false }
                 };
 
-                // Assign lab courses
-                for (int i = 0; i < Math.Min(labs.Count, labCourses.Length); i++)
+                // Seed lab sessions
+                for (int i = 0; i < Math.Min(labs.Count, labSessions.Length); i++)
                 {
                     var lab = labs[i];
-                    var course = labCourses[i];
+                    var session = labSessions[i];
+                    var semesterStart = session.IsFall ? fallStart : springStart;
+                    var semesterEnd = session.IsFall ? fallEnd : springEnd;
 
                     schedules.Add(new Schedule
                     {
                         Id = Guid.NewGuid(),
                         RoomId = lab.Id,
                         ScheduleType = ScheduleType.Academic_Course,
-                        Title = course.Name,
-                        StartTime = course.Time.Item1,
-                        EndTime = course.Time.Item2,
-                        DayOfWeek = course.Day,
+                        Title = session.Name,
+                        StartTime = session.Start,
+                        EndTime = session.End,
+                        DayOfWeek = session.Day,
                         StartDate = semesterStart,
                         EndDate = semesterEnd,
                         IsDeleted = false,
@@ -343,38 +398,74 @@ namespace EVAuctionTrader.Presentation.Helper
                     });
                 }
 
-                // Seed Recurring Maintenance Schedules
-                var maintenanceRooms = rooms.Take(10).ToList(); // First 10 rooms for maintenance
-
-                var maintenanceSchedules = new[]
+                // Stadium events (year-round) - Use SpecifyKind for dates
+                var stadiumEvents = new[]
                 {
-                    new { Name = "Weekly Cleaning Service", Time = (new TimeSpan(18, 0, 0), new TimeSpan(19, 0, 0)), Day = 6 }, // Friday 18:00-19:00
-                    new { Name = "HVAC System Check", Time = (new TimeSpan(7, 0, 0), new TimeSpan(7, 30, 0)), Day = 7 }, // Saturday 7:00-7:30
-                    new { Name = "Equipment Inspection", Time = (new TimeSpan(8, 0, 0), new TimeSpan(9, 0, 0)), Day = 7 }, // Saturday 8:00-9:00
-                    new { Name = "Network Infrastructure Check", Time = (new TimeSpan(19, 0, 0), new TimeSpan(20, 0, 0)), Day = 3 }, // Tuesday 19:00-20:00
-                    new { Name = "Electrical System Maintenance", Time = (new TimeSpan(6, 0, 0), new TimeSpan(7, 0, 0)), Day = 1 } // Sunday 6:00-7:00
+                    new { Name = "Morning Sports Training", Start = new TimeSpan(6, 0, 0), End = new TimeSpan(8, 0, 0), Day = 2 },
+                    new { Name = "Student Basketball League", Start = new TimeSpan(16, 0, 0), End = new TimeSpan(18, 0, 0), Day = 4 },
+                    new { Name = "Football Practice", Start = new TimeSpan(15, 0, 0), End = new TimeSpan(17, 0, 0), Day = 3 },
+                    new { Name = "Volleyball Tournament", Start = new TimeSpan(14, 0, 0), End = new TimeSpan(16, 0, 0), Day = 6 }
                 };
 
-                // Maintenance period (whole year)
-                var maintenanceStart = new DateTime(currentDate.Year, 1, 1);
-                var maintenanceEnd = new DateTime(currentDate.Year, 12, 31);
+                var yearStart = DateTime.SpecifyKind(new DateTime(currentDate.Year, 1, 1), DateTimeKind.Utc);
+                var yearEnd = DateTime.SpecifyKind(new DateTime(currentDate.Year, 12, 31), DateTimeKind.Utc);
 
+                // Seed stadium events
+                foreach (var stadium in stadiums)
+                {
+                    for (int i = 0; i < Math.Min(2, stadiumEvents.Length); i++)
+                    {
+                        var evt = stadiumEvents[i];
+                        schedules.Add(new Schedule
+                        {
+                            Id = Guid.NewGuid(),
+                            RoomId = stadium.Id,
+                            ScheduleType = ScheduleType.Academic_Course,
+                            Title = evt.Name,
+                            StartTime = evt.Start,
+                            EndTime = evt.End,
+                            DayOfWeek = evt.Day,
+                            StartDate = yearStart,
+                            EndDate = yearEnd,
+                            IsDeleted = false,
+                            CreatedAt = DateTime.UtcNow,
+                            CreatedBy = adminId
+                        });
+                    }
+                }
+
+                // Maintenance schedules
+                var maintenanceSchedules = new[]
+                {
+                    new { Name = "Weekly Cleaning Service", Start = new TimeSpan(18, 0, 0), End = new TimeSpan(19, 0, 0), Day = 6 },
+                    new { Name = "HVAC System Check", Start = new TimeSpan(7, 0, 0), End = new TimeSpan(7, 30, 0), Day = 7 },
+                    new { Name = "Equipment Inspection", Start = new TimeSpan(8, 0, 0), End = new TimeSpan(9, 0, 0), Day = 7 },
+                    new { Name = "Network Infrastructure Check", Start = new TimeSpan(19, 0, 0), End = new TimeSpan(20, 0, 0), Day = 3 },
+                    new { Name = "Electrical System Maintenance", Start = new TimeSpan(6, 0, 0), End = new TimeSpan(7, 0, 0), Day = 1 },
+                    new { Name = "Fire Safety Inspection", Start = new TimeSpan(17, 30, 0), End = new TimeSpan(18, 30, 0), Day = 5 }
+                };
+
+                var maintenanceStart = DateTime.SpecifyKind(new DateTime(currentDate.Year, 1, 1), DateTimeKind.Utc);
+                var maintenanceEnd = DateTime.SpecifyKind(new DateTime(currentDate.Year, 12, 31), DateTimeKind.Utc);
+
+                // Seed maintenance to first 15 rooms
+                var maintenanceRooms = rooms.Take(15).ToList();
                 foreach (var room in maintenanceRooms)
                 {
-                    // Assign 2-3 different maintenance schedules per room
-                    var maintenanceCount = new Random().Next(2, 4);
-                    for (int i = 0; i < maintenanceCount && i < maintenanceSchedules.Length; i++)
-                    {
-                        var maintenance = maintenanceSchedules[i];
+                    var random = new Random(room.Id.GetHashCode());
+                    var maintenanceCount = random.Next(2, 5);
+                    var selectedMaintenance = maintenanceSchedules.OrderBy(x => random.Next()).Take(maintenanceCount);
 
+                    foreach (var maintenance in selectedMaintenance)
+                    {
                         schedules.Add(new Schedule
                         {
                             Id = Guid.NewGuid(),
                             RoomId = room.Id,
                             ScheduleType = ScheduleType.Recurring_Maintenance,
                             Title = maintenance.Name,
-                            StartTime = maintenance.Time.Item1,
-                            EndTime = maintenance.Time.Item2,
+                            StartTime = maintenance.Start,
+                            EndTime = maintenance.End,
                             DayOfWeek = maintenance.Day,
                             StartDate = maintenanceStart,
                             EndDate = maintenanceEnd,
@@ -385,15 +476,11 @@ namespace EVAuctionTrader.Presentation.Helper
                     }
                 }
 
-                // Add all schedules to database
                 await context.Schedules.AddRangeAsync(schedules);
                 await context.SaveChangesAsync();
             }
         }
 
-        /// <summary>
-        /// Seed all initial data (Users, Campuses, Rooms, and Schedules)
-        /// </summary>
         public static async Task SeedAllAsync(UniSpaceDbContext context)
         {
             await SeedUsersAsync(context);

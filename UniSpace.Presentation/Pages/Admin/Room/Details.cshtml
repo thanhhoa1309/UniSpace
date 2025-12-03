@@ -209,6 +209,11 @@
                         </div>
                         <div class="card-body">
                             <div class="d-grid gap-2">
+                                <a asp-page="RoomSchedules" asp-route-id="@Model.Room.Id" 
+                                   class="btn btn-info btn-lg">
+                                    <i class="bi bi-calendar-week"></i> View Schedules
+                                </a>
+                                <hr class="my-2" />
                                 <a asp-page="Edit" asp-route-id="@Model.Room.Id" 
                                    class="btn btn-warning btn-lg">
                                     <i class="bi bi-pencil-square"></i> Edit Room
@@ -219,7 +224,7 @@
                                         data-bs-target="#deleteModal">
                                     <i class="bi bi-trash"></i> Delete Room
                                 </button>
-                                <hr />
+                                <hr class="my-2" />
                                 <a asp-page="Index" class="btn btn-outline-secondary btn-lg">
                                     <i class="bi bi-arrow-left"></i> Back to List
                                 </a>
@@ -255,7 +260,7 @@
                                     <strong><i class="bi bi-tag text-muted"></i> Type:</strong><br/>
                                     <span class="badge @typeBadge">@Model.Room.TypeDisplay</span>
                                 </li>
-                                <li class="mb-3 pb-3 border-bottom">
+                                <li class="mb-3 pb-3 border-bottom>
                                     <strong><i class="bi bi-circle text-muted"></i> Status:</strong><br/>
                                     <span class="badge @statusBadge">@Model.Room.CurrentStatusDisplay</span>
                                 </li>

@@ -1,0 +1,389 @@
+@page
+@using UniSpace.BusinessObject.Enums
+@model UniSpace.Presentation.Pages.Admin.Room.RoomSchedulesModel
+@{
+    ViewData["Title"] = $"{Model.Room?.Name} - Schedules";
+}
+
+<div class="container-fluid px-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mt-4 mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-page="/Admin/Dashboard">
+                    <i class="bi bi-house"></i> Dashboard
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a asp-page="Index">Room Management</a>
+            </li>
+            @if (Model.Room != null)
+            {
+                <li class="breadcrumb-item">
+                    <a asp-page="Details" asp-route-id="@Model.Room.Id">
+                        @Model.Room.Name
+                    </a>
+                </li>
+            }
+            <li class="breadcrumb-item active">Schedules</li>
+        </ol>
+    </nav>
+
+    @if (Model.Room != null)
+    {
+        <!-- Room Info Header -->
+        <div class="card shadow-lg mb-4">
+            <div class="card-header bg-gradient-primary text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3 class="mb-1">
+                            <i class="bi bi-door-open"></i> @Model.Room.Name
+                        </h3>
+                        <p class="mb-0">
+                            <i class="bi bi-building me-1"></i>@Model.Room.CampusName
+                            <span class="mx-2">|</span>
+                            <i class="bi bi-tag me-1"></i>@Model.Room.TypeDisplay
+                            <span class="mx-2">|</span>
+                            <i class="bi bi-people me-1"></i>@Model.Room.Capacity seats
+                        </p>
+                    </div>
+                    <div class="text-end">
+                        <a asp-page="Details" asp-route-id="@Model.Room.Id" class="btn btn-light">
+                            <i class="bi bi-arrow-left"></i> Back to Room
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-xl-4 col-md-6 mb-3">
+                <div class="card border-left-primary shadow h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Total Schedules
+                                </div>
+                                <div class="h4 mb-0 font-weight-bold text-gray-800">
+                                    @Model.TotalSchedules
+                                </div>
+                            </div>
+                            <i class="bi bi-calendar-week display-4 text-primary opacity-25"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 mb-3">
+                <div class="card border-left-info shadow h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                    Academic Courses
+                                </div>
+                                <div class="h4 mb-0 font-weight-bold text-gray-800">
+                                    @Model.AcademicSchedules
+                                </div>
+                            </div>
+                            <i class="bi bi-book display-4 text-info opacity-25"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 mb-3">
+                <div class="card border-left-warning shadow h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    Maintenance
+                                </div>
+                                <div class="h4 mb-0 font-weight-bold text-gray-800">
+                                    @Model.MaintenanceSchedules
+                                </div>
+                            </div>
+                            <i class="bi bi-tools display-4 text-warning opacity-25"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.Schedules.Any())
+        {
+            <!-- Weekly Schedule View -->
+            <div class="card shadow-lg mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="bi bi-calendar-week me-2"></i>Weekly Schedule
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @foreach (var dayGroup in Model.SchedulesByDay)
+                    {
+                        var dayOfWeek = dayGroup.Key;
+                        var daySchedules = dayGroup.Value;
+                        var dayColor = Model.GetDayColor(dayOfWeek);
+                        
+                        <div class="mb-4">
+                            <h5 class="border-bottom pb-2 mb-3">
+                                <span class="badge bg-@dayColor">
+                                    @Model.GetDayName(dayOfWeek)
+                                </span>
+                                <small class="text-muted ms-2">(@daySchedules.Count schedule(s))</small>
+                            </h5>
+                            
+                            <div class="row g-3">
+                                @foreach (var schedule in daySchedules)
+                                {
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="card h-100 @(schedule.ScheduleType == ScheduleType.Academic_Course ? "border-primary" : "border-warning")">
+                                            <div class="card-header @(schedule.ScheduleType == ScheduleType.Academic_Course ? "bg-primary" : "bg-warning") text-white">
+                                                <div class="d-flex justify-content-between align-items-start">
+                                                    <h6 class="mb-0">
+                                                        <i class="bi @(schedule.ScheduleType == ScheduleType.Academic_Course ? "bi-book" : "bi-tools")"></i>
+                                                        @schedule.Title
+                                                    </h6>
+                                                    @if (schedule.ScheduleType == ScheduleType.Academic_Course)
+                                                    {
+                                                        <span class="badge bg-light text-primary">Academic</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge bg-light text-warning">Maintenance</span>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="mb-2">
+                                                    <i class="bi bi-clock text-primary"></i>
+                                                    <strong>Time:</strong>
+                                                    <span class="badge bg-secondary">
+                                                        @schedule.StartTime.ToString(@"hh\:mm") - @schedule.EndTime.ToString(@"hh\:mm")
+                                                    </span>
+                                                </div>
+                                                <div class="mb-2">
+                                                    <i class="bi bi-calendar-range text-success"></i>
+                                                    <strong>Period:</strong><br/>
+                                                    <small>
+                                                        @schedule.StartDate.ToString("MMM dd, yyyy") - 
+                                                        @schedule.EndDate.ToString("MMM dd, yyyy")
+                                                    </small>
+                                                </div>
+                                                <div class="mb-2">
+                                                    <i class="bi bi-hourglass text-info"></i>
+                                                    <strong>Duration:</strong>
+                                                    <span class="badge bg-info">
+                                                        @((schedule.EndTime - schedule.StartTime).Hours)h 
+                                                        @((schedule.EndTime - schedule.StartTime).Minutes)m
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer bg-light">
+                                                <div class="d-flex justify-content-between">
+                                                    <a asp-page="/Admin/Schedule/Details" 
+                                                       asp-route-id="@schedule.Id" 
+                                                       class="btn btn-sm btn-outline-primary">
+                                                        <i class="bi bi-eye"></i> View
+                                                    </a>
+                                                    <a asp-page="/Admin/Schedule/Edit" 
+                                                       asp-route-id="@schedule.Id" 
+                                                       class="btn btn-sm btn-outline-warning">
+                                                        <i class="bi bi-pencil"></i> Edit
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Timeline View -->
+            <div class="card shadow-lg">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="bi bi-list-ul me-2"></i>All Schedules (Timeline View)
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th width="200">Title</th>
+                                    <th width="100">Type</th>
+                                    <th width="120">Day</th>
+                                    <th width="150">Time</th>
+                                    <th width="200">Period</th>
+                                    <th width="100">Duration</th>
+                                    <th width="120" class="text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var schedule in Model.Schedules)
+                                {
+                                    <tr>
+                                        <td>
+                                            <strong>@schedule.Title</strong>
+                                        </td>
+                                        <td>
+                                            @if (schedule.ScheduleType == ScheduleType.Academic_Course)
+                                            {
+                                                <span class="badge bg-primary">
+                                                    <i class="bi bi-book"></i> Academic
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning">
+                                                    <i class="bi bi-tools"></i> Maintenance
+                                                </span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-@Model.GetDayColor(schedule.DayOfWeek)">
+                                                @schedule.DayOfWeekDisplay
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <i class="bi bi-clock"></i>
+                                            @schedule.StartTime.ToString(@"hh\:mm") - 
+                                            @schedule.EndTime.ToString(@"hh\:mm")
+                                        </td>
+                                        <td>
+                                            <small>
+                                                @schedule.StartDate.ToString("MMM dd") - 
+                                                @schedule.EndDate.ToString("MMM dd, yyyy")
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-info">
+                                                @((schedule.EndTime - schedule.StartTime).Hours)h 
+                                                @((schedule.EndTime - schedule.StartTime).Minutes)m
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <a asp-page="/Admin/Schedule/Details" 
+                                                   asp-route-id="@schedule.Id" 
+                                                   class="btn btn-outline-info"
+                                                   title="View Details">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                                <a asp-page="/Admin/Schedule/Edit" 
+                                                   asp-route-id="@schedule.Id" 
+                                                   class="btn btn-outline-warning"
+                                                   title="Edit">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <!-- Empty State -->
+            <div class="card shadow-lg">
+                <div class="card-body text-center py-5">
+                    <i class="bi bi-calendar-x display-1 text-muted mb-3"></i>
+                    <h4 class="text-muted">No Schedules Found</h4>
+                    <p class="text-muted">This room doesn't have any schedules yet.</p>
+                    <a asp-page="/Admin/Schedule/Create" 
+                       asp-route-roomId="@Model.Room.Id" 
+                       class="btn btn-primary btn-lg mt-3">
+                        <i class="bi bi-plus-circle"></i> Create First Schedule
+                    </a>
+                </div>
+            </div>
+        }
+
+        <!-- Quick Actions -->
+        <div class="card shadow-lg mt-4">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">
+                    <i class="bi bi-lightning me-2"></i>Quick Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <a asp-page="/Admin/Schedule/Create" 
+                           asp-route-roomId="@Model.Room.Id" 
+                           class="btn btn-primary w-100">
+                            <i class="bi bi-plus-circle"></i> Add Schedule
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a asp-page="Details" 
+                           asp-route-id="@Model.Room.Id" 
+                           class="btn btn-info w-100">
+                            <i class="bi bi-info-circle"></i> Room Details
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a asp-page="/Admin/Schedule/Index" 
+                           asp-route-roomId="@Model.Room.Id" 
+                           class="btn btn-secondary w-100">
+                            <i class="bi bi-list"></i> All Schedules
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a asp-page="Index" class="btn btn-outline-secondary w-100">
+                            <i class="bi bi-arrow-left"></i> Back to Rooms
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Error State -->
+        <div class="alert alert-danger">
+            <i class="bi bi-exclamation-triangle"></i>
+            @(Model.ErrorMessage ?? "Room not found.")
+        </div>
+        <a asp-page="Index" class="btn btn-primary">
+            <i class="bi bi-arrow-left"></i> Back to Rooms
+        </a>
+    }
+</div>
+
+<style>
+    .border-left-primary {
+        border-left: 0.25rem solid #4e73df !important;
+    }
+    .border-left-info {
+        border-left: 0.25rem solid #36b9cc !important;
+    }
+    .border-left-warning {
+        border-left: 0.25rem solid #f6c23e !important;
+    }
+    .text-xs {
+        font-size: 0.7rem;
+    }
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+    }
+    .opacity-25 {
+        opacity: 0.25;
+    }
+    .card:hover {
+        transform: translateY(-2px);
+        transition: all 0.3s ease;
+    }
+</style>
