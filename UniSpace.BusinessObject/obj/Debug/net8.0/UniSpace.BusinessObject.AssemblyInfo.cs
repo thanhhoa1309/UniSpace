@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("UniSpace.BusinessObject")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bbd6a96e8f5c8bc851c97dd18bbf479e0bcfe48c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+37266cce8d8db491824b531eb724916a192ff7d5")]
 [assembly: System.Reflection.AssemblyProductAttribute("UniSpace.BusinessObject")]
 [assembly: System.Reflection.AssemblyTitleAttribute("UniSpace.BusinessObject")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
