@@ -25,10 +25,10 @@ namespace UniSpace.Presentation.Pages.Admin
         {
             try
             {
-                var campuses = await _campusService.GetAllCampusesAsync();
+                var campuses = await _campusService.GetCampusesAsync();
                 TotalCampuses = campuses.Count;
                 TotalRooms = campuses.Sum(c => c.TotalRooms);
-                
+
                 // TODO: Get from other services when implemented
                 TotalBookings = 0;
                 PendingReports = 0;

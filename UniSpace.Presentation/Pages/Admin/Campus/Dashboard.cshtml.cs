@@ -22,14 +22,14 @@ namespace UniSpace.Presentation.Pages.Admin.Campus
         public int TotalRooms { get; set; }
         public int ActiveCampuses { get; set; }
         public int CampusesWithRooms { get; set; }
-        
+
         // Campus List
         public List<CampusDto> RecentCampuses { get; set; } = new();
         public List<CampusDto> TopCampusesByRooms { get; set; } = new();
-        
+
         // Charts Data
         public Dictionary<string, int> CampusRoomDistribution { get; set; } = new();
-        
+
         // Percentages
         public double CampusUtilizationRate { get; set; }
         public double AverageRoomsPerCampus { get; set; }
@@ -39,7 +39,7 @@ namespace UniSpace.Presentation.Pages.Admin.Campus
             try
             {
                 // Get all campuses
-                var allCampuses = await _campusService.GetAllCampusesAsync();
+                var allCampuses = await _campusService.GetCampusesAsync();
 
                 // Basic statistics
                 TotalCampuses = allCampuses.Count;
@@ -75,7 +75,7 @@ namespace UniSpace.Presentation.Pages.Admin.Campus
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error loading campus dashboard data");
-                
+
                 // Initialize with default values
                 TotalCampuses = 0;
                 TotalRooms = 0;

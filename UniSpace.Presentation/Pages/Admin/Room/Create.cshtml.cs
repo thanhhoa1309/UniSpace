@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using UniSpace.BusinessObject.DTOs.RoomDTOs;
-using UniSpace.BusinessObject.Enums;
 using UniSpace.Service.Interfaces;
 
 namespace UniSpace.Presentation.Pages.Admin.Room
@@ -87,7 +86,7 @@ namespace UniSpace.Presentation.Pages.Admin.Room
         {
             try
             {
-                var campuses = await _campusService.GetAllCampusesAsync();
+                var campuses = await _campusService.GetCampusesAsync();
                 CampusOptions = campuses.Select(c => new SelectListItem
                 {
                     Value = c.Id.ToString(),

@@ -60,7 +60,7 @@ namespace UniSpace.Presentation.Pages.Admin.Room
                     status: status);
 
                 // Load campus options for filter
-                var campuses = await _campusService.GetAllCampusesAsync();
+                var campuses = await _campusService.GetCampusesAsync();
                 CampusOptions = campuses.Select(c => new SelectListItem
                 {
                     Value = c.Id.ToString(),

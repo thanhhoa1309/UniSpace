@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UniSpace.BusinessObject.DTOs.CampusDTOs;
+﻿using UniSpace.BusinessObject.DTOs.CampusDTOs;
 using UniSpace.Services.Utils;
 
 namespace UniSpace.Service.Interfaces
