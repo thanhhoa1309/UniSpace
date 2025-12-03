@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("UniSpace.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+76f5706d22e6aa70a8eba6e48c0a129aee3c2d9b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bbd6a96e8f5c8bc851c97dd18bbf479e0bcfe48c")]
 [assembly: System.Reflection.AssemblyProductAttribute("UniSpace.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("UniSpace.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
