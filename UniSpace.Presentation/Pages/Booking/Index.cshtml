@@ -1,0 +1,202 @@
+@page
+@model UniSpace.Presentation.Pages.Booking.IndexModel
+@{
+    ViewData["Title"] = "My Bookings";
+}
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="mb-0">
+                    <i class="fas fa-calendar-check me-2"></i>My Bookings
+                </h2>
+                <a asp-page="Create" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>New Booking
+                </a>
+            </div>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>@TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- Filter Section -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Search</label>
+                    <input type="text" class="form-control" name="searchTerm" value="@Model.SearchTerm" placeholder="Room name, purpose...">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" name="status">
+                        <option value="">All Status</option>
+                        <option value="Pending" selected="@(Model.Status == "Pending")">Pending</option>
+                        <option value="Approved" selected="@(Model.Status == "Approved")">Approved</option>
+                        <option value="Rejected" selected="@(Model.Status == "Rejected")">Rejected</option>
+                        <option value="Completed" selected="@(Model.Status == "Completed")">Completed</option>
+                        <option value="Cancelled" selected="@(Model.Status == "Cancelled")">Cancelled</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">From Date</label>
+                    <input type="date" class="form-control" name="startDate" value="@Model.StartDate?.ToString("yyyy-MM-dd")">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">&nbsp;</label>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-search me-2"></i>Filter
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bookings Table -->
+    <div class="card">
+        <div class="card-body">
+            @if (Model.Bookings.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Room</th>
+                                <th>Campus</th>
+                                <th>Start Time</th>
+                                <th>End Time</th>
+                                <th>Duration</th>
+                                <th>Purpose</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var booking in Model.Bookings)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>@booking.RoomName</strong>
+                                    </td>
+                                    <td>@booking.CampusName</td>
+                                    <td>
+                                        <small class="text-muted">@booking.StartTime.ToLocalTime().ToString("dd/MM/yyyy")</small><br>
+                                        <strong>@booking.StartTime.ToLocalTime().ToString("HH:mm")</strong>
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">@booking.EndTime.ToLocalTime().ToString("dd/MM/yyyy")</small><br>
+                                        <strong>@booking.EndTime.ToLocalTime().ToString("HH:mm")</strong>
+                                    </td>
+                                    <td>@booking.DurationMinutes min</td>
+                                    <td>
+                                        <span title="@booking.Purpose">
+                                            @(booking.Purpose.Length > 50 ? booking.Purpose.Substring(0, 50) + "..." : booking.Purpose)
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @if (booking.Status == UniSpace.BusinessObject.Enums.BookingStatus.Pending)
+                                        {
+                                            <span class="badge bg-warning">@booking.StatusDisplay</span>
+                                        }
+                                        else if (booking.Status == UniSpace.BusinessObject.Enums.BookingStatus.Approved)
+                                        {
+                                            <span class="badge bg-success">@booking.StatusDisplay</span>
+                                        }
+                                        else if (booking.Status == UniSpace.BusinessObject.Enums.BookingStatus.Rejected)
+                                        {
+                                            <span class="badge bg-danger">@booking.StatusDisplay</span>
+                                        }
+                                        else if (booking.Status == UniSpace.BusinessObject.Enums.BookingStatus.Cancelled)
+                                        {
+                                            <span class="badge bg-secondary">@booking.StatusDisplay</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-info">@booking.StatusDisplay</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a asp-page="Details" asp-route-id="@booking.Id" class="btn btn-sm btn-info" title="Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        @if (booking.Status == UniSpace.BusinessObject.Enums.BookingStatus.Pending && booking.StartTime > DateTime.UtcNow)
+                                        {
+                                            <a asp-page="Edit" asp-route-id="@booking.Id" class="btn btn-sm btn-warning" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-sm btn-danger" onclick="cancelBooking('@booking.Id')" title="Cancel">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                @if (Model.Bookings.TotalPages > 1)
+                {
+                    <nav aria-label="Bookings pagination" class="mt-3">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item @(Model.Bookings.CurrentPage == 1 ? "disabled" : "")">
+                                <a class="page-link" asp-route-pageNumber="@(Model.Bookings.CurrentPage - 1)" asp-route-searchTerm="@Model.SearchTerm" asp-route-status="@Model.Status">Previous</a>
+                            </li>
+                            @for (int i = 1; i <= Model.Bookings.TotalPages; i++)
+                            {
+                                <li class="page-item @(i == Model.Bookings.CurrentPage ? "active" : "")">
+                                    <a class="page-link" asp-route-pageNumber="@i" asp-route-searchTerm="@Model.SearchTerm" asp-route-status="@Model.Status">@i</a>
+                                </li>
+                            }
+                            <li class="page-item @(Model.Bookings.CurrentPage == Model.Bookings.TotalPages ? "disabled" : "")">
+                                <a class="page-link" asp-route-pageNumber="@(Model.Bookings.CurrentPage + 1)" asp-route-searchTerm="@Model.SearchTerm" asp-route-status="@Model.Status">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                }
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
+                    <h4>No bookings found</h4>
+                    <p class="text-muted">Start by creating your first booking!</p>
+                    <a asp-page="Create" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Create Booking
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<form id="cancelForm" method="post" asp-page-handler="Cancel" style="display: none;">
+    <input type="hidden" id="cancelBookingId" name="id" />
+</form>
+
+@section Scripts {
+    <script>
+        function cancelBooking(bookingId) {
+            if (confirm('Are you sure you want to cancel this booking?')) {
+                document.getElementById('cancelBookingId').value = bookingId;
+                document.getElementById('cancelForm').submit();
+            }
+        }
+    </script>
+}

@@ -1,0 +1,160 @@
+@page
+@model UniSpace.Presentation.Pages.Booking.DetailsModel
+@{
+    ViewData["Title"] = "Booking Details";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>Booking Details
+                    </h4>
+                    @if (Model.Booking.Status == UniSpace.BusinessObject.Enums.BookingStatus.Pending)
+                    {
+                        <span class="badge bg-warning">@Model.Booking.StatusDisplay</span>
+                    }
+                    else if (Model.Booking.Status == UniSpace.BusinessObject.Enums.BookingStatus.Approved)
+                    {
+                        <span class="badge bg-success">@Model.Booking.StatusDisplay</span>
+                    }
+                    else if (Model.Booking.Status == UniSpace.BusinessObject.Enums.BookingStatus.Rejected)
+                    {
+                        <span class="badge bg-danger">@Model.Booking.StatusDisplay</span>
+                    }
+                    else if (Model.Booking.Status == UniSpace.BusinessObject.Enums.BookingStatus.Cancelled)
+                    {
+                        <span class="badge bg-secondary">@Model.Booking.StatusDisplay</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-info">@Model.Booking.StatusDisplay</span>
+                    }
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-2">
+                                <i class="fas fa-door-open me-2"></i>Room Information
+                            </h6>
+                            <p class="mb-1"><strong>Room:</strong> @Model.Booking.RoomName</p>
+                            <p class="mb-0"><strong>Campus:</strong> @Model.Booking.CampusName</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-2">
+                                <i class="fas fa-user me-2"></i>Booked By
+                            </h6>
+                            <p class="mb-1"><strong>Name:</strong> @Model.Booking.UserName</p>
+                            <p class="mb-0"><strong>Email:</strong> @Model.Booking.UserEmail</p>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-2">
+                                <i class="fas fa-calendar-alt me-2"></i>Start Time
+                            </h6>
+                            <p class="mb-1">
+                                <strong>@Model.Booking.StartTime.ToLocalTime().ToString("dddd, dd MMMM yyyy")</strong>
+                            </p>
+                            <p class="mb-0 text-primary">
+                                <i class="fas fa-clock me-1"></i>
+                                <strong>@Model.Booking.StartTime.ToLocalTime().ToString("HH:mm")</strong>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-2">
+                                <i class="fas fa-calendar-check me-2"></i>End Time
+                            </h6>
+                            <p class="mb-1">
+                                <strong>@Model.Booking.EndTime.ToLocalTime().ToString("dddd, dd MMMM yyyy")</strong>
+                            </p>
+                            <p class="mb-0 text-primary">
+                                <i class="fas fa-clock me-1"></i>
+                                <strong>@Model.Booking.EndTime.ToLocalTime().ToString("HH:mm")</strong>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info mb-3">
+                        <i class="fas fa-hourglass-half me-2"></i>
+                        <strong>Duration:</strong> @Model.Booking.DurationMinutes minutes
+                        (@(Model.Booking.DurationMinutes / 60)h @(Model.Booking.DurationMinutes % 60)m)
+                    </div>
+
+                    <hr>
+
+                    <div class="mb-3">
+                        <h6 class="text-muted mb-2">
+                            <i class="fas fa-clipboard me-2"></i>Purpose
+                        </h6>
+                        <p class="border p-3 rounded bg-light">@Model.Booking.Purpose</p>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Booking.AdminNote))
+                    {
+                        <div class="mb-3">
+                            <h6 class="text-muted mb-2">
+                                <i class="fas fa-comment-alt me-2"></i>Admin Note
+                            </h6>
+                            <p class="border p-3 rounded bg-warning bg-opacity-10">@Model.Booking.AdminNote</p>
+                        </div>
+                    }
+
+                    <hr>
+
+                    <div class="row text-muted small">
+                        <div class="col-md-6">
+                            <p class="mb-0">
+                                <i class="fas fa-calendar-plus me-2"></i>
+                                Created: @Model.Booking.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")
+                            </p>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <p class="mb-0">
+                                <i class="fas fa-hashtag me-2"></i>
+                                ID: @Model.Booking.Id.ToString().Substring(0, 8)...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-light">
+                    <div class="d-flex justify-content-between">
+                        <a asp-page="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Back to List
+                        </a>
+                        <div>
+                            @if (Model.Booking.Status == UniSpace.BusinessObject.Enums.BookingStatus.Pending && Model.Booking.StartTime > DateTime.UtcNow)
+                            {
+                                <a asp-page="Edit" asp-route-id="@Model.Booking.Id" class="btn btn-warning">
+                                    <i class="fas fa-edit me-2"></i>Edit
+                                </a>
+                                <button type="button" class="btn btn-danger" onclick="cancelBooking()">
+                                    <i class="fas fa-times me-2"></i>Cancel Booking
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="cancelForm" method="post" asp-page-handler="Cancel" style="display: none;">
+    <input type="hidden" name="id" value="@Model.Booking.Id" />
+</form>
+
+@section Scripts {
+    <script>
+        function cancelBooking() {
+            if (confirm('Are you sure you want to cancel this booking?')) {
+                document.getElementById('cancelForm').submit();
+            }
+        }
+    </script>
+}

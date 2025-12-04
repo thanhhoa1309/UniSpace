@@ -1,0 +1,145 @@
+@page
+@model UniSpace.Presentation.Pages.Booking.CreateModel
+@{
+    ViewData["Title"] = "Create Booking";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-calendar-plus me-2"></i>Create New Booking
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>@Model.ErrorMessage
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <form method="post">
+                        <div class="mb-3">
+                            <label asp-for="CreateBooking.RoomId" class="form-label">Room *</label>
+                            <select asp-for="CreateBooking.RoomId" class="form-select" id="roomSelect">
+                                <option value="">-- Select Room --</option>
+                                @foreach (var campus in Model.Campuses)
+                                {
+                                    <optgroup label="@campus.Name">
+                                        @foreach (var room in Model.Rooms.Where(r => r.CampusId == campus.Id))
+                                        {
+                                            <option value="@room.Id">
+                                                @room.Name (@room.TypeDisplay) - Capacity: @room.Capacity
+                                            </option>
+                                        }
+                                    </optgroup>
+                                }
+                            </select>
+                            <span asp-validation-for="CreateBooking.RoomId" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="CreateBooking.StartTime" class="form-label">Start Time *</label>
+                                <input asp-for="CreateBooking.StartTime" type="datetime-local" class="form-control" id="startTime" />
+                                <span asp-validation-for="CreateBooking.StartTime" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="CreateBooking.EndTime" class="form-label">End Time *</label>
+                                <input asp-for="CreateBooking.EndTime" type="datetime-local" class="form-control" id="endTime" />
+                                <span asp-validation-for="CreateBooking.EndTime" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Duration</label>
+                            <input type="text" class="form-control" id="duration" readonly placeholder="Select start and end time">
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="CreateBooking.Purpose" class="form-label">Purpose *</label>
+                            <textarea asp-for="CreateBooking.Purpose" class="form-control" rows="4" placeholder="Describe the purpose of this booking..."></textarea>
+                            <span asp-validation-for="CreateBooking.Purpose" class="text-danger"></span>
+                            <small class="text-muted">Maximum 500 characters</small>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Note:</strong> Your booking will be in "Pending" status. Please wait for admin approval.
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-page="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to List
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Create Booking
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Room Availability Check -->
+            <div class="card mt-3" id="availabilityCard" style="display: none;">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-clock me-2"></i>Room Availability
+                    </h5>
+                </div>
+                <div class="card-body" id="availabilityContent">
+                    <p class="text-muted">Select room and time to check availability...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // Calculate duration
+        function updateDuration() {
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
+            
+            if (startTime && endTime) {
+                const start = new Date(startTime);
+                const end = new Date(endTime);
+                const diff = (end - start) / 1000 / 60; // minutes
+                
+                if (diff > 0) {
+                    const hours = Math.floor(diff / 60);
+                    const minutes = diff % 60;
+                    document.getElementById('duration').value = `${hours}h ${minutes}m`;
+                } else {
+                    document.getElementById('duration').value = 'Invalid time range';
+                }
+            }
+        }
+
+        document.getElementById('startTime').addEventListener('change', updateDuration);
+        document.getElementById('endTime').addEventListener('change', updateDuration);
+
+        // Set minimum date to today
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        document.getElementById('startTime').min = now.toISOString().slice(0, 16);
+        document.getElementById('endTime').min = now.toISOString().slice(0, 16);
+
+        // Auto-set end time 1 hour after start time
+        document.getElementById('startTime').addEventListener('change', function() {
+            if (!document.getElementById('endTime').value) {
+                const start = new Date(this.value);
+                start.setHours(start.getHours() + 1);
+                const endTimeStr = start.toISOString().slice(0, 16);
+                document.getElementById('endTime').value = endTimeStr;
+                updateDuration();
+            }
+        });
+    </script>
+}
