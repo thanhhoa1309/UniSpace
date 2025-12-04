@@ -1,0 +1,204 @@
+@page
+@model UniSpace.Presentation.Pages.Bookings.MyBookingsModel
+@using UniSpace.BusinessObject.Enums
+@{
+    ViewData["Title"] = "My Bookings";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <h5 class="mb-0">
+                            <i class="bi bi-calendar-check"></i> My Bookings
+                        </h5>
+                        <a href="/Bookings/SearchRooms" class="btn btn-primary btn-sm">
+                            <i class="bi bi-plus-circle"></i> New Booking
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="bi bi-exclamation-circle"></i> <strong>Error!</strong> @TempData["Error"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="bi bi-check-circle"></i> <strong>Success!</strong> @TempData["Success"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <!-- Filter -->
+                    <form method="get" class="row g-3 mb-4">
+                        <div class="col-md-3">
+                            <label for="statusFilter" class="form-label">
+                                <i class="bi bi-funnel"></i> Filter by Status
+                            </label>
+                            <select class="form-select" id="statusFilter" name="statusFilter" onchange="this.form.submit()">
+                                <option value="">All Statuses</option>
+                                <option value="0" selected="@(Model.StatusFilter == BookingStatus.Pending)">Pending</option>
+                                <option value="1" selected="@(Model.StatusFilter == BookingStatus.Approved)">Approved</option>
+                                <option value="2" selected="@(Model.StatusFilter == BookingStatus.Rejected)">Rejected</option>
+                                <option value="3" selected="@(Model.StatusFilter == BookingStatus.Completed)">Completed</option>
+                                <option value="4" selected="@(Model.StatusFilter == BookingStatus.Cancelled)">Cancelled</option>
+                            </select>
+                        </div>
+                    </form>
+
+                    @if (Model.Bookings.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>ROOM</th>
+                                        <th>TIME</th>
+                                        <th>PURPOSE</th>
+                                        <th class="text-center">STATUS</th>
+                                        <th class="text-center">ACTIONS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var booking in Model.Bookings)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex flex-column">
+                                                    <strong class="mb-1">@booking.RoomName</strong>
+                                                    <small class="text-muted">
+                                                        @booking.CampusName | @booking.RoomTypeDisplay
+                                                    </small>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex flex-column">
+                                                    <strong class="mb-1">
+                                                        @booking.StartTime.ToLocalTime().ToString("MMM dd, yyyy")
+                                                    </strong>
+                                                    <small class="text-muted">
+                                                        @booking.StartTime.ToLocalTime().ToString("HH:mm") - @booking.EndTime.ToLocalTime().ToString("HH:mm")
+                                                    </small>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="text-muted">
+                                                    @(booking.Purpose.Length > 50 ? booking.Purpose.Substring(0, 50) + "..." : booking.Purpose)
+                                                </span>
+                                            </td>
+                                            <td class="text-center">
+                                                @{
+                                                    var badgeClass = booking.Status switch
+                                                    {
+                                                        BookingStatus.Pending => "bg-warning",
+                                                        BookingStatus.Approved => "bg-success",
+                                                        BookingStatus.Rejected => "bg-danger",
+                                                        BookingStatus.Completed => "bg-info",
+                                                        BookingStatus.Cancelled => "bg-secondary",
+                                                        _ => "bg-secondary"
+                                                    };
+                                                }
+                                                <span class="badge @badgeClass">@booking.StatusDisplay</span>
+                                                @if (!string.IsNullOrEmpty(booking.AdminNote))
+                                                {
+                                                    <br><small class="text-muted mt-1">Note: @booking.AdminNote</small>
+                                                }
+                                            </td>
+                                            <td>
+                                                <div class="action-buttons">
+                                                    <a href="/Bookings/Details?id=@booking.Id" 
+                                                       class="btn btn-sm btn-info text-white" 
+                                                       title="View Details">
+                                                        <i class="bi bi-eye"></i>
+                                                    </a>
+
+                                                    @if (booking.Status == BookingStatus.Pending)
+                                                    {
+                                                        <a href="/Bookings/Edit?id=@booking.Id" 
+                                                           class="btn btn-sm btn-warning text-white" 
+                                                           title="Edit">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </a>
+                                                    }
+
+                                                    @if (booking.Status == BookingStatus.Pending || booking.Status == BookingStatus.Approved)
+                                                    {
+                                                        <form method="post" 
+                                                              asp-page-handler="Cancel" 
+                                                              asp-route-id="@booking.Id" 
+                                                              onsubmit="return confirm('Are you sure you want to cancel this booking?');">
+                                                            <button type="submit" 
+                                                                    class="btn btn-sm btn-danger text-white" 
+                                                                    title="Cancel">
+                                                                <i class="bi bi-x-circle"></i>
+                                                            </button>
+                                                        </form>
+                                                    }
+
+                                                    @if (booking.Status == BookingStatus.Completed)
+                                                    {
+                                                        <a href="/RoomReports/Create?bookingId=@booking.Id" 
+                                                           class="btn btn-sm btn-dark text-white" 
+                                                           title="Report Issue">
+                                                            <i class="bi bi-exclamation-triangle"></i>
+                                                        </a>
+                                                    }
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        @if (Model.TotalPages > 1)
+                        {
+                            <nav aria-label="Page navigation" class="mt-4">
+                                <ul class="pagination justify-content-center">
+                                    @{
+                                        var prevDisabled = Model.PageNumber == 1 ? "disabled" : "";
+                                        var nextDisabled = Model.PageNumber == Model.TotalPages ? "disabled" : "";
+                                    }
+                                    <li class="page-item @prevDisabled">
+                                        <a class="page-link" href="?pageNumber=@(Model.PageNumber - 1)@(Model.StatusFilter.HasValue ? $"&statusFilter={(int)Model.StatusFilter}" : "")">
+                                            <i class="bi bi-chevron-left"></i> Previous
+                                        </a>
+                                    </li>
+
+                                    @for (int i = Math.Max(1, Model.PageNumber - 2); i <= Math.Min(Model.TotalPages, Model.PageNumber + 2); i++)
+                                    {
+                                        var activeClass = i == Model.PageNumber ? "active" : "";
+                                        <li class="page-item @activeClass">
+                                            <a class="page-link" href="?pageNumber=@i@(Model.StatusFilter.HasValue ? $"&statusFilter={(int)Model.StatusFilter}" : "")">@i</a>
+                                        </li>
+                                    }
+
+                                    <li class="page-item @nextDisabled">
+                                        <a class="page-link" href="?pageNumber=@(Model.PageNumber + 1)@(Model.StatusFilter.HasValue ? $"&statusFilter={(int)Model.StatusFilter}" : "")">
+                                            Next <i class="bi bi-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        }
+                    }
+                    else
+                    {
+                        <div class="alert alert-info text-center">
+                            <i class="bi bi-info-circle"></i> You don't have any bookings yet.
+                            <a href="/Bookings/SearchRooms" class="alert-link">Start booking now!</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

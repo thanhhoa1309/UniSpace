@@ -12,8 +12,8 @@ using UniSpace.Domain;
 namespace UniSpace.Domain.Migrations
 {
     [DbContext(typeof(UniSpaceDbContext))]
-    [Migration("20251203094837_nanaa")]
-    partial class nanaa
+    [Migration("20251204143801_fixRoomReportEntities")]
+    partial class fixRoomReportEntities
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -251,6 +251,12 @@ namespace UniSpace.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("AdminResponse")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("BookingId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -291,6 +297,8 @@ namespace UniSpace.Domain.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BookingId");
 
                     b.HasIndex("RoomId");
 
@@ -396,6 +404,12 @@ namespace UniSpace.Domain.Migrations
 
             modelBuilder.Entity("UniSpace.Domain.Entities.RoomReport", b =>
                 {
+                    b.HasOne("UniSpace.Domain.Entities.Booking", "Booking")
+                        .WithMany("RoomReports")
+                        .HasForeignKey("BookingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("UniSpace.Domain.Entities.Room", "Room")
                         .WithMany("Reports")
                         .HasForeignKey("RoomId")
@@ -408,9 +422,16 @@ namespace UniSpace.Domain.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Booking");
+
                     b.Navigation("Room");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("UniSpace.Domain.Entities.Booking", b =>
+                {
+                    b.Navigation("RoomReports");
                 });
 
             modelBuilder.Entity("UniSpace.Domain.Entities.Campus", b =>

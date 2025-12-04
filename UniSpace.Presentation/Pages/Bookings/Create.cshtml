@@ -1,0 +1,152 @@
+@page
+@model UniSpace.Presentation.Pages.Bookings.CreateModel
+@{
+    ViewData["Title"] = "Create Booking";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header pb-0">
+                    <div class="d-flex align-items-center">
+                        <h6 class="mb-0">Create New Booking</h6>
+                        <a href="/Bookings/SearchRooms" class="btn btn-secondary btn-sm ms-auto">
+                            <i class="fas fa-arrow-left"></i> Back to Search
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (Model.Room != null)
+                    {
+                        <!-- Room Information -->
+                        <div class="alert alert-info">
+                            <h5 class="text-dark"><i class="fas fa-door-open"></i> @Model.Room.Name</h5>
+                            <p class="mb-1">
+                                <i class="fas fa-building"></i> <strong>Campus:</strong> @Model.Room.CampusName<br>
+                                <i class="fas fa-tag"></i> <strong>Type:</strong> @Model.Room.TypeDisplay<br>
+                                <i class="fas fa-users"></i> <strong>Capacity:</strong> @Model.Room.Capacity people<br>
+                                @if (!string.IsNullOrEmpty(Model.Room.Description))
+                                {
+                                    <i class="fas fa-info-circle"></i> @Model.Room.Description
+                                }
+                            </p>
+                        </div>
+
+                        <!-- Booking Form -->
+                        <form method="post">
+                            <input type="hidden" asp-for="Booking.RoomId" />
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Booking.StartTime" class="form-label">Start Time <span class="text-danger">*</span></label>
+                                    <input type="datetime-local" 
+                                           class="form-control @(ViewData.ModelState["Booking.StartTime"]?.Errors.Count > 0 ? "is-invalid" : "")"
+                                           asp-for="Booking.StartTime" 
+                                           id="startTime"
+                                           required>
+                                    <span asp-validation-for="Booking.StartTime" class="invalid-feedback"></span>
+                                    <small class="text-muted">Select when you want to start using the room</small>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Booking.EndTime" class="form-label">End Time <span class="text-danger">*</span></label>
+                                    <input type="datetime-local" 
+                                           class="form-control @(ViewData.ModelState["Booking.EndTime"]?.Errors.Count > 0 ? "is-invalid" : "")"
+                                           asp-for="Booking.EndTime" 
+                                           id="endTime"
+                                           required>
+                                    <span asp-validation-for="Booking.EndTime" class="invalid-feedback"></span>
+                                    <small class="text-muted">Select when you will finish using the room</small>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <div id="availabilityCheck" class="alert" style="display:none;"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Booking.Purpose" class="form-label">Purpose <span class="text-danger">*</span></label>
+                                <textarea class="form-control @(ViewData.ModelState["Booking.Purpose"]?.Errors.Count > 0 ? "is-invalid" : "")"
+                                          asp-for="Booking.Purpose" 
+                                          rows="4"
+                                          placeholder="Please describe the purpose of your booking (minimum 10 characters)"
+                                          required></textarea>
+                                <span asp-validation-for="Booking.Purpose" class="invalid-feedback"></span>
+                                <small class="text-muted">Provide details about how you plan to use the room</small>
+                            </div>
+
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                            <div class="d-flex justify-content-end">
+                                <a href="/Bookings/SearchRooms" class="btn btn-secondary me-2">
+                                    <i class="fas fa-times"></i> Cancel
+                                </a>
+                                <button type="submit" class="btn btn-primary" id="submitBtn">
+                                    <i class="fas fa-calendar-check"></i> Create Booking
+                                </button>
+                            </div>
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle"></i> Room information not available.
+                            <a href="/Bookings/SearchRooms" class="alert-link">Go back to search</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        $(document).ready(function() {
+            let availabilityTimeout;
+
+            function checkAvailability() {
+                const roomId = '@Model.Booking.RoomId';
+                const startTime = $('#startTime').val();
+                const endTime = $('#endTime').val();
+
+                if (startTime && endTime) {
+                    $.get('/Bookings/Create', {
+                        handler: 'CheckAvailability',
+                        roomId: roomId,
+                        startTime: startTime,
+                        endTime: endTime
+                    }, function(data) {
+                        const alertDiv = $('#availabilityCheck');
+                        const submitBtn = $('#submitBtn');
+                        
+                        if (data.available) {
+                            alertDiv.removeClass('alert-danger').addClass('alert-success');
+                            alertDiv.html('<i class="fas fa-check-circle"></i> Room is available for the selected time!');
+                            alertDiv.show();
+                            submitBtn.prop('disabled', false);
+                        } else {
+                            alertDiv.removeClass('alert-success').addClass('alert-danger');
+                            alertDiv.html('<i class="fas fa-times-circle"></i> Room is not available for the selected time. Please choose a different time.');
+                            alertDiv.show();
+                            submitBtn.prop('disabled', true);
+                        }
+                    });
+                }
+            }
+
+            $('#startTime, #endTime').on('change', function() {
+                clearTimeout(availabilityTimeout);
+                availabilityTimeout = setTimeout(checkAvailability, 500);
+            });
+
+            // Initial check if times are pre-filled
+            if ($('#startTime').val() && $('#endTime').val()) {
+                checkAvailability();
+            }
+        });
+    </script>
+}
