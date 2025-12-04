@@ -37,6 +37,16 @@ msbuild.log
 msbuild.err
 msbuild.wrn
 
+# .NET build artifacts
+*.dll
+*.exe
+*.pdb
+*.cache
+*.assets.cache
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
 # Dependencies
 node_modules/
 wwwroot/lib/
