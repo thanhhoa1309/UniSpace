@@ -30,6 +30,8 @@ bld/
 [Oo]bj/
 **/[Bb]in/
 **/[Oo]bj/
+**/obj/**
+*.obj
 [Oo]ut/
 msbuild.log
 msbuild.err
