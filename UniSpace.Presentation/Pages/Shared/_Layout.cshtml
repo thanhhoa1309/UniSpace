@@ -10,25 +10,36 @@
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
+    <!-- Header Section -->
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary border-bottom box-shadow mb-3">
-            <div class="container">
+            <div class="container-fluid">
+                <!-- Brand/Logo -->
                 <a class="navbar-brand" asp-page="/Index">
                     <i class="bi bi-mortarboard"></i> UniSpace
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                
+                <!-- Mobile Toggle Button -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" 
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                
+                <!-- Navigation Menu -->
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <!-- Left Side Navigation -->
                     <ul class="navbar-nav flex-grow-1">
+                        <!-- Home Link -->
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-page="/Index">
                                 <i class="bi bi-house"></i> Home
                             </a>
                         </li>
+                        
+                        <!-- Authenticated User Navigation -->
                         @if (User.Identity?.IsAuthenticated == true)
                         {
+                            <!-- Admin Menu -->
                             @if (User.IsInRole("Admin"))
                             {
                                 <li class="nav-item dropdown">
@@ -37,12 +48,15 @@
                                         <i class="bi bi-gear"></i> Admin
                                     </a>
                                     <ul class="dropdown-menu">
+                                        <!-- Admin Dashboard -->
                                         <li>
                                             <a class="dropdown-item" asp-page="/Admin/Dashboard">
                                                 <i class="bi bi-speedometer2"></i> Admin Dashboard
                                             </a>
                                         </li>
                                         <li><hr class="dropdown-divider"></li>
+                                        
+                                        <!-- Campus Management -->
                                         <li>
                                             <a class="dropdown-item" asp-page="/Admin/Campus/Dashboard">
                                                 <i class="bi bi-building"></i> Campus Dashboard
@@ -54,6 +68,8 @@
                                             </a>
                                         </li>
                                         <li><hr class="dropdown-divider"></li>
+                                        
+                                        <!-- Room Management -->
                                         <li>
                                             <a class="dropdown-item" asp-page="/Admin/Room/Dashboard">
                                                 <i class="bi bi-door-open"></i> Room Dashboard
@@ -65,6 +81,8 @@
                                             </a>
                                         </li>
                                         <li><hr class="dropdown-divider"></li>
+                                        
+                                        <!-- Other Admin Features -->
                                         <li>
                                             <a class="dropdown-item" href="#">
                                                 <i class="bi bi-people"></i> User Management
@@ -80,6 +98,7 @@
                             }
                             else
                             {
+                                <!-- Regular User Dashboard -->
                                 <li class="nav-item">
                                     <a class="nav-link text-white" asp-page="/Dashboard">
                                         <i class="bi bi-speedometer2"></i> Dashboard
@@ -88,14 +107,34 @@
                             }
                         }
                     </ul>
+                    
+                    <!-- Right Side - User Account -->
                     <ul class="navbar-nav">
                         @if (User.Identity?.IsAuthenticated == true)
                         {
+                            <!-- Logged In User Dropdown -->
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-white" href="#" role="button" 
                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-person-circle"></i> @User.Identity.Name
+                                    <i class="bi bi-person-circle"></i> 
+                                    @User.Identity.Name
+                                    
+                                    <!-- Role Badge -->
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <span class="badge bg-warning text-dark ms-1">Admin</span>
+                                    }
+                                    else if (User.IsInRole("Teacher"))
+                                    {
+                                        <span class="badge bg-info text-dark ms-1">Teacher</span>
+                                    }
+                                    else if (User.IsInRole("Student"))
+                                    {
+                                        <span class="badge bg-success ms-1">Student</span>
+                                    }
                                 </a>
+                                
+                                <!-- User Dropdown Menu -->
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li>
                                         <a class="dropdown-item" href="#">
@@ -104,7 +143,12 @@
                                     </li>
                                     <li>
                                         <a class="dropdown-item" href="#">
-                                            <i class="bi bi-gear"></i> Settings
+                                            <i class="bi bi-calendar-check"></i> My Bookings
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-page="/RoomReports/MyReports">
+                                            <i class="bi bi-file-text"></i> My Reports
                                         </a>
                                     </li>
                                     <li><hr class="dropdown-divider"></li>
@@ -118,6 +162,7 @@
                         }
                         else
                         {
+                            <!-- Guest User Links -->
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-page="/Auth/Login">
                                     <i class="bi bi-box-arrow-in-right"></i> Login
@@ -134,18 +179,24 @@
             </div>
         </nav>
     </header>
+    
+    <!-- Main Content -->
     <div class="container-fluid">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted mt-5">
+    <!-- Footer Section -->
+    <footer class="border-top footer text-muted text-center py-3 mt-5 bg-light">
         <div class="container">
-            &copy; 2024 - UniSpace - University Space Management System - <a asp-page="/Privacy">Privacy</a>
+            <p class="mb-0">
+                &copy; @DateTime.Now.Year UniSpace - University Space Management System
+            </p>
         </div>
     </footer>
 
+    <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

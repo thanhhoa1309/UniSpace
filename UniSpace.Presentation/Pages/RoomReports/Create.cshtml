@@ -1,0 +1,102 @@
+@page
+@model UniSpace.Presentation.Pages.RoomReports.CreateModel
+@{
+    ViewData["Title"] = "Report Room Issue";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-exclamation-triangle"></i> Report Room Issue
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="bi bi-exclamation-circle"></i> @Model.ErrorMessage
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <div class="alert alert-info mb-4">
+                        <i class="bi bi-info-circle"></i>
+                        <strong>Note:</strong> Each booking can only be reported once. Please provide detailed information about the issue.
+                    </div>
+
+                    <form method="post">
+                        <input type="hidden" asp-for="Input.BookingId" />
+
+                        <div class="mb-3">
+                            <label asp-for="Input.IssueType" class="form-label">
+                                <i class="bi bi-tag"></i> Issue Type <span class="text-danger">*</span>
+                            </label>
+                            <select asp-for="Input.IssueType" class="form-select" required>
+                                <option value="">-- Select Issue Type --</option>
+                                <option value="Broken Equipment">Broken Equipment</option>
+                                <option value="Cleanliness">Cleanliness</option>
+                                <option value="Air Conditioning">Air Conditioning</option>
+                                <option value="Lighting">Lighting</option>
+                                <option value="Furniture">Furniture</option>
+                                <option value="Technology">Technology (Projector, Computer, etc.)</option>
+                                <option value="Safety">Safety Concern</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <span asp-validation-for="Input.IssueType" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Input.Description" class="form-label">
+                                <i class="bi bi-chat-left-text"></i> Description <span class="text-danger">*</span>
+                            </label>
+                            <textarea asp-for="Input.Description" class="form-control" rows="6" 
+                                      placeholder="Please describe the issue in detail (minimum 10 characters)..." required></textarea>
+                            <div class="form-text">
+                                <i class="bi bi-info-circle"></i> Be as specific as possible to help us resolve the issue quickly.
+                                <span id="charCount">0</span>/1000 characters
+                            </div>
+                            <span asp-validation-for="Input.Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-page="/Dashboard" class="btn btn-secondary">
+                                <i class="bi bi-x-circle"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-send"></i> Submit Report
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        $(document).ready(function() {
+            // Character counter for description
+            $('#Input_Description').on('input', function() {
+                var length = $(this).val().length;
+                $('#charCount').text(length);
+                
+                if (length < 10) {
+                    $('#charCount').addClass('text-danger').removeClass('text-success');
+                } else if (length > 950) {
+                    $('#charCount').addClass('text-warning').removeClass('text-success text-danger');
+                } else {
+                    $('#charCount').addClass('text-success').removeClass('text-danger text-warning');
+                }
+            });
+
+            // Initialize character count
+            $('#Input_Description').trigger('input');
+        });
+    </script>
+}

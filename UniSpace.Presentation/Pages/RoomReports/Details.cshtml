@@ -1,0 +1,155 @@
+@page
+@model UniSpace.Presentation.Pages.RoomReports.DetailsModel
+@{
+    ViewData["Title"] = "Report Details";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>
+            <i class="bi bi-file-text-fill"></i> Report Details
+        </h2>
+        <a asp-page="./MyReports" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to My Reports
+        </a>
+    </div>
+
+    @if (Model.Report == null)
+    {
+        <div class="alert alert-danger">
+            <i class="bi bi-exclamation-triangle"></i> Report not found.
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card shadow mb-4">
+                    <div class="card-header @(Model.Report.Status == UniSpace.BusinessObject.Enums.ReportStatus.Open ? "bg-warning" : "bg-success") text-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">
+                                <i class="bi bi-tag"></i> @Model.Report.IssueType
+                            </h5>
+                            <span class="badge @(Model.Report.Status == UniSpace.BusinessObject.Enums.ReportStatus.Open ? "bg-dark" : "bg-light text-dark") fs-6">
+                                @Model.Report.StatusDisplay
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-3 text-muted">
+                            <i class="bi bi-calendar-event"></i> Reported on @Model.Report.CreatedAt.ToString("MMMM dd, yyyy 'at' HH:mm")
+                        </h6>
+
+                        <div class="mb-4">
+                            <h6><i class="bi bi-chat-left-text"></i> Description</h6>
+                            <p class="ms-3">@Model.Report.Description</p>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(Model.Report.AdminResponse))
+                        {
+                            <div class="alert alert-info">
+                                <h6><i class="bi bi-chat-left-dots"></i> Admin Response</h6>
+                                <p class="mb-1">@Model.Report.AdminResponse</p>
+                                @if (Model.Report.UpdatedAt.HasValue)
+                                {
+                                    <small class="text-muted">
+                                        <i class="bi bi-clock"></i> Responded on @Model.Report.UpdatedAt.Value.ToString("MMMM dd, yyyy 'at' HH:mm")
+                                    </small>
+                                }
+                            </div>
+                        }
+                        else if (Model.Report.Status == UniSpace.BusinessObject.Enums.ReportStatus.Open)
+                        {
+                            <div class="alert alert-warning">
+                                <i class="bi bi-hourglass-split"></i> <strong>Pending Review</strong><br/>
+                                <small>Our team is reviewing your report. We'll respond as soon as possible.</small>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card shadow mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h6 class="mb-0">
+                            <i class="bi bi-info-circle"></i> Report Information
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row mb-0">
+                            <dt class="col-sm-5">
+                                <i class="bi bi-hash"></i> Report ID:
+                            </dt>
+                            <dd class="col-sm-7">
+                                <small class="text-muted font-monospace">@Model.Report.Id.ToString().Substring(0, 8)...</small>
+                            </dd>
+
+                            <dt class="col-sm-5">
+                                <i class="bi bi-bookmark"></i> Booking ID:
+                            </dt>
+                            <dd class="col-sm-7">
+                                <small class="text-muted font-monospace">@Model.Report.BookingId.ToString().Substring(0, 8)...</small>
+                            </dd>
+
+                            <dt class="col-sm-5">
+                                <i class="bi bi-building"></i> Campus:
+                            </dt>
+                            <dd class="col-sm-7">
+                                @Model.Report.CampusName
+                            </dd>
+
+                            <dt class="col-sm-5">
+                                <i class="bi bi-door-open"></i> Room:
+                            </dt>
+                            <dd class="col-sm-7">
+                                @Model.Report.RoomName
+                            </dd>
+
+                            <dt class="col-sm-5">
+                                <i class="bi bi-person"></i> Reporter:
+                            </dt>
+                            <dd class="col-sm-7">
+                                @Model.Report.UserName
+                            </dd>
+
+                            <dt class="col-sm-5">
+                                <i class="bi bi-envelope"></i> Email:
+                            </dt>
+                            <dd class="col-sm-7">
+                                <small>@Model.Report.UserEmail</small>
+                            </dd>
+
+                            <dt class="col-sm-5">
+                                <i class="bi bi-flag"></i> Status:
+                            </dt>
+                            <dd class="col-sm-7">
+                                <span class="badge @(Model.Report.Status == UniSpace.BusinessObject.Enums.ReportStatus.Open ? "bg-warning text-dark" : "bg-success")">
+                                    @Model.Report.StatusDisplay
+                                </span>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="card shadow">
+                    <div class="card-header bg-light">
+                        <h6 class="mb-0">
+                            <i class="bi bi-question-circle"></i> Need Help?
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="small mb-2">
+                            If you have additional information or questions about this report, please contact our support team.
+                        </p>
+                        <div class="d-grid">
+                            <a href="mailto:support@unispace.edu" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-envelope"></i> Contact Support
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
