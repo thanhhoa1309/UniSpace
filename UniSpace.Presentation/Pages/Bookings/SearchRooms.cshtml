@@ -1,0 +1,149 @@
+@page
+@model UniSpace.Presentation.Pages.Bookings.SearchRoomsModel
+@{
+    ViewData["Title"] = "Search Rooms";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header pb-0">
+                    <h6>Search Available Rooms</h6>
+                </div>
+                <div class="card-body px-4 pt-4 pb-2">
+                    <!-- Search Form -->
+                    <form method="get" class="row g-3 mb-4">
+                        <div class="col-md-3">
+                            <label for="searchTerm" class="form-label">Search</label>
+                            <input type="text" class="form-control" id="searchTerm" name="searchTerm" 
+                                   value="@Model.SearchTerm" placeholder="Room name or campus...">
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="campusId" class="form-label">Campus</label>
+                            <select class="form-select" id="campusId" name="campusId" asp-items="Model.Campuses">
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="roomType" class="form-label">Room Type</label>
+                            <select class="form-select" id="roomType" name="roomType" asp-items="Model.RoomTypes">
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="minCapacity" class="form-label">Min Capacity</label>
+                            <input type="number" class="form-control" id="minCapacity" name="minCapacity" 
+                                   value="@Model.MinCapacity" min="1">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="startTime" class="form-label">From</label>
+                            <input type="datetime-local" class="form-control" id="startTime" name="startTime" 
+                                   value="@(Model.StartTime?.ToString("yyyy-MM-ddTHH:mm"))">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="endTime" class="form-label">To</label>
+                            <input type="datetime-local" class="form-control" id="endTime" name="endTime" 
+                                   value="@(Model.EndTime?.ToString("yyyy-MM-ddTHH:mm"))">
+                        </div>
+
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                            <a href="/Bookings/SearchRooms" class="btn btn-secondary">
+                                <i class="fas fa-redo"></i> Reset
+                            </a>
+                        </div>
+                    </form>
+
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Error!</strong> @TempData["Error"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Success!</strong> @TempData["Success"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <!-- Results -->
+                    @if (Model.Rooms.Any())
+                    {
+                        <div class="row">
+                            @foreach (var room in Model.Rooms)
+                            {
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title">@room.Name</h5>
+                                            <h6 class="card-subtitle mb-2 text-muted">@room.CampusName</h6>
+                                            
+                                            <div class="mb-2">
+                                                <span class="badge bg-info">@room.TypeDisplay</span>
+                                                <span class="badge bg-success">@room.RoomStatusDisplay</span>
+                                            </div>
+
+                                            <p class="card-text">
+                                                <i class="fas fa-users"></i> Capacity: <strong>@room.Capacity</strong><br>
+                                                @if (!string.IsNullOrEmpty(room.Description))
+                                                {
+                                                    <small class="text-muted">@room.Description</small>
+                                                }
+                                            </p>
+
+                                            <div class="d-grid">
+                                                <a href="/Bookings/Create?roomId=@room.Id@(Model.StartTime.HasValue ? $"&startTime={Model.StartTime:yyyy-MM-ddTHH:mm}" : "")@(Model.EndTime.HasValue ? $"&endTime={Model.EndTime:yyyy-MM-ddTHH:mm}" : "")" 
+                                                   class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-calendar-plus"></i> Book This Room
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Pagination -->
+                        @if (Model.TotalPages > 1)
+                        {
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+                                        <a class="page-link" href="?pageNumber=@(Model.PageNumber - 1)@(Model.CampusId.HasValue ? $"&campusId={Model.CampusId}" : "")@(Model.RoomType.HasValue ? $"&roomType={(int)Model.RoomType}" : "")@(!string.IsNullOrEmpty(Model.SearchTerm) ? $"&searchTerm={Model.SearchTerm}" : "")">Previous</a>
+                                    </li>
+
+                                    @for (int i = Math.Max(1, Model.PageNumber - 2); i <= Math.Min(Model.TotalPages, Model.PageNumber + 2); i++)
+                                    {
+                                        <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                                            <a class="page-link" href="?pageNumber=@i@(Model.CampusId.HasValue ? $"&campusId={Model.CampusId}" : "")@(Model.RoomType.HasValue ? $"&roomType={(int)Model.RoomType}" : "")@(!string.IsNullOrEmpty(Model.SearchTerm) ? $"&searchTerm={Model.SearchTerm}" : "")">@i</a>
+                                        </li>
+                                    }
+
+                                    <li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
+                                        <a class="page-link" href="?pageNumber=@(Model.PageNumber + 1)@(Model.CampusId.HasValue ? $"&campusId={Model.CampusId}" : "")@(Model.RoomType.HasValue ? $"&roomType={(int)Model.RoomType}" : "")@(!string.IsNullOrEmpty(Model.SearchTerm) ? $"&searchTerm={Model.SearchTerm}" : "")">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        }
+                    }
+                    else
+                    {
+                        <div class="alert alert-info text-center">
+                            <i class="fas fa-info-circle"></i> No rooms found matching your criteria. Try adjusting your search filters.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -69,6 +69,7 @@ namespace UniSpace.Presentation.Architecture
             services.AddScoped<IRoomService, RoomService>();
             services.AddScoped<IScheduleService, ScheduleService>();
             services.AddScoped<IRoomReportService, RoomReportService>();
+            services.AddScoped<IBookingService, BookingService>();
 
             return services;
         }
@@ -136,6 +137,9 @@ namespace UniSpace.Presentation.Architecture
 
                 options.AddPolicy("LecturerPolicy", policy =>
                     policy.RequireRole("Lecturer"));
+
+                options.AddPolicy("UserPolicy", policy =>
+                    policy.RequireRole("Student", "Lecturer"));
 
                 options.AddPolicy("AdminPolicy", policy =>
                     policy.RequireRole("Admin"));

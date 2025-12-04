@@ -1,31 +1,43 @@
 @page
 @model UniSpace.Presentation.Pages.DashboardModel
+@using UniSpace.BusinessObject.Enums
 @{
     ViewData["Title"] = "Dashboard";
 }
 
-<div class="container mt-4">
-    <h1 class="mb-4">Dashboard</h1>
-
+<div class="container-fluid py-4">
     <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">
+                <i class="bi bi-speedometer2"></i> My Dashboard
+            </h1>
+        </div>
+    </div>
+
+    <!-- User Information Card -->
+    <div class="row mb-4">
         <div class="col-md-12">
-            <div class="card mb-4">
+            <div class="card">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">User Information</h5>
+                    <h5 class="mb-0"><i class="bi bi-person-circle"></i> User Information</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
                             <p><strong>Email:</strong> @Model.UserEmail</p>
-                            <p><strong>Role:</strong> <span class="badge bg-info">@Model.UserRole</span></p>
-                            <p><strong>User ID:</strong> @Model.UserId</p>
                         </div>
                         <div class="col-md-6">
-                            <p><strong>Authentication Status:</strong> 
-                                <span class="badge bg-success">Authenticated</span>
-                            </p>
-                            <p><strong>Session Active:</strong> 
-                                <span class="badge bg-success">Yes</span>
+                            <p><strong>Role:</strong> 
+                                @{
+                                    var roleClass = Model.UserRole switch
+                                    {
+                                        "Student" => "bg-success",
+                                        "Lecturer" => "bg-info",
+                                        "Admin" => "bg-warning text-dark",
+                                        _ => "bg-secondary"
+                                    };
+                                }
+                                <span class="badge @roleClass">@Model.UserRole</span>
                             </p>
                         </div>
                     </div>
@@ -34,54 +46,202 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-4 mb-3">
-            <div class="card text-center">
-                <div class="card-body">
-                    <i class="bi bi-building" style="font-size: 3rem;"></i>
-                    <h5 class="card-title mt-3">Campuses</h5>
-                    <p class="card-text">View and manage campuses</p>
-                    <a href="#" class="btn btn-primary">View Campuses</a>
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="text-primary mb-2">
+                        <i class="bi bi-calendar-check" style="font-size: 3rem;"></i>
+                    </div>
+                    <h3 class="mb-0">@Model.TotalBookings</h3>
+                    <p class="text-muted mb-0">Total Bookings</p>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4 mb-3">
-            <div class="card text-center">
-                <div class="card-body">
-                    <i class="bi bi-door-open" style="font-size: 3rem;"></i>
-                    <h5 class="card-title mt-3">Rooms</h5>
-                    <p class="card-text">Browse available rooms</p>
-                    <a href="#" class="btn btn-primary">View Rooms</a>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="text-warning mb-2">
+                        <i class="bi bi-hourglass-split" style="font-size: 3rem;"></i>
+                    </div>
+                    <h3 class="mb-0">@Model.PendingBookings</h3>
+                    <p class="text-muted mb-0">Pending Approval</p>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4 mb-3">
-            <div class="card text-center">
-                <div class="card-body">
-                    <i class="bi bi-calendar-check" style="font-size: 3rem;"></i>
-                    <h5 class="card-title mt-3">My Bookings</h5>
-                    <p class="card-text">Manage your bookings</p>
-                    <a href="#" class="btn btn-primary">View Bookings</a>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="text-success mb-2">
+                        <i class="bi bi-check-circle" style="font-size: 3rem;"></i>
+                    </div>
+                    <h3 class="mb-0">@Model.ApprovedBookings</h3>
+                    <p class="text-muted mb-0">Approved Bookings</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="text-info mb-2">
+                        <i class="bi bi-file-text" style="font-size: 3rem;"></i>
+                    </div>
+                    <h3 class="mb-0">@Model.TotalReports</h3>
+                    <p class="text-muted mb-0">Reports Submitted</p>
                 </div>
             </div>
         </div>
     </div>
 
-    @if (Model.UserRole == "Admin" || Model.UserRole == "Lecturer")
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-lightning"></i> Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="d-grid">
+                                <a href="/Bookings/SearchRooms" class="btn btn-primary btn-lg">
+                                    <i class="bi bi-search"></i> Search Rooms
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="d-grid">
+                                <a href="/Bookings/MyBookings" class="btn btn-success btn-lg">
+                                    <i class="bi bi-list-check"></i> My Bookings
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="d-grid">
+                                <a href="/RoomReports/MyReports" class="btn btn-info btn-lg">
+                                    <i class="bi bi-file-text"></i> My Reports
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upcoming Bookings -->
+    @if (Model.UpcomingBookings.Any())
     {
-        <div class="row mt-4">
+        <div class="row mb-4">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header bg-secondary text-white">
-                        <h5 class="mb-0">Admin Tools</h5>
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-calendar-event"></i> Upcoming Bookings</h5>
                     </div>
                     <div class="card-body">
-                        <div class="btn-group" role="group">
-                            <a href="#" class="btn btn-outline-secondary">Manage Users</a>
-                            <a href="#" class="btn btn-outline-secondary">View Reports</a>
-                            <a href="#" class="btn btn-outline-secondary">System Settings</a>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Room</th>
+                                        <th>Campus</th>
+                                        <th>Date & Time</th>
+                                        <th>Purpose</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var booking in Model.UpcomingBookings)
+                                    {
+                                        <tr>
+                                            <td>@booking.RoomName</td>
+                                            <td>@booking.CampusName</td>
+                                            <td>
+                                                <small>
+                                                    @booking.StartTime.ToLocalTime().ToString("MMM dd, yyyy")<br>
+                                                    @booking.StartTime.ToLocalTime().ToString("HH:mm") - @booking.EndTime.ToLocalTime().ToString("HH:mm")
+                                                </small>
+                                            </td>
+                                            <td>
+                                                <small>@(booking.Purpose.Length > 50 ? booking.Purpose.Substring(0, 50) + "..." : booking.Purpose)</small>
+                                            </td>
+                                            <td>
+                                                <a href="/Bookings/Details?id=@booking.Id" class="btn btn-sm btn-primary">
+                                                    <i class="bi bi-eye"></i> View
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Recent Bookings -->
+    @if (Model.RecentBookings.Any())
+    {
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="bi bi-clock-history"></i> Recent Bookings</h5>
+                            <a href="/Bookings/MyBookings" class="btn btn-sm btn-primary">View All</a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Room</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var booking in Model.RecentBookings)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@booking.RoomName</strong><br>
+                                                <small class="text-muted">@booking.CampusName</small>
+                                            </td>
+                                            <td>
+                                                <small>@booking.StartTime.ToLocalTime().ToString("MMM dd, yyyy HH:mm")</small>
+                                            </td>
+                                            <td>
+                                                @{
+                                                    var badgeClass = booking.Status switch
+                                                    {
+                                                        BookingStatus.Pending => "bg-warning",
+                                                        BookingStatus.Approved => "bg-success",
+                                                        BookingStatus.Rejected => "bg-danger",
+                                                        BookingStatus.Completed => "bg-info",
+                                                        BookingStatus.Cancelled => "bg-secondary",
+                                                        _ => "bg-secondary"
+                                                    };
+                                                }
+                                                <span class="badge @badgeClass">@booking.StatusDisplay</span>
+                                            </td>
+                                            <td>
+                                                <a href="/Bookings/Details?id=@booking.Id" class="btn btn-sm btn-primary">
+                                                    <i class="bi bi-eye"></i> View
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
