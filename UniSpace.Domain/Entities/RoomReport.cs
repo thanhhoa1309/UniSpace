@@ -10,7 +10,6 @@ namespace UniSpace.Domain.Entities
         public string IssueType { get; set; }
         public string Description { get; set; }
         public ReportStatus Status { get; set; }
-        public string? AdminResponse { get; set; }
 
         public User User { get; set; }
         public Room Room { get; set; }

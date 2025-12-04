@@ -1,0 +1,538 @@
+@page
+@model UniSpace.Presentation.Pages.Admin.Booking.ConfirmModel
+@{
+    ViewData["Title"] = "Confirm Booking Request";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<style>
+    .booking-card {
+        transition: all 0.3s ease;
+        border-radius: 15px;
+        overflow: hidden;
+        border: none;
+    }
+
+    .booking-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.12) !important;
+    }
+
+    .info-badge {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 8px 15px;
+        border-radius: 20px;
+        color: white;
+        font-weight: 600;
+        display: inline-block;
+        margin: 5px 5px 5px 0;
+    }
+
+    .time-display {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        padding: 25px;
+        border-radius: 15px;
+        color: white;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(245, 87, 108, 0.3);
+    }
+
+    .time-display-blue {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .action-button {
+        padding: 15px 30px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+    .approve-btn {
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        box-shadow: 0 5px 15px rgba(56, 239, 125, 0.4);
+    }
+
+    .approve-btn:hover {
+        background: linear-gradient(135deg, #0e8072 0%, #2ec96a 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 7px 20px rgba(56, 239, 125, 0.5);
+    }
+
+    .reject-btn {
+        background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+        box-shadow: 0 5px 15px rgba(235, 51, 73, 0.4);
+    }
+
+    .reject-btn:hover {
+        background: linear-gradient(135deg, #d12e42 0%, #db4939 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 7px 20px rgba(235, 51, 73, 0.5);
+    }
+
+    .gradient-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 25px;
+        color: white;
+    }
+
+    .purpose-box {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        border-left: 4px solid #667eea;
+        padding: 20px;
+        border-radius: 10px;
+        min-height: 100px;
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    .admin-note-textarea {
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 15px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    .admin-note-textarea:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        outline: none;
+    }
+
+    .tips-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 15px;
+        color: white;
+    }
+
+    .duration-badge {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        padding: 10px 20px;
+        border-radius: 25px;
+        color: #333;
+        font-weight: bold;
+        display: inline-block;
+        box-shadow: 0 4px 15px rgba(250, 112, 154, 0.3);
+    }
+
+    .info-row {
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        background: white;
+        border: 1px solid #e0e0e0;
+        transition: all 0.3s ease;
+    }
+
+    .info-row:hover {
+        border-color: #667eea;
+        box-shadow: 0 3px 10px rgba(102, 126, 234, 0.1);
+    }
+
+    .section-divider {
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #667eea, transparent);
+        margin: 25px 0;
+    }
+
+    .pulse-badge {
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    @@keyframes pulse {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.7;
+        }
+    }
+</style>
+
+<div class="container-fluid mt-4 px-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div>
+                    <h1 class="display-6 fw-bold mb-2">
+                        <i class="bi bi-clipboard-check text-primary"></i> 
+                        Confirm Booking Request
+                    </h1>
+                    <p class="text-muted mb-0">Review and make a decision on this booking request</p>
+                </div>
+                <a asp-page="./Index" class="btn btn-outline-secondary btn-lg">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <strong>Error!</strong> @Model.ErrorMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (Model.Booking == null)
+    {
+        <div class="alert alert-warning" role="alert">
+            <h4 class="alert-heading"><i class="bi bi-exclamation-triangle"></i> Booking Not Available</h4>
+            <p>The booking information could not be loaded. This may be because:</p>
+            <ul class="mb-0">
+                <li>The booking ID is invalid</li>
+                <li>The booking has been deleted</li>
+                <li>You don't have permission to view this booking</li>
+            </ul>
+            <hr>
+            <p class="mb-0">
+                <a asp-page="./Index" class="btn btn-primary">
+                    <i class="bi bi-arrow-left"></i> Back to Booking List
+                </a>
+            </p>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            <!-- Left Column - Booking Details -->
+            <div class="col-lg-7">
+                <!-- Main Booking Info Card -->
+                <div class="card booking-card shadow-lg mb-4">
+                    <div class="gradient-header">
+                        <h4 class="mb-0 fw-bold">
+                            <i class="bi bi-bookmark-star"></i> Booking Information
+                        </h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- User & Room Information -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <div class="info-row">
+                                    <h6 class="text-primary fw-bold mb-3">
+                                        <i class="bi bi-person-circle"></i> User Information
+                                    </h6>
+                                    <div class="mb-2">
+                                        <small class="text-muted d-block mb-1">Full Name</small>
+                                        <strong class="fs-5">@Model.Booking.UserName</strong>
+                                    </div>
+                                    <div>
+                                        <small class="text-muted d-block mb-1">Email Address</small>
+                                        <a href="mailto:@Model.Booking.UserEmail" class="text-decoration-none">
+                                            <i class="bi bi-envelope"></i> @Model.Booking.UserEmail
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-row">
+                                    <h6 class="text-primary fw-bold mb-3">
+                                        <i class="bi bi-door-open"></i> Room Information
+                                    </h6>
+                                    <div class="mb-2">
+                                        <small class="text-muted d-block mb-1">Room Name</small>
+                                        <strong class="fs-5">@Model.Booking.RoomName</strong>
+                                    </div>
+                                    <div class="mt-2">
+                                        <span class="info-badge">
+                                            <i class="bi bi-building"></i> @Model.Booking.CampusName
+                                        </span>
+                                        <span class="info-badge">
+                                            <i class="bi bi-tag"></i> @Model.Booking.RoomTypeDisplay
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-divider"></div>
+
+                        <!-- Schedule Information -->
+                        <div class="mb-4">
+                            <h6 class="text-primary fw-bold mb-3">
+                                <i class="bi bi-calendar-range"></i> Schedule Details
+                            </h6>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="time-display">
+                                        <div class="mb-2">
+                                            <i class="bi bi-calendar-event fs-3"></i>
+                                        </div>
+                                        <small class="d-block opacity-75 mb-2">Start Time</small>
+                                        <h4 class="fw-bold mb-1">@Model.Booking.StartTime.ToString("HH:mm")</h4>
+                                        <small class="d-block">@Model.Booking.StartTime.ToString("dddd, dd MMMM yyyy")</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="time-display time-display-blue">
+                                        <div class="mb-2">
+                                            <i class="bi bi-calendar-check fs-3"></i>
+                                        </div>
+                                        <small class="d-block opacity-75 mb-2">End Time</small>
+                                        <h4 class="fw-bold mb-1">@Model.Booking.EndTime.ToString("HH:mm")</h4>
+                                        <small class="d-block">@Model.Booking.EndTime.ToString("dddd, dd MMMM yyyy")</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center mt-3">
+                                @{
+                                    var duration = Model.Booking.EndTime - Model.Booking.StartTime;
+                                    <span class="duration-badge">
+                                        <i class="bi bi-clock-history"></i> 
+                                        Duration: @duration.TotalHours.ToString("0.##") hours
+                                    </span>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="section-divider"></div>
+
+                        <!-- Purpose -->
+                        <div class="mb-4">
+                            <h6 class="text-primary fw-bold mb-3">
+                                <i class="bi bi-chat-left-quote"></i> Purpose of Booking
+                            </h6>
+                            <div class="purpose-box">
+                                <i class="bi bi-quote fs-4 text-muted d-block mb-2"></i>
+                                <p class="mb-0">@Model.Booking.Purpose</p>
+                            </div>
+                        </div>
+
+                        <!-- Status & Metadata -->
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="info-row">
+                                    <small class="text-muted d-block mb-2">Current Status</small>
+                                    <span class="badge bg-warning text-dark fs-6 pulse-badge">
+                                        <i class="bi bi-clock"></i> @Model.Booking.StatusDisplay
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-row">
+                                    <small class="text-muted d-block mb-2">Requested On</small>
+                                    <strong>
+                                        <i class="bi bi-calendar2"></i> 
+                                        @Model.Booking.CreatedAt.ToString("MMM dd, yyyy 'at' HH:mm")
+                                    </strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Decision Form -->
+            <div class="col-lg-5">
+                <!-- Decision Card -->
+                <div class="card booking-card shadow-lg mb-4">
+                    <div class="card-header bg-warning text-dark text-center py-3">
+                        <h4 class="mb-1 fw-bold">
+                            <i class="bi bi-clipboard-check"></i> Admin Decision
+                        </h4>
+                        <small class="d-block mt-1">Make your decision carefully</small>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="post" id="confirmForm">
+                            <input type="hidden" asp-for="Input.Id" />
+
+                            <!-- Admin Note -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold text-dark mb-3">
+                                    <i class="bi bi-pen"></i> Admin Note
+                                </label>
+                                <textarea asp-for="Input.AdminNote" 
+                                          class="form-control admin-note-textarea" 
+                                          rows="6" 
+                                          id="adminNote"
+                                          maxlength="500"
+                                          placeholder="Enter your note here...
+• Why are you approving/rejecting?
+• Any special instructions for the user?
+• Additional comments or recommendations"></textarea>
+                                <div class="form-text mt-2">
+                                    <i class="bi bi-info-circle"></i> 
+                                    <span id="noteRequirement">
+                                        Optional for approval, <strong class="text-danger">required for rejection</strong>
+                                    </span>
+                                </div>
+                                <div class="mt-2">
+                                    <small class="text-muted">
+                                        Characters: <span id="charCount">0</span> / 500
+                                    </small>
+                                </div>
+                            </div>
+
+                            <!-- Important Notice -->
+                            <div class="alert alert-info border-0 shadow-sm mb-4">
+                                <h6 class="alert-heading fw-bold">
+                                    <i class="bi bi-exclamation-circle"></i> Important Notice
+                                </h6>
+                                <ul class="mb-0 small">
+                                    <li class="mb-1"><strong>Approve:</strong> User can use the room</li>
+                                    <li class="mb-1"><strong>Reject:</strong> User notified with your reason</li>
+                                    <li class="mb-1">Action <strong>cannot be undone</strong></li>
+                                    <li><i class="bi bi-envelope"></i> User receives email notification</li>
+                                </ul>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="d-grid gap-3">
+                                <button type="submit" 
+                                        asp-page-handler="Approve" 
+                                        class="btn action-button approve-btn text-white"
+                                        id="approveBtn">
+                                    <i class="bi bi-check-circle-fill me-2"></i>
+                                    <strong>Approve Booking</strong>
+                                </button>
+                                
+                                <button type="submit" 
+                                        asp-page-handler="Reject" 
+                                        class="btn action-button reject-btn text-white"
+                                        id="rejectBtn">
+                                    <i class="bi bi-x-circle-fill me-2"></i>
+                                    <strong>Reject Booking</strong>
+                                </button>
+
+                                <a asp-page="./Index" class="btn btn-outline-secondary btn-lg">
+                                    <i class="bi bi-arrow-left me-2"></i>Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Tips Card -->
+                <div class="card tips-card border-0 shadow-lg">
+                    <div class="card-body p-4">
+                        <h6 class="mb-3 fw-bold">
+                            <i class="bi bi-lightbulb-fill me-2"></i>Review Checklist
+                        </h6>
+                        <ul class="mb-0 small" style="line-height: 2;">
+                            <li><i class="bi bi-check2 me-2"></i>Purpose is appropriate and clear</li>
+                            <li><i class="bi bi-check2 me-2"></i>No schedule conflicts</li>
+                            <li><i class="bi bi-check2 me-2"></i>Room type matches the purpose</li>
+                            <li><i class="bi bi-check2 me-2"></i>Duration is reasonable</li>
+                            <li><i class="bi bi-check2 me-2"></i>User has good booking history</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function() {
+            @if (Model.Booking != null)
+            {
+                @:var adminNote = $('#adminNote');
+                @:var charCount = $('#charCount');
+                @:var approveBtn = $('#approveBtn');
+                @:var rejectBtn = $('#rejectBtn');
+                @:var noteRequirement = $('#noteRequirement');
+                @:
+                @:// Character counter
+                @:adminNote.on('input', function() {
+                    @:var length = $(this).val().length;
+                    @:charCount.text(length);
+                    @:
+                    @:if (length > 500) {
+                        @:charCount.addClass('text-danger fw-bold');
+                        @:$(this).addClass('border-danger');
+                    @:} else if (length > 450) {
+                        @:charCount.addClass('text-warning fw-bold');
+                        @:charCount.removeClass('text-danger');
+                        @:$(this).removeClass('border-danger');
+                    @:} else {
+                        @:charCount.removeClass('text-danger text-warning fw-bold');
+                        @:$(this).removeClass('border-danger');
+                    @:}
+                @:});
+                @:
+                @:// Approve button confirmation
+                @:approveBtn.on('click', function(e) {
+                    @:e.preventDefault();
+                    @:
+                    @:Swal.fire({
+                        @:title: 'Approve Booking?',
+                        @:html: '<div class="text-start"><p class="mb-2"><strong>User:</strong> @Model.Booking.UserName</p><p class="mb-2"><strong>Room:</strong> @Model.Booking.RoomName</p><p class="mb-3"><strong>Date:</strong> @Model.Booking.StartTime.ToString("MMM dd, yyyy")</p><p class="text-muted mb-0"><i class="bi bi-info-circle"></i> The user will be notified and can use the room.</p></div>',
+                        @:icon: 'question',
+                        @:showCancelButton: true,
+                        @:confirmButtonColor: '#38ef7d',
+                        @:cancelButtonColor: '#6c757d',
+                        @:confirmButtonText: '<i class="bi bi-check-circle"></i> Yes, Approve!',
+                        @:cancelButtonText: 'Cancel'
+                    @:}).then((result) => {
+                        @:if (result.isConfirmed) {
+                            @:$(this).closest('form').submit();
+                        @:}
+                    @:});
+                @:});
+                @:
+                @:// Reject button confirmation
+                @:rejectBtn.on('click', function(e) {
+                    @:e.preventDefault();
+                    @:
+                    @:var note = adminNote.val().trim();
+                    @:
+                    @:if (!note || note.length < 10) {
+                        @:Swal.fire({
+                            @:title: 'Admin Note Required!',
+                            @:html: '<p class="mb-0">You must provide a meaningful reason (at least 10 characters) for rejecting this booking.</p>',
+                            @:icon: 'warning',
+                            @:confirmButtonColor: '#f45c43',
+                            @:confirmButtonText: 'OK'
+                        @:});
+                        @:adminNote.addClass('border-danger').focus();
+                        @:noteRequirement.addClass('text-danger fw-bold');
+                        @:return;
+                    @:}
+                    @:
+                    @:Swal.fire({
+                        @:title: 'Reject Booking?',
+                        @:html: '<div class="text-start"><p class="mb-2"><strong>User:</strong> @Model.Booking.UserName</p><p class="mb-2"><strong>Room:</strong> @Model.Booking.RoomName</p><div class="alert alert-warning mt-3 mb-3"><strong><i class="bi bi-chat-left-text"></i> Your note:</strong><br><span class="small">' + note + '</span></div><p class="text-danger mb-0"><i class="bi bi-exclamation-triangle"></i> This action cannot be undone!</p></div>',
+                        @:icon: 'warning',
+                        @:showCancelButton: true,
+                        @:confirmButtonColor: '#f45c43',
+                        @:cancelButtonColor: '#6c757d',
+                        @:confirmButtonText: '<i class="bi bi-x-circle"></i> Yes, Reject!',
+                        @:cancelButtonText: 'Cancel'
+                    @:}).then((result) => {
+                        @:if (result.isConfirmed) {
+                            @:$(this).closest('form').submit();
+                        @:}
+                    @:});
+                @:});
+                @:
+                @:// Auto-dismiss alerts
+                @:setTimeout(function() {
+                    @:$('.alert-danger').fadeOut('slow');
+                @:}, 5000);
+                @:
+                @:// Highlight note field when reject is hovered
+                @:rejectBtn.on('mouseenter', function() {
+                    @:var note = adminNote.val().trim();
+                    @:if (!note || note.length < 10) {
+                        @:adminNote.addClass('border-warning');
+                        @:noteRequirement.addClass('text-warning');
+                    @:}
+                @:});
+                @:
+                @:rejectBtn.on('mouseleave', function() {
+                    @:adminNote.removeClass('border-warning');
+                    @:noteRequirement.removeClass('text-warning');
+                @:});
+            }
+        });
+    </script>
+}

@@ -45,24 +45,25 @@
                             <p class="ms-3">@Model.Report.Description</p>
                         </div>
 
-                        @if (!string.IsNullOrEmpty(Model.Report.AdminResponse))
-                        {
-                            <div class="alert alert-info">
-                                <h6><i class="bi bi-chat-left-dots"></i> Admin Response</h6>
-                                <p class="mb-1">@Model.Report.AdminResponse</p>
-                                @if (Model.Report.UpdatedAt.HasValue)
-                                {
-                                    <small class="text-muted">
-                                        <i class="bi bi-clock"></i> Responded on @Model.Report.UpdatedAt.Value.ToString("MMMM dd, yyyy 'at' HH:mm")
-                                    </small>
-                                }
-                            </div>
-                        }
-                        else if (Model.Report.Status == UniSpace.BusinessObject.Enums.ReportStatus.Open)
+                        @if (Model.Report.Status == UniSpace.BusinessObject.Enums.ReportStatus.Open)
                         {
                             <div class="alert alert-warning">
                                 <i class="bi bi-hourglass-split"></i> <strong>Pending Review</strong><br/>
                                 <small>Our team is reviewing your report. We'll respond as soon as possible.</small>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-success">
+                                <i class="bi bi-check-circle"></i> <strong>Resolved</strong><br/>
+                                <small>This issue has been resolved by our team.</small>
+                                @if (Model.Report.UpdatedAt.HasValue)
+                                {
+                                    <br/>
+                                    <small class="text-muted">
+                                        <i class="bi bi-clock"></i> Resolved on @Model.Report.UpdatedAt.Value.ToString("MMMM dd, yyyy 'at' HH:mm")
+                                    </small>
+                                }
                             </div>
                         }
                     </div>

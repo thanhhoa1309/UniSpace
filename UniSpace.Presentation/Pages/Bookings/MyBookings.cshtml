@@ -13,6 +13,9 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <h5 class="mb-0">
                             <i class="bi bi-calendar-check"></i> My Bookings
+                            <span class="badge bg-info ms-2" id="realTimeIndicator" style="display:none;">
+                                <i class="bi bi-broadcast"></i> Live
+                            </span>
                         </h5>
                         <a href="/Bookings/SearchRooms" class="btn btn-primary btn-sm">
                             <i class="bi bi-plus-circle"></i> New Booking
@@ -36,6 +39,12 @@
                         </div>
                     }
 
+                    <!-- Real-time notification area -->
+                    <div id="realtimeNotification" class="alert alert-success alert-dismissible fade show d-none" role="alert">
+                        <i class="bi bi-info-circle"></i> <span id="notificationMessage"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+
                     <!-- Filter -->
                     <form method="get" class="row g-3 mb-4">
                         <div class="col-md-3">
@@ -56,7 +65,7 @@
                     @if (Model.Bookings.Any())
                     {
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
+                            <table class="table table-hover align-middle mb-0" id="bookingsTable">
                                 <thead>
                                     <tr>
                                         <th>ROOM</th>
@@ -69,7 +78,7 @@
                                 <tbody>
                                     @foreach (var booking in Model.Bookings)
                                     {
-                                        <tr>
+                                        <tr data-booking-id="@booking.Id" id="booking-@booking.Id">
                                             <td>
                                                 <div class="d-flex flex-column">
                                                     <strong class="mb-1">@booking.RoomName</strong>
@@ -93,7 +102,7 @@
                                                     @(booking.Purpose.Length > 50 ? booking.Purpose.Substring(0, 50) + "..." : booking.Purpose)
                                                 </span>
                                             </td>
-                                            <td class="text-center">
+                                            <td class="text-center booking-status">
                                                 @{
                                                     var badgeClass = booking.Status switch
                                                     {
@@ -105,10 +114,12 @@
                                                         _ => "bg-secondary"
                                                     };
                                                 }
-                                                <span class="badge @badgeClass">@booking.StatusDisplay</span>
+                                                <span class="badge @badgeClass status-badge" data-status="@booking.Status">
+                                                    @booking.StatusDisplay
+                                                </span>
                                                 @if (!string.IsNullOrEmpty(booking.AdminNote))
                                                 {
-                                                    <br><small class="text-muted mt-1">Note: @booking.AdminNote</small>
+                                                    <br><small class="text-muted mt-1 admin-note">Note: @booking.AdminNote</small>
                                                 }
                                             </td>
                                             <td>
@@ -122,7 +133,7 @@
                                                     @if (booking.Status == BookingStatus.Pending)
                                                     {
                                                         <a href="/Bookings/Edit?id=@booking.Id" 
-                                                           class="btn btn-sm btn-warning text-white" 
+                                                           class="btn btn-sm btn-warning text-white action-edit" 
                                                            title="Edit">
                                                             <i class="bi bi-pencil"></i>
                                                         </a>
@@ -133,6 +144,7 @@
                                                         <form method="post" 
                                                               asp-page-handler="Cancel" 
                                                               asp-route-id="@booking.Id" 
+                                                              class="d-inline action-cancel"
                                                               onsubmit="return confirm('Are you sure you want to cancel this booking?');">
                                                             <button type="submit" 
                                                                     class="btn btn-sm btn-danger text-white" 
@@ -145,7 +157,7 @@
                                                     @if (booking.Status == BookingStatus.Completed)
                                                     {
                                                         <a href="/RoomReports/Create?bookingId=@booking.Id" 
-                                                           class="btn btn-sm btn-dark text-white" 
+                                                           class="btn btn-sm btn-dark text-white action-report" 
                                                            title="Report Issue">
                                                             <i class="bi bi-exclamation-triangle"></i>
                                                         </a>
@@ -202,3 +214,213 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.0/signalr.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialize SignalR connection
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/bookingHub")
+                .withAutomaticReconnect()
+                .configureLogging(signalR.LogLevel.Information)
+                .build();
+
+            // Connection handlers
+            connection.onreconnecting(() => {
+                console.log('SignalR: Reconnecting...');
+                $('#realTimeIndicator').removeClass('bg-info').addClass('bg-warning').show();
+            });
+
+            connection.onreconnected(() => {
+                console.log('SignalR: Reconnected');
+                $('#realTimeIndicator').removeClass('bg-warning').addClass('bg-info');
+                showNotification('Connection restored', 'success');
+            });
+
+            connection.onclose(() => {
+                console.log('SignalR: Connection closed');
+                $('#realTimeIndicator').hide();
+            });
+
+            // Listen for booking status updates
+            connection.on("BookingStatusUpdated", function(data) {
+                console.log('Booking status updated:', data);
+                updateBookingStatus(data.bookingId, data.status, data.message);
+                showNotification(data.message, 'info');
+            });
+
+            // Listen for booking completion
+            connection.on("BookingCompleted", function(data) {
+                console.log('Booking completed:', data);
+                updateBookingToCompleted(data.bookingId, data.roomName);
+                showNotification(`Your booking for "${data.roomName}" has been completed!`, 'success');
+            });
+
+            // Start connection
+            connection.start()
+                .then(() => {
+                    console.log('SignalR: Connected');
+                    $('#realTimeIndicator').show();
+                })
+                .catch(err => {
+                    console.error('SignalR connection error:', err);
+                });
+
+            // Update booking status in UI
+            function updateBookingStatus(bookingId, newStatus, message) {
+                const row = $(`tr[data-booking-id="${bookingId}"]`);
+                if (row.length === 0) return;
+
+                const statusCell = row.find('.booking-status');
+                const statusBadge = statusCell.find('.status-badge');
+                
+                // Update badge class and text
+                const statusInfo = getStatusInfo(newStatus);
+                statusBadge.removeClass()
+                    .addClass(`badge ${statusInfo.class} status-badge`)
+                    .attr('data-status', newStatus)
+                    .text(statusInfo.text);
+
+                // Add glow animation
+                row.addClass('table-success');
+                setTimeout(() => row.removeClass('table-success'), 2000);
+
+                // Update actions based on new status
+                updateActionButtons(row, newStatus);
+            }
+
+            function updateBookingToCompleted(bookingId, roomName) {
+                const row = $(`tr[data-booking-id="${bookingId}"]`);
+                if (row.length === 0) return;
+
+                // Update status badge
+                const statusBadge = row.find('.status-badge');
+                statusBadge.removeClass()
+                    .addClass('badge bg-info status-badge')
+                    .attr('data-status', 'Completed')
+                    .text('Completed');
+
+                // Add report button
+                const actionsCell = row.find('.action-buttons');
+                actionsCell.find('.action-edit, .action-cancel').remove();
+                
+                if (actionsCell.find('.action-report').length === 0) {
+                    actionsCell.append(`
+                        <a href="/RoomReports/Create?bookingId=${bookingId}" 
+                           class="btn btn-sm btn-dark text-white action-report" 
+                           title="Report Issue">
+                            <i class="bi bi-exclamation-triangle"></i>
+                        </a>
+                    `);
+                }
+
+                // Highlight row
+                row.addClass('table-info');
+                setTimeout(() => row.removeClass('table-info'), 3000);
+            }
+
+            function updateActionButtons(row, status) {
+                const actionsCell = row.find('.action-buttons');
+                
+                // Remove old action buttons
+                actionsCell.find('.action-edit, .action-cancel, .action-report').remove();
+
+                // Add appropriate buttons based on status
+                if (status === 'Pending') {
+                    // Add edit and cancel buttons
+                    actionsCell.append(`
+                        <a href="/Bookings/Edit?id=${row.data('booking-id')}" 
+                           class="btn btn-sm btn-warning text-white action-edit" 
+                           title="Edit">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                    `);
+                }
+                
+                if (status === 'Pending' || status === 'Approved') {
+                    // Add cancel button
+                    actionsCell.append(`
+                        <form method="post" 
+                              action="?handler=Cancel&id=${row.data('booking-id')}" 
+                              class="d-inline action-cancel"
+                              onsubmit="return confirm('Are you sure?');">
+                            <button type="submit" 
+                                    class="btn btn-sm btn-danger text-white" 
+                                    title="Cancel">
+                                <i class="bi bi-x-circle"></i>
+                            </button>
+                        </form>
+                    `);
+                }
+
+                if (status === 'Completed') {
+                    // Add report button
+                    actionsCell.append(`
+                        <a href="/RoomReports/Create?bookingId=${row.data('booking-id')}" 
+                           class="btn btn-sm btn-dark text-white action-report" 
+                           title="Report Issue">
+                            <i class="bi bi-exclamation-triangle"></i>
+                        </a>
+                    `);
+                }
+            }
+
+            function getStatusInfo(status) {
+                const statusMap = {
+                    'Pending': { class: 'bg-warning', text: 'Pending' },
+                    'Approved': { class: 'bg-success', text: 'Approved' },
+                    'Rejected': { class: 'bg-danger', text: 'Rejected' },
+                    'Completed': { class: 'bg-info', text: 'Completed' },
+                    'Cancelled': { class: 'bg-secondary', text: 'Cancelled' }
+                };
+                return statusMap[status] || { class: 'bg-secondary', text: status };
+            }
+
+            function showNotification(message, type = 'info') {
+                const notification = $('#realtimeNotification');
+                const messageSpan = $('#notificationMessage');
+                
+                // Update notification style
+                notification.removeClass('alert-info alert-success alert-warning alert-danger')
+                    .addClass(`alert-${type}`);
+                
+                // Set message
+                messageSpan.text(message);
+                
+                // Show notification
+                notification.removeClass('d-none').addClass('show');
+                
+                // Auto hide after 5 seconds
+                setTimeout(() => {
+                    notification.removeClass('show').addClass('d-none');
+                }, 5000);
+            }
+        });
+    </script>
+
+    <style>
+        @@keyframes glow {
+            0%, 100% { background-color: transparent; }
+            50% { background-color: rgba(25, 135, 84, 0.2); }
+        }
+
+        .table-success {
+            animation: glow 2s ease-in-out;
+        }
+
+        .table-info {
+            animation: glow 3s ease-in-out;
+            background-color: rgba(13, 202, 240, 0.2) !important;
+        }
+
+        #realTimeIndicator {
+            animation: pulse 2s infinite;
+        }
+
+        @@keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+}

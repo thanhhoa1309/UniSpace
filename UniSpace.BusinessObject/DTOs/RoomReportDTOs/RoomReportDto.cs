@@ -16,7 +16,6 @@ namespace UniSpace.BusinessObject.DTOs.RoomReportDTOs
         public string Description { get; set; } = string.Empty;
         public ReportStatus Status { get; set; }
         public string StatusDisplay { get; set; } = string.Empty;
-        public string? AdminResponse { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }

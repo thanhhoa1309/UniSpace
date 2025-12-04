@@ -69,22 +69,12 @@
                                 </small>
                             </div>
                             
-                            <div class="mb-3">
+                            <div class="mb-0">
                                 <p class="card-text small">
                                     <strong>Description:</strong><br/>
                                     @(report.Description.Length > 150 ? report.Description.Substring(0, 150) + "..." : report.Description)
                                 </p>
                             </div>
-
-                            @if (!string.IsNullOrEmpty(report.AdminResponse))
-                            {
-                                <div class="alert alert-info mb-0">
-                                    <small>
-                                        <strong><i class="bi bi-chat-left-dots"></i> Admin Response:</strong><br/>
-                                        @report.AdminResponse
-                                    </small>
-                                </div>
-                            }
                         </div>
                         <div class="card-footer bg-transparent">
                             <a asp-page="./Details" asp-route-id="@report.Id" class="btn btn-sm btn-outline-primary w-100">

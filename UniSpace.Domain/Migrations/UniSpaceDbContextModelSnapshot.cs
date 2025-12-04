@@ -248,9 +248,6 @@ namespace UniSpace.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("AdminResponse")
-                        .HasColumnType("text");
-
                     b.Property<Guid>("BookingId")
                         .HasColumnType("uuid");
 

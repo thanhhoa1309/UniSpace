@@ -112,7 +112,9 @@
                     </div>
                 </div>
                 <div class="card-footer bg-light">
-                    <a href="#" class="small text-warning">View Details <i class="bi bi-arrow-right"></i></a>
+                    <a asp-page="/Admin/Booking/Dashboard" class="small text-warning">
+                        View Dashboard <i class="bi bi-arrow-right"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -128,13 +130,13 @@
                 <div class="card-body">
                     <div class="row g-3">
                         <!-- Campus Dashboard -->
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="card h-100 hover-shadow">
                                 <div class="card-body text-center">
                                     <i class="bi bi-building display-4 text-primary mb-3"></i>
                                     <h5 class="card-title">Campus Management</h5>
-                                    <p class="card-text text-muted">Manage campuses, locations, and facilities</p>
-                                    <a asp-page="/Admin/Campus/Dashboard" class="btn btn-primary">
+                                    <p class="card-text text-muted small">Manage campuses, locations, and facilities</p>
+                                    <a asp-page="/Admin/Campus/Dashboard" class="btn btn-primary btn-sm">
                                         <i class="bi bi-speedometer2"></i> View Dashboard
                                     </a>
                                 </div>
@@ -142,13 +144,13 @@
                         </div>
 
                         <!-- Room Dashboard -->
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="card h-100 hover-shadow">
                                 <div class="card-body text-center">
                                     <i class="bi bi-door-open display-4 text-success mb-3"></i>
                                     <h5 class="card-title">Room Management</h5>
-                                    <p class="card-text text-muted">Manage rooms, capacity, and availability</p>
-                                    <a asp-page="/Admin/Room/Dashboard" class="btn btn-success">
+                                    <p class="card-text text-muted small">Manage rooms, capacity, and availability</p>
+                                    <a asp-page="/Admin/Room/Dashboard" class="btn btn-success btn-sm">
                                         <i class="bi bi-speedometer2"></i> View Dashboard
                                     </a>
                                 </div>
@@ -156,13 +158,30 @@
                         </div>
 
                         <!-- Schedule Dashboard -->
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="card h-100 hover-shadow">
                                 <div class="card-body text-center">
                                     <i class="bi bi-calendar-week display-4 text-info mb-3"></i>
                                     <h5 class="card-title">Schedule Management</h5>
-                                    <p class="card-text text-muted">Manage schedules, courses, and maintenance</p>
-                                    <a asp-page="/Admin/Schedule/Dashboard" class="btn btn-info">
+                                    <p class="card-text text-muted small">Manage schedules, courses, and maintenance</p>
+                                    <a asp-page="/Admin/Schedule/Dashboard" class="btn btn-info btn-sm">
+                                        <i class="bi bi-speedometer2"></i> View Dashboard
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Booking Confirmation Dashboard - NEW -->
+                        <div class="col-md-3">
+                            <div class="card h-100 hover-shadow border-warning" style="border-width: 2px;">
+                                <div class="card-body text-center position-relative">
+                                    <span class="badge bg-warning position-absolute top-0 end-0 m-2 pulse-badge">
+                                        <i class="bi bi-star-fill"></i> Priority
+                                    </span>
+                                    <i class="bi bi-clipboard-check display-4 text-warning mb-3"></i>
+                                    <h5 class="card-title">Booking Confirmation</h5>
+                                    <p class="card-text text-muted small">Review and approve pending booking requests</p>
+                                    <a asp-page="/Admin/Booking/Dashboard" class="btn btn-warning btn-sm text-dark fw-bold">
                                         <i class="bi bi-speedometer2"></i> View Dashboard
                                     </a>
                                 </div>
@@ -184,6 +203,15 @@
                 </div>
                 <div class="card-body">
                     <div class="list-group list-group-flush">
+                        <a asp-page="/Admin/Booking/Index" asp-route-status="0" class="list-group-item list-group-item-action bg-warning-subtle border-warning">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-exclamation-triangle-fill text-warning me-3" style="font-size: 1.5em;"></i>
+                                <div>
+                                    <strong class="text-warning">Review Pending Bookings</strong>
+                                    <p class="mb-0 small text-muted">Confirm or reject booking requests</p>
+                                </div>
+                            </div>
+                        </a>
                         <a asp-page="/Admin/Campus/Create" class="list-group-item list-group-item-action">
                             <div class="d-flex align-items-center">
                                 <i class="bi bi-plus-circle text-primary me-3" style="font-size: 1.5em;"></i>
@@ -288,6 +316,7 @@
                         You are managing <strong>@Model.TotalCampuses campus(es)</strong> with 
                         <strong>@Model.TotalRooms room(s)</strong> and 
                         <strong>@Model.TotalSchedules schedule(s)</strong>.
+                        There are <strong class="text-warning">@Model.TotalBookings booking(s)</strong> in the system.
                     </p>
                     <div class="btn-group" role="group">
                         <a asp-page="/Admin/Campus/Index" class="btn btn-outline-primary">
@@ -298,6 +327,9 @@
                         </a>
                         <a asp-page="/Admin/Schedule/Index" class="btn btn-outline-info">
                             <i class="bi bi-calendar-week"></i> Schedules
+                        </a>
+                        <a asp-page="/Admin/Booking/Dashboard" class="btn btn-outline-warning">
+                            <i class="bi bi-clipboard-check"></i> Bookings
                         </a>
                     </div>
                 </div>
@@ -329,5 +361,21 @@
     }
     .bg-gradient-primary {
         background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+    }
+    .pulse-badge {
+        animation: pulse 2s ease-in-out infinite;
+    }
+    @@keyframes pulse {
+        0%, 100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+    }
+    .bg-warning-subtle {
+        background-color: rgba(255, 193, 7, 0.1) !important;
     }
 </style>

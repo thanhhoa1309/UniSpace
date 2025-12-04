@@ -318,7 +318,6 @@ namespace UniSpace.Service.Services
                 report.IssueType = updateDto.IssueType.Trim();
                 report.Description = updateDto.Description.Trim();
                 report.Status = updateDto.Status;
-                report.AdminResponse = updateDto.AdminResponse?.Trim();
                 report.UpdatedAt = currentTime;
                 report.UpdatedBy = currentUserId;
 
@@ -353,10 +352,6 @@ namespace UniSpace.Service.Services
                 var currentTime = _currentTime.GetCurrentTime();
 
                 report.Status = status;
-                if (!string.IsNullOrWhiteSpace(adminResponse))
-                {
-                    report.AdminResponse = adminResponse.Trim();
-                }
                 report.UpdatedAt = currentTime;
                 report.UpdatedBy = currentUserId;
 
@@ -564,7 +559,6 @@ namespace UniSpace.Service.Services
                 Description = report.Description,
                 Status = report.Status,
                 StatusDisplay = GetStatusDisplay(report.Status),
-                AdminResponse = report.AdminResponse,
                 CreatedAt = report.CreatedAt,
                 UpdatedAt = report.UpdatedAt
             };

@@ -1,0 +1,109 @@
+@page
+@model UniSpace.Presentation.Pages.Admin.Booking.TestConfirmModel
+@{
+    ViewData["Title"] = "Test Confirm Page";
+}
+
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-success text-white">
+            <h3>? Confirm Page Test</h3>
+        </div>
+        <div class="card-body">
+            <h4>Status: @Model.Status</h4>
+            
+            <hr/>
+            
+            <h5>Available Pending Bookings:</h5>
+            
+            @if (Model.PendingBookings.Any())
+            {
+                <div class="list-group">
+                    @foreach (var booking in Model.PendingBookings)
+                    {
+                        var parts = booking.Split(" - ");
+                        if (parts.Length >= 4)
+                        {
+                            var id = parts[0];
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>@parts[1]</strong> - @parts[2]<br/>
+                                        <small class="text-muted">Time: @parts[3]</small><br/>
+                                        <small class="text-muted font-monospace">ID: @id</small>
+                                    </div>
+                                    <div>
+                                        <a href="/Admin/Booking/Confirm?id=@id" class="btn btn-primary btn-sm">
+                                            <i class="bi bi-clipboard-check"></i> Test Confirm Page
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-info">@booking</div>
+                        }
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle"></i> No pending bookings available to test.
+                    <hr/>
+                    <p class="mb-0">
+                        <strong>To test the Confirm page:</strong><br/>
+                        1. Create a booking as a regular user<br/>
+                        2. Come back to this page<br/>
+                        3. Click "Test Confirm Page" button
+                    </p>
+                </div>
+            }
+            
+            <hr/>
+            
+            <h5>Navigation Links:</h5>
+            <div class="btn-group" role="group">
+                <a href="/Admin/Booking/Dashboard" class="btn btn-outline-primary">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+                <a href="/Admin/Booking/Index" class="btn btn-outline-info">
+                    <i class="bi bi-list"></i> Index
+                </a>
+                <a href="/Admin/Dashboard" class="btn btn-outline-secondary">
+                    <i class="bi bi-house"></i> Admin Home
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card shadow mt-4">
+        <div class="card-header bg-info text-white">
+            <h5>?? How to Use Confirm Page</h5>
+        </div>
+        <div class="card-body">
+            <ol>
+                <li><strong>Get a Pending Booking ID</strong> from the list above</li>
+                <li><strong>Click "Test Confirm Page"</strong> button</li>
+                <li><strong>Or manually navigate</strong> to: <code>/Admin/Booking/Confirm?id={booking-id}</code></li>
+                <li><strong>Review the booking</strong> details</li>
+                <li><strong>Enter admin note</strong> (optional for approve, required for reject)</li>
+                <li><strong>Click Approve or Reject</strong></li>
+            </ol>
+            
+            <hr/>
+            
+            <h6>Expected URL Format:</h6>
+            <pre class="bg-light p-3"><code>https://localhost:5001/Admin/Booking/Confirm?id=a1b2c3d4-e5f6-7890-abcd-ef1234567890</code></pre>
+            
+            <h6>Requirements:</h6>
+            <ul>
+                <li>? Must be logged in as Admin</li>
+                <li>? Booking must have Status = Pending</li>
+                <li>? Booking must not be soft deleted</li>
+                <li>? Booking start time must be in the future</li>
+            </ul>
+        </div>
+    </div>
+</div>

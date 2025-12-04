@@ -18,8 +18,5 @@ namespace UniSpace.BusinessObject.DTOs.RoomReportDTOs
 
         [Required(ErrorMessage = "Status is required")]
         public ReportStatus Status { get; set; }
-
-        [StringLength(1000, ErrorMessage = "Admin response cannot exceed 1000 characters")]
-        public string? AdminResponse { get; set; }
     }
 }

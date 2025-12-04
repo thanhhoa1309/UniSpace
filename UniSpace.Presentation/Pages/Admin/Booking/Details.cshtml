@@ -1,0 +1,261 @@
+@page
+@model UniSpace.Presentation.Pages.Admin.Booking.DetailsModel
+@{
+    ViewData["Title"] = "Booking Details";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>
+            <i class="bi bi-calendar-event-fill"></i> Booking Details
+        </h2>
+        <div>
+            <a asp-page="./Index" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Bookings
+            </a>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle"></i> @Model.SuccessMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-circle"></i> @Model.ErrorMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row">
+        <!-- Main Details -->
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header @Model.GetStatusBadgeClass(Model.Booking.Status) text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="bi bi-bookmark-fill"></i> Booking Information
+                        </h5>
+                        <span class="badge bg-light text-dark fs-6">
+                            @Model.Booking.StatusDisplay
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- User Information -->
+                    <div class="mb-4">
+                        <h6 class="text-primary">
+                            <i class="bi bi-person-circle"></i> User Information
+                        </h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="mb-1"><strong>Name:</strong> @Model.Booking.UserName</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="mb-1"><strong>Email:</strong> @Model.Booking.UserEmail</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr/>
+
+                    <!-- Room Information -->
+                    <div class="mb-4">
+                        <h6 class="text-primary">
+                            <i class="bi bi-door-open"></i> Room Information
+                        </h6>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p class="mb-1"><strong>Room:</strong> @Model.Booking.RoomName</p>
+                            </div>
+                            <div class="col-md-4">
+                                <p class="mb-1"><strong>Type:</strong> <span class="badge bg-info">@Model.Booking.RoomTypeDisplay</span></p>
+                            </div>
+                            <div class="col-md-4">
+                                <p class="mb-1"><strong>Campus:</strong> @Model.Booking.CampusName</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr/>
+
+                    <!-- Schedule Information -->
+                    <div class="mb-4">
+                        <h6 class="text-primary">
+                            <i class="bi bi-calendar-range"></i> Schedule
+                        </h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h6 class="card-subtitle mb-2 text-muted">Start Time</h6>
+                                        <p class="mb-1"><strong>@Model.Booking.StartTime.ToString("dddd, MMMM dd, yyyy")</strong></p>
+                                        <p class="mb-0 text-primary fs-4"><strong>@Model.Booking.StartTime.ToString("HH:mm")</strong></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h6 class="card-subtitle mb-2 text-muted">End Time</h6>
+                                        <p class="mb-1"><strong>@Model.Booking.EndTime.ToString("dddd, MMMM dd, yyyy")</strong></p>
+                                        <p class="mb-0 text-primary fs-4"><strong>@Model.Booking.EndTime.ToString("HH:mm")</strong></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-2 text-center">
+                            @{
+                                var duration = Model.Booking.EndTime - Model.Booking.StartTime;
+                                <p class="mb-0">
+                                    <span class="badge bg-secondary">
+                                        Duration: @duration.TotalHours.ToString("0.##") hours
+                                    </span>
+                                </p>
+                            }
+                        </div>
+                    </div>
+
+                    <hr/>
+
+                    <!-- Purpose -->
+                    <div class="mb-4">
+                        <h6 class="text-primary">
+                            <i class="bi bi-chat-left-text"></i> Purpose
+                        </h6>
+                        <div class="alert alert-light">
+                            @Model.Booking.Purpose
+                        </div>
+                    </div>
+
+                    <!-- Admin Note -->
+                    @if (!string.IsNullOrEmpty(Model.Booking.AdminNote))
+                    {
+                        <hr/>
+                        <div class="mb-4">
+                            <h6 class="text-primary">
+                                <i class="bi bi-clipboard-check"></i> Admin Note
+                            </h6>
+                            <div class="alert alert-warning">
+                                @Model.Booking.AdminNote
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Action Buttons -->
+                    <hr/>
+                    <div class="d-flex gap-2 flex-wrap">
+                        @if (Model.Booking.Status == UniSpace.BusinessObject.Enums.BookingStatus.Pending)
+                        {
+                            <a asp-page="./Confirm" asp-route-id="@Model.Booking.Id" class="btn btn-warning">
+                                <i class="bi bi-pencil-square"></i> Review Booking
+                            </a>
+                            <form method="post" asp-page-handler="Approve" asp-route-id="@Model.Booking.Id" class="d-inline">
+                                <button type="submit" class="btn btn-success" onclick="return confirm('Are you sure you want to approve this booking?')">
+                                    <i class="bi bi-check-circle"></i> Quick Approve
+                                </button>
+                            </form>
+                        }
+                        <form method="post" asp-page-handler="Delete" asp-route-id="@Model.Booking.Id" class="d-inline">
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this booking?')">
+                                <i class="bi bi-trash"></i> Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Status Card -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h6 class="mb-0">
+                        <i class="bi bi-info-circle"></i> Booking Status
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-5">Status:</dt>
+                        <dd class="col-sm-7">
+                            <span class="badge @Model.GetStatusBadgeClass(Model.Booking.Status)">
+                                @Model.Booking.StatusDisplay
+                            </span>
+                        </dd>
+
+                        <dt class="col-sm-5">Booking ID:</dt>
+                        <dd class="col-sm-7">
+                            <small class="text-muted font-monospace">@Model.Booking.Id.ToString().Substring(0, 8)...</small>
+                        </dd>
+
+                        <dt class="col-sm-5">Created:</dt>
+                        <dd class="col-sm-7">
+                            <small>@Model.Booking.CreatedAt.ToString("MM/dd/yyyy HH:mm")</small>
+                        </dd>
+
+                        @if (Model.Booking.UpdatedAt.HasValue)
+                        {
+                            <dt class="col-sm-5">Updated:</dt>
+                            <dd class="col-sm-7">
+                                <small>@Model.Booking.UpdatedAt.Value.ToString("MM/dd/yyyy HH:mm")</small>
+                            </dd>
+                        }
+                    </dl>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0">
+                        <i class="bi bi-link-45deg"></i> Quick Links
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a asp-page="/Admin/Room/Details" asp-route-id="@Model.Booking.RoomId" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-door-open"></i> View Room Details
+                        </a>
+                        <a asp-page="/Admin/Booking/Index" asp-route-status="@((int)UniSpace.BusinessObject.Enums.BookingStatus.Pending)" class="btn btn-outline-warning btn-sm">
+                            <i class="bi bi-clock"></i> View Pending Bookings
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Booking Statistics -->
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0">
+                        <i class="bi bi-graph-up"></i> Statistics
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <p class="mb-2">
+                        <strong>User ID:</strong><br/>
+                        <small class="text-muted font-monospace">@Model.Booking.UserId.ToString().Substring(0, 13)...</small>
+                    </p>
+                    <p class="mb-0">
+                        <strong>Room ID:</strong><br/>
+                        <small class="text-muted font-monospace">@Model.Booking.RoomId.ToString().Substring(0, 13)...</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Auto-dismiss alerts after 5 seconds
+        setTimeout(function() {
+            $('.alert').fadeOut('slow');
+        }, 5000);
+    </script>
+}

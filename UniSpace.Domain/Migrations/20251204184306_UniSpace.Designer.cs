@@ -12,8 +12,8 @@ using UniSpace.Domain;
 namespace UniSpace.Domain.Migrations
 {
     [DbContext(typeof(UniSpaceDbContext))]
-    [Migration("20251204143801_fixRoomReportEntities")]
-    partial class fixRoomReportEntities
+    [Migration("20251204184306_UniSpace")]
+    partial class UniSpace
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -250,9 +250,6 @@ namespace UniSpace.Domain.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
-
-                    b.Property<string>("AdminResponse")
-                        .HasColumnType("text");
 
                     b.Property<Guid>("BookingId")
                         .HasColumnType("uuid");
