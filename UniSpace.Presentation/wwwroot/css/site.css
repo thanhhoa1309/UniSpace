@@ -17,10 +17,6 @@ html {
   min-height: 100%;
 }
 
-body {
-  margin-bottom: 60px;
-}
-
 /* Typography Utilities */
 .text-xxs {
   font-size: 0.65rem !important;
