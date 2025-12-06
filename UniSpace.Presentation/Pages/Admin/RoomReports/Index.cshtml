@@ -1,0 +1,402 @@
+@page
+@model UniSpace.Presentation.Pages.Admin.RoomReports.IndexModel
+@using UniSpace.BusinessObject.Enums
+@{
+    ViewData["Title"] = "Room Reports Management";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<style>
+    .stats-card {
+        border-radius: 15px;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .stats-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+    }
+
+    .stats-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+    }
+
+    .report-card {
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        border-left: 4px solid #dee2e6;
+    }
+
+    .report-card:hover {
+        transform: translateX(5px);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    .report-card.open {
+        border-left-color: #ffc107;
+        background: linear-gradient(to right, #fff9e6 0%, white 100%);
+    }
+
+    .report-card.resolved {
+        border-left-color: #28a745;
+        background: linear-gradient(to right, #e8f5e9 0%, white 100%);
+    }
+
+    .badge-custom {
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 13px;
+    }
+
+    .action-btn {
+        padding: 8px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .action-btn:hover {
+        transform: scale(1.05);
+    }
+
+    .search-box {
+        border-radius: 25px;
+        border: 2px solid #e9ecef;
+        padding: 12px 24px;
+        transition: all 0.3s ease;
+    }
+
+    .search-box:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+
+    .gradient-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+    }
+
+    .filter-btn {
+        border-radius: 25px;
+        padding: 10px 20px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .filter-btn:hover {
+        transform: translateY(-2px);
+    }
+</style>
+
+<div class="container-fluid px-4 py-4">
+    <!-- Header -->
+    <div class="gradient-header shadow">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="display-6 fw-bold mb-2">
+                    <i class="bi bi-exclamation-triangle-fill"></i> Room Reports Management
+                </h1>
+                <p class="mb-0 opacity-75">Monitor and manage all room issue reports</p>
+            </div>
+            <a asp-page="/Admin/Dashboard" class="btn btn-light btn-lg">
+                <i class="bi bi-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <strong>Success!</strong> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <strong>Error!</strong> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- Statistics Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card stats-card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="stats-icon bg-primary bg-opacity-10 text-primary me-3">
+                            <i class="bi bi-clipboard-data"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-muted mb-1">Total Reports</h6>
+                            <h2 class="fw-bold mb-0">@Model.TotalReports</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card stats-card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="stats-icon bg-warning bg-opacity-10 text-warning me-3">
+                            <i class="bi bi-exclamation-circle"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-muted mb-1">Open Reports</h6>
+                            <h2 class="fw-bold mb-0 text-warning">@Model.OpenReports</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card stats-card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="stats-icon bg-success bg-opacity-10 text-success me-3">
+                            <i class="bi bi-check-circle"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-muted mb-1">Resolved Reports</h6>
+                            <h2 class="fw-bold mb-0 text-success">@Model.ResolvedReports</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="text" 
+                               name="SearchTerm" 
+                               value="@Model.SearchTerm" 
+                               class="form-control search-box border-start-0" 
+                               placeholder="Search by issue type, description, room, or user...">
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <select name="StatusFilter" class="form-select" onchange="this.form.submit()">
+                        <option value="">All Statuses</option>
+                        <option value="0" selected="@(Model.StatusFilter == ReportStatus.Open)">
+                            Open
+                        </option>
+                        <option value="1" selected="@(Model.StatusFilter == ReportStatus.Resolved)">
+                            Resolved
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="btn-group w-100">
+                        <button type="submit" class="btn btn-primary filter-btn">
+                            <i class="bi bi-funnel"></i> Apply Filters
+                        </button>
+                        <a asp-page="./Index" class="btn btn-outline-secondary filter-btn">
+                            <i class="bi bi-x-circle"></i> Clear
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Reports List -->
+    @if (!Model.Reports.Any())
+    {
+        <div class="card shadow-sm">
+            <div class="card-body text-center py-5">
+                <i class="bi bi-inbox fs-1 text-muted mb-3 d-block"></i>
+                <h4 class="text-muted">No Reports Found</h4>
+                <p class="text-muted">
+                    @if (Model.StatusFilter.HasValue || !string.IsNullOrEmpty(Model.SearchTerm))
+                    {
+                        <span>Try adjusting your filters to see more results.</span>
+                    }
+                    else
+                    {
+                        <span>There are no room reports at the moment.</span>
+                    }
+                </p>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var report in Model.Reports)
+            {
+                <div class="col-12">
+                    <div class="card report-card shadow-sm @(report.Status == ReportStatus.Open ? "open" : "resolved")">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <!-- Report Info -->
+                                <div class="col-md-7">
+                                    <div class="d-flex align-items-start mb-3">
+                                        <div class="flex-grow-1">
+                                            <h5 class="fw-bold mb-2">
+                                                <i class="bi bi-tag-fill text-primary"></i>
+                                                @report.IssueType
+                                            </h5>
+                                            <span class="badge-custom @(report.Status == ReportStatus.Open ? "bg-warning text-dark" : "bg-success text-white")">
+                                                <i class="bi bi-@(report.Status == ReportStatus.Open ? "exclamation-circle" : "check-circle")"></i>
+                                                @report.StatusDisplay
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-6">
+                                            <small class="text-muted d-block">
+                                                <i class="bi bi-person"></i> <strong>Reporter:</strong>
+                                            </small>
+                                            <span>@report.UserName</span>
+                                        </div>
+                                        <div class="col-6">
+                                            <small class="text-muted d-block">
+                                                <i class="bi bi-door-open"></i> <strong>Room:</strong>
+                                            </small>
+                                            <span>@report.RoomName</span>
+                                        </div>
+                                        <div class="col-6">
+                                            <small class="text-muted d-block">
+                                                <i class="bi bi-building"></i> <strong>Campus:</strong>
+                                            </small>
+                                            <span>@report.CampusName</span>
+                                        </div>
+                                        <div class="col-6">
+                                            <small class="text-muted d-block">
+                                                <i class="bi bi-calendar"></i> <strong>Reported:</strong>
+                                            </small>
+                                            <span>@report.CreatedAt.ToString("MMM dd, yyyy HH:mm")</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="border-start border-3 border-primary ps-3">
+                                        <small class="text-muted d-block mb-1"><strong>Description:</strong></small>
+                                        <p class="mb-0">
+                                            @(report.Description.Length > 200 ? report.Description.Substring(0, 200) + "..." : report.Description)
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Actions -->
+                                <div class="col-md-5">
+                                    <div class="d-grid gap-2">
+                                        <a asp-page="./Details" asp-route-id="@report.Id" class="btn btn-outline-primary action-btn">
+                                            <i class="bi bi-eye"></i> View Details
+                                        </a>
+
+                                        @if (report.Status == ReportStatus.Open)
+                                        {
+                                            <form method="post" asp-page-handler="Resolve" asp-route-id="@report.Id" 
+                                                  onsubmit="return confirm('Mark this report as resolved?');">
+                                                <button type="submit" class="btn btn-success action-btn w-100">
+                                                    <i class="bi bi-check-circle"></i> Mark as Resolved
+                                                </button>
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <form method="post" asp-page-handler="Reopen" asp-route-id="@report.Id"
+                                                  onsubmit="return confirm('Reopen this report?');">
+                                                <button type="submit" class="btn btn-warning action-btn w-100">
+                                                    <i class="bi bi-arrow-counterclockwise"></i> Reopen Report
+                                                </button>
+                                            </form>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Pagination -->
+        @if (Model.TotalPages > 1)
+        {
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    @{
+                        var prevDisabled = Model.PageNumber == 1 ? "disabled" : "";
+                        var nextDisabled = Model.PageNumber == Model.TotalPages ? "disabled" : "";
+                    }
+                    
+                    <li class="page-item @prevDisabled">
+                        <a class="page-link" 
+                           href="?pageNumber=@(Model.PageNumber - 1)@(Model.StatusFilter.HasValue ? $"&statusFilter={(int)Model.StatusFilter}" : "")@(!string.IsNullOrEmpty(Model.SearchTerm) ? $"&searchTerm={Model.SearchTerm}" : "")">
+                            <i class="bi bi-chevron-left"></i> Previous
+                        </a>
+                    </li>
+
+                    @for (int i = Math.Max(1, Model.PageNumber - 2); i <= Math.Min(Model.TotalPages, Model.PageNumber + 2); i++)
+                    {
+                        var activeClass = i == Model.PageNumber ? "active" : "";
+                        <li class="page-item @activeClass">
+                            <a class="page-link" 
+                               href="?pageNumber=@i@(Model.StatusFilter.HasValue ? $"&statusFilter={(int)Model.StatusFilter}" : "")@(!string.IsNullOrEmpty(Model.SearchTerm) ? $"&searchTerm={Model.SearchTerm}" : "")">
+                                @i
+                            </a>
+                        </li>
+                    }
+
+                    <li class="page-item @nextDisabled">
+                        <a class="page-link" 
+                           href="?pageNumber=@(Model.PageNumber + 1)@(Model.StatusFilter.HasValue ? $"&statusFilter={(int)Model.StatusFilter}" : "")@(!string.IsNullOrEmpty(Model.SearchTerm) ? $"&searchTerm={Model.SearchTerm}" : "")">
+                            Next <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        }
+    }
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function() {
+            // Auto-dismiss alerts
+            setTimeout(function() {
+                $('.alert').fadeOut('slow');
+            }, 5000);
+
+            // Search on enter key
+            $('input[name="SearchTerm"]').on('keypress', function(e) {
+                if (e.which == 13) {
+                    $(this).closest('form').submit();
+                }
+            });
+        });
+    </script>
+}

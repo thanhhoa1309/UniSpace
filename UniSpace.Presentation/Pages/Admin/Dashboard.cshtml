@@ -171,7 +171,7 @@
                             </div>
                         </div>
 
-                        <!-- Booking Confirmation Dashboard - NEW -->
+                        <!-- Booking Confirmation Dashboard -->
                         <div class="col-md-3">
                             <div class="card h-100 hover-shadow border-warning" style="border-width: 2px;">
                                 <div class="card-body text-center position-relative">
@@ -183,6 +183,20 @@
                                     <p class="card-text text-muted small">Review and approve pending booking requests</p>
                                     <a asp-page="/Admin/Booking/Dashboard" class="btn btn-warning btn-sm text-dark fw-bold">
                                         <i class="bi bi-speedometer2"></i> View Dashboard
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reports Dashboard - NEW -->
+                        <div class="col-md-3 mt-3">
+                            <div class="card h-100 hover-shadow border-danger" style="border-width: 2px;">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-file-earmark-bar-graph display-4 text-danger mb-3"></i>
+                                    <h5 class="card-title">Reports & Analytics</h5>
+                                    <p class="card-text text-muted small">View system reports, statistics, and analytics</p>
+                                    <a asp-page="/Admin/Reports/Dashboard" class="btn btn-danger btn-sm">
+                                        <i class="bi bi-graph-up"></i> View Dashboard
                                     </a>
                                 </div>
                             </div>
@@ -212,6 +226,15 @@
                                 </div>
                             </div>
                         </a>
+                        <a asp-page="/Admin/Reports/Dashboard" class="list-group-item list-group-item-action">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-file-earmark-bar-graph text-danger me-3" style="font-size: 1.5em;"></i>
+                                <div>
+                                    <strong>View Reports & Analytics</strong>
+                                    <p class="mb-0 small text-muted">Check system reports and statistics</p>
+                                </div>
+                            </div>
+                        </a>
                         <a asp-page="/Admin/Campus/Create" class="list-group-item list-group-item-action">
                             <div class="d-flex align-items-center">
                                 <i class="bi bi-plus-circle text-primary me-3" style="font-size: 1.5em;"></i>
@@ -236,6 +259,15 @@
                                 <div>
                                     <strong>Add New Schedule</strong>
                                     <p class="mb-0 small text-muted">Create a new schedule</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a asp-page="/Admin/Schedule/BulkCreate" class="list-group-item list-group-item-action">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-calendar-plus-fill text-success me-3" style="font-size: 1.5em;"></i>
+                                <div>
+                                    <strong>Bulk Create Schedules</strong>
+                                    <p class="mb-0 small text-muted">Create schedules for multiple rooms</p>
                                 </div>
                             </div>
                         </a>

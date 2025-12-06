@@ -1,0 +1,600 @@
+@page
+@using UniSpace.BusinessObject.Enums
+@model UniSpace.Presentation.Pages.Admin.Schedule.BulkCreateModel
+@{
+    ViewData["Title"] = "Bulk Create Schedules";
+}
+
+<div class="container-fluid mt-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-page="/Admin/Dashboard">
+                    <i class="bi bi-house"></i> Dashboard
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a asp-page="Index">Schedule Management</a>
+            </li>
+            <li class="breadcrumb-item active">Bulk Create Schedules</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-12">
+            <!-- Header -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body bg-gradient-primary text-white">
+                    <h2 class="mb-2">
+                        <i class="bi bi-calendar-plus"></i> Bulk Create Schedules
+                    </h2>
+                    <p class="mb-0">Create schedules for multiple rooms and days at once</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle"></i> @Model.ErrorMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (Model.Result != null)
+    {
+        <!-- Result Summary -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card text-white bg-success shadow">
+                    <div class="card-body text-center">
+                        <i class="bi bi-check-circle display-4 mb-2"></i>
+                        <h3>@Model.Result.SuccessfulSchedules</h3>
+                        <p class="mb-0">Successful</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-danger shadow">
+                    <div class="card-body text-center">
+                        <i class="bi bi-x-circle display-4 mb-2"></i>
+                        <h3>@Model.Result.FailedSchedules</h3>
+                        <p class="mb-0">Failed</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-info shadow">
+                    <div class="card-body text-center">
+                        <i class="bi bi-grid-3x3 display-4 mb-2"></i>
+                        <h3>@Model.Result.TotalRoomsProcessed</h3>
+                        <p class="mb-0">Total Processed</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.Result.Errors.Any())
+        {
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="bi bi-exclamation-triangle"></i> Errors & Conflicts
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Room</th>
+                                    <th>Day</th>
+                                    <th>Error</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var error in Model.Result.Errors)
+                                {
+                                    <tr>
+                                        <td>@error.RoomName</td>
+                                        <td>
+                                            @if (error.DayOfWeek.HasValue)
+                                            {
+                                                <span class="badge bg-secondary">
+                                                    @(((DayOfWeek)error.DayOfWeek.Value).ToString())
+                                                </span>
+                                            }
+                                        </td>
+                                        <td><small>@error.ErrorMessage</small></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="text-center mb-4">
+            <a asp-page="Index" class="btn btn-primary btn-lg">
+                <i class="bi bi-list"></i> View All Schedules
+            </a>
+            <a asp-page="BulkCreate" class="btn btn-outline-secondary btn-lg">
+                <i class="bi bi-plus-circle"></i> Create More
+            </a>
+        </div>
+    }
+
+    <div class="row">
+        <!-- Main Form -->
+        <div class="col-lg-8">
+            <form method="post" id="bulkCreateForm">
+                <!-- Basic Information Card -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-info-circle"></i> Basic Information
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Title -->
+                            <div class="col-md-8 mb-3">
+                                <label asp-for="Input.Title" class="form-label fw-bold">
+                                    <i class="bi bi-card-text text-primary"></i> Title 
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="Input.Title" 
+                                       class="form-control form-control-lg" 
+                                       placeholder="e.g., PRN221 - Advanced C# Programming"
+                                       id="titleInput" />
+                                <span asp-validation-for="Input.Title" class="text-danger"></span>
+                            </div>
+
+                            <!-- Schedule Type -->
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="Input.ScheduleType" class="form-label fw-bold">
+                                    <i class="bi bi-tag text-info"></i> Type 
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <select asp-for="Input.ScheduleType" class="form-select form-select-lg">
+                                    <option value="">-- Select --</option>
+                                    <option value="@((int)ScheduleType.Academic_Course)">
+                                        ?? Academic Course
+                                    </option>
+                                    <option value="@((int)ScheduleType.Recurring_Maintenance)">
+                                        ?? Maintenance
+                                    </option>
+                                </select>
+                                <span asp-validation-for="Input.ScheduleType" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Room Selection Card -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-door-open"></i> Select Rooms
+                            <span class="badge bg-light text-dark ms-2" id="roomCount">0 selected</span>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <button type="button" class="btn btn-sm btn-outline-success" onclick="selectAllRooms()">
+                                <i class="bi bi-check-all"></i> Select All
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="deselectAllRooms()">
+                                <i class="bi bi-x"></i> Deselect All
+                            </button>
+                            <input type="text" class="form-control form-control-sm mt-2" id="roomSearch" 
+                                   placeholder="?? Search rooms..." onkeyup="filterRooms()" />
+                        </div>
+                        
+                        <div class="room-grid" id="roomGrid">
+                            @foreach (var room in Model.AvailableRooms)
+                            {
+                                <div class="room-card" data-room-name="@room.Name.ToLower()" data-campus="@room.CampusName.ToLower()">
+                                    <input type="checkbox" 
+                                           name="Input.RoomIds" 
+                                           value="@room.Id" 
+                                           id="room_@room.Id" 
+                                           class="room-checkbox" 
+                                           onchange="updateRoomCount()" />
+                                    <label for="room_@room.Id" class="room-label">
+                                        <div class="room-header">
+                                            <strong>@room.Name</strong>
+                                            <span class="badge bg-primary">@room.TypeDisplay</span>
+                                        </div>
+                                        <div class="room-details">
+                                            <small class="text-muted">
+                                                <i class="bi bi-building"></i> @room.CampusName
+                                            </small>
+                                            <small class="text-muted">
+                                                <i class="bi bi-people"></i> @room.Capacity seats
+                                            </small>
+                                        </div>
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                        <span asp-validation-for="Input.RoomIds" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Days of Week Card -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0">
+                            <i class="bi bi-calendar-week"></i> Select Days of Week
+                            <span class="badge bg-dark text-white ms-2" id="dayCount">0 selected</span>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="day-grid">
+                            @for (int i = 0; i < 7; i++)
+                            {
+                                var dayName = ((DayOfWeek)i).ToString();
+                                var dayShort = dayName.Substring(0, 3);
+                                <div class="day-card">
+                                    <input type="checkbox" 
+                                           name="Input.DaysOfWeek" 
+                                           value="@i" 
+                                           id="day_@i" 
+                                           class="day-checkbox" 
+                                           onchange="updateDayCount()" />
+                                    <label for="day_@i" class="day-label">
+                                        <div class="day-short">@dayShort</div>
+                                        <div class="day-full">@dayName</div>
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                        <span asp-validation-for="Input.DaysOfWeek" class="text-danger"></span>
+                        <div class="mt-2">
+                            <button type="button" class="btn btn-sm btn-outline-warning" onclick="selectWeekdays()">
+                                <i class="bi bi-briefcase"></i> Weekdays Only
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-warning" onclick="selectAllDays()">
+                                <i class="bi bi-calendar"></i> All Days
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Time & Date Card -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-clock"></i> Time & Date Settings
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Time Range -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">
+                                    <i class="bi bi-clock"></i> Time Range <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">From</span>
+                                    <input asp-for="Input.StartTime" type="time" class="form-control" />
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-text">To</span>
+                                    <input asp-for="Input.EndTime" type="time" class="form-control" />
+                                </div>
+                                <span asp-validation-for="Input.StartTime" class="text-danger"></span>
+                                <span asp-validation-for="Input.EndTime" class="text-danger"></span>
+                            </div>
+
+                            <!-- Date Range -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">
+                                    <i class="bi bi-calendar-range"></i> Date Range <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">From</span>
+                                    <input asp-for="Input.StartDate" type="date" class="form-control" />
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-text">To</span>
+                                    <input asp-for="Input.EndDate" type="date" class="form-control" />
+                                </div>
+                                <span asp-validation-for="Input.StartDate" class="text-danger"></span>
+                                <span asp-validation-for="Input.EndDate" class="text-danger"></span>
+                            </div>
+
+                            <!-- Break Time -->
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Input.BreakTimeMinutes" class="form-label fw-bold">
+                                    <i class="bi bi-clock-history"></i> Break Time (minutes)
+                                </label>
+                                <input asp-for="Input.BreakTimeMinutes" type="number" class="form-control" min="0" max="120" />
+                                <span asp-validation-for="Input.BreakTimeMinutes" class="text-danger"></span>
+                                <div class="form-text">Buffer time between schedules</div>
+                            </div>
+
+                            <!-- Skip Conflicts -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">
+                                    <i class="bi bi-shield-check"></i> Conflict Handling
+                                </label>
+                                <div class="form-check form-switch">
+                                    <input asp-for="Input.SkipConflicts" class="form-check-input" type="checkbox" role="switch" />
+                                    <label asp-for="Input.SkipConflicts" class="form-check-label">
+                                        Skip rooms with conflicts
+                                    </label>
+                                </div>
+                                <div class="form-text">If disabled, entire operation fails on first conflict</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a asp-page="Index" class="btn btn-outline-secondary btn-lg">
+                                <i class="bi bi-x-circle"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-calendar-plus"></i> Create Schedules
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Summary Sidebar -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm sticky-top" style="top: 20px;">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-eye"></i> Summary
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6 class="text-muted">Title</h6>
+                        <p id="summaryTitle" class="mb-0">-</p>
+                    </div>
+                    <div class="mb-3">
+                        <h6 class="text-muted">Type</h6>
+                        <p id="summaryType" class="mb-0">-</p>
+                    </div>
+                    <div class="mb-3">
+                        <h6 class="text-muted">Rooms</h6>
+                        <p id="summaryRooms" class="mb-0">0 rooms selected</p>
+                    </div>
+                    <div class="mb-3">
+                        <h6 class="text-muted">Days</h6>
+                        <p id="summaryDays" class="mb-0">0 days selected</p>
+                    </div>
+                    <div class="mb-3">
+                        <h6 class="text-muted">Time</h6>
+                        <p id="summaryTime" class="mb-0">-</p>
+                    </div>
+                    <div class="mb-3">
+                        <h6 class="text-muted">Date Range</h6>
+                        <p id="summaryDate" class="mb-0">-</p>
+                    </div>
+                    <hr />
+                    <div class="alert alert-info mb-0">
+                        <strong>Total Schedules:</strong>
+                        <h3 class="mb-0" id="totalSchedules">0</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .room-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .room-card {
+            position: relative;
+        }
+
+        .room-checkbox {
+            display: none;
+        }
+
+        .room-label {
+            display: block;
+            padding: 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .room-label:hover {
+            border-color: #0d6efd;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .room-checkbox:checked + .room-label {
+            border-color: #198754;
+            background: #d1e7dd;
+            box-shadow: 0 4px 12px rgba(25,135,84,0.3);
+        }
+
+        .room-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .room-details {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .day-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+        }
+
+        .day-card {
+            position: relative;
+        }
+
+        .day-checkbox {
+            display: none;
+        }
+
+        .day-label {
+            display: block;
+            padding: 20px 10px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            background: white;
+        }
+
+        .day-label:hover {
+            border-color: #ffc107;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .day-checkbox:checked + .day-label {
+            border-color: #ffc107;
+            background: #fff3cd;
+            box-shadow: 0 4px 12px rgba(255,193,7,0.3);
+        }
+
+        .day-short {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .day-full {
+            font-size: 0.8em;
+            color: #6c757d;
+        }
+    </style>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        function updateRoomCount() {
+            const checked = document.querySelectorAll('.room-checkbox:checked').length;
+            document.getElementById('roomCount').textContent = checked + ' selected';
+            document.getElementById('summaryRooms').textContent = checked + ' rooms selected';
+            updateTotal();
+        }
+
+        function updateDayCount() {
+            const checked = document.querySelectorAll('.day-checkbox:checked').length;
+            document.getElementById('dayCount').textContent = checked + ' selected';
+            const days = Array.from(document.querySelectorAll('.day-checkbox:checked'))
+                .map(cb => document.querySelector(`label[for="${cb.id}"] .day-short`).textContent)
+                .join(', ');
+            document.getElementById('summaryDays').textContent = days || '0 days selected';
+            updateTotal();
+        }
+
+        function updateTotal() {
+            const rooms = document.querySelectorAll('.room-checkbox:checked').length;
+            const days = document.querySelectorAll('.day-checkbox:checked').length;
+            document.getElementById('totalSchedules').textContent = rooms * days;
+        }
+
+        function selectAllRooms() {
+            document.querySelectorAll('.room-checkbox').forEach(cb => cb.checked = true);
+            updateRoomCount();
+        }
+
+        function deselectAllRooms() {
+            document.querySelectorAll('.room-checkbox').forEach(cb => cb.checked = false);
+            updateRoomCount();
+        }
+
+        function selectAllDays() {
+            document.querySelectorAll('.day-checkbox').forEach(cb => cb.checked = true);
+            updateDayCount();
+        }
+
+        function selectWeekdays() {
+            document.querySelectorAll('.day-checkbox').forEach((cb, idx) => {
+                cb.checked = idx >= 1 && idx <= 5; // Monday to Friday
+            });
+            updateDayCount();
+        }
+
+        function filterRooms() {
+            const search = document.getElementById('roomSearch').value.toLowerCase();
+            document.querySelectorAll('.room-card').forEach(card => {
+                const name = card.dataset.roomName;
+                const campus = card.dataset.campus;
+                const match = name.includes(search) || campus.includes(search);
+                card.style.display = match ? 'block' : 'none';
+            });
+        }
+
+        // Live summary updates
+        document.getElementById('titleInput')?.addEventListener('input', function() {
+            document.getElementById('summaryTitle').textContent = this.value || '-';
+        });
+
+        document.querySelector('select[name="Input.ScheduleType"]')?.addEventListener('change', function() {
+            const text = this.options[this.selectedIndex].text;
+            document.getElementById('summaryType').textContent = text || '-';
+        });
+
+        document.querySelector('input[name="Input.StartTime"]')?.addEventListener('change', updateTimeDisplay);
+        document.querySelector('input[name="Input.EndTime"]')?.addEventListener('change', updateTimeDisplay);
+
+        function updateTimeDisplay() {
+            const start = document.querySelector('input[name="Input.StartTime"]').value;
+            const end = document.querySelector('input[name="Input.EndTime"]').value;
+            document.getElementById('summaryTime').textContent = start && end ? `${start} - ${end}` : '-';
+        }
+
+        document.querySelector('input[name="Input.StartDate"]')?.addEventListener('change', updateDateDisplay);
+        document.querySelector('input[name="Input.EndDate"]')?.addEventListener('change', updateDateDisplay);
+
+        function updateDateDisplay() {
+            const start = document.querySelector('input[name="Input.StartDate"]').value;
+            const end = document.querySelector('input[name="Input.EndDate"]').value;
+            document.getElementById('summaryDate').textContent = start && end ? `${start} to ${end}` : '-';
+        }
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', function() {
+            updateRoomCount();
+            updateDayCount();
+            updateTimeDisplay();
+            updateDateDisplay();
+        });
+    </script>
+}

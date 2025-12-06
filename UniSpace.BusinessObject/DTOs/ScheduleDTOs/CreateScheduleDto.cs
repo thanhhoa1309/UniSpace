@@ -36,5 +36,54 @@ namespace UniSpace.BusinessObject.DTOs.ScheduleDTOs
         /// </summary>
         [Range(0, 120, ErrorMessage = "Break time must be between 0 and 120 minutes")]
         public int BreakTimeMinutes { get; set; } = 15;
+
+        /// <summary>
+        /// If true, this is a one-time schedule (not recurring).
+        /// StartDate and EndDate should be the same.
+        /// </summary>
+        public bool IsOneTime { get; set; } = false;
+
+        /// <summary>
+        /// Custom validation: Validates that dates are consistent with schedule type
+        /// </summary>
+        public bool IsValid(out string? errorMessage)
+        {
+            errorMessage = null;
+
+            // Check time validity
+            if (StartTime >= EndTime)
+            {
+                errorMessage = "Start time must be before end time";
+                return false;
+            }
+
+            // For one-time schedules, dates should be the same
+            if (IsOneTime)
+            {
+                if (StartDate.Date != EndDate.Date)
+                {
+                    errorMessage = "For one-time schedules, Start date and End date must be the same";
+                    return false;
+                }
+
+                // Day of week should match the date
+                if ((int)StartDate.DayOfWeek != DayOfWeek)
+                {
+                    errorMessage = $"Day of week ({DayOfWeek}) does not match the selected date ({StartDate:yyyy-MM-dd})";
+                    return false;
+                }
+            }
+            // For recurring schedules
+            else
+            {
+                if (StartDate.Date > EndDate.Date)
+                {
+                    errorMessage = "Start date must be before or equal to end date";
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace EVDealerSales.DataAccess.Utils
+namespace UniSpace.Domain.Utils
 {
     public static class ResourceHelper
     {

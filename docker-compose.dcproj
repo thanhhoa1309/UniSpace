@@ -14,6 +14,9 @@
     <None Include="ADMIN_DASHBOARD_BOOKING_ACCESS.md" />
     <None Include="BOOKING_NOT_AVAILABLE_FIX.md" />
     <None Include="BUILD_FIX_SUMMARY.md" />
+    <None Include="BULK_SCHEDULE_CALENDAR_GUIDE.md" />
+    <None Include="BULK_SCHEDULE_SUMMARY_VI.md" />
+    <None Include="BUTTON_LOCATION_GUIDE.md" />
     <None Include="CONFIRM_BOOKING_UI_GUIDE.md" />
     <None Include="CONFIRM_SUMMARY.md" />
     <None Include="docker-compose.override.yml">
@@ -21,14 +24,17 @@
     </None>
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
+    <None Include="FIX_REPORTS_DASHBOARD_VIETNAMESE.md" />
     <None Include="HUONG_DAN_GET_ROOMS_THONG_NHAT.md" />
     <None Include="HUONG_DAN_PAGINATION.md" />
     <None Include="HUONG_DAN_SCHEDULE_CRUD.md" />
     <None Include="HUONG_DAN_SU_DUNG_SCHEDULE.md" />
     <None Include="NULL_REFERENCE_FIX_SUMMARY.md" />
     <None Include="QUICK_START_CONFIRM.md" />
+    <None Include="REPORTS_DASHBOARD_IMPLEMENTATION.md" />
     <None Include="ROOMREPORT_IMPLEMENTATION.md" />
     <None Include="ROOM_PAGINATION_SUMMARY.md" />
+    <None Include="ROOM_REPORT_DEV_QUICK_REF.md" />
     <None Include="ROOM_SERVICE_PAGINATION_GUIDE.md" />
     <None Include="SCHEDULE_CRUD_GUIDE.md" />
     <None Include="SCHEDULE_IMPLEMENTATION_COMPLETE.md" />
@@ -39,5 +45,6 @@
     <None Include="UNIFIED_GET_ROOMS_GUIDE.md" />
     <None Include="UniSpace.Service\BackgroundServices\BookingCompletionService.cs" />
     <None Include="UniSpace.Service\Hubs\BookingHub.cs" />
+    <None Include="USER_ROOM_REPORT_GUIDE.md" />
   </ItemGroup>
 </Project>
