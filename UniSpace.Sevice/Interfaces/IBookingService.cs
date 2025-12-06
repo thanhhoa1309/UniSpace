@@ -26,6 +26,7 @@ namespace UniSpace.Service.Interfaces
 
         // Update
         Task<BookingDto?> UpdateBookingAsync(UpdateBookingDto updateDto);
+        Task<BookingDto?> ConfirmBookingAsync(ConfirmBookingDto confirmDto);
         Task<bool> CancelBookingAsync(Guid bookingId);
         Task<bool> ApproveBookingAsync(Guid bookingId, string? adminNote = null);
         Task<bool> RejectBookingAsync(Guid bookingId, string adminNote);

@@ -78,7 +78,7 @@ namespace UniSpace.Presentation.Pages.Admin.Booking
             }
         }
 
-        public async Task<IActionResult> OnPostApproveAsync()
+        public async Task<IActionResult> OnPostConfirmAsync()
         {
             try
             {
@@ -88,6 +88,14 @@ namespace UniSpace.Presentation.Pages.Admin.Booking
                     return RedirectToPage("Index");
                 }
 
+                // Validate status
+                if (Input.Status != BookingStatus.Approved && Input.Status != BookingStatus.Rejected)
+                {
+                    TempData["ErrorMessage"] = "Invalid action. Please use Approve or Reject buttons.";
+                    return RedirectToPage("Index");
+                }
+
+                // Load booking first
                 Booking = await _bookingService.GetBookingByIdAsync(Input.Id);
 
                 if (Booking == null)
@@ -98,45 +106,52 @@ namespace UniSpace.Presentation.Pages.Admin.Booking
 
                 if (Booking.Status != BookingStatus.Pending)
                 {
-                    TempData["ErrorMessage"] = $"Cannot approve booking with status: {Booking.StatusDisplay}";
+                    TempData["ErrorMessage"] = $"Cannot confirm booking with status: {Booking.StatusDisplay}";
                     return RedirectToPage("Index");
                 }
 
-                // Validate admin note length if provided
+                // Validate admin note for rejection
+                if (Input.Status == BookingStatus.Rejected)
+                {
+                    if (string.IsNullOrWhiteSpace(Input.AdminNote))
+                    {
+                        ErrorMessage = "?? Admin note is required when rejecting a booking. Please provide a clear reason for the user.";
+                        return Page();
+                    }
+
+                    if (Input.AdminNote.Trim().Length < 10)
+                    {
+                        ErrorMessage = "Please provide a meaningful reason (at least 10 characters) for rejecting this booking.";
+                        return Page();
+                    }
+                }
+
+                // Validate admin note length
                 if (!string.IsNullOrWhiteSpace(Input.AdminNote) && Input.AdminNote.Length > 500)
                 {
                     ErrorMessage = "Admin note cannot exceed 500 characters.";
                     return Page();
                 }
 
-                var success = await _bookingService.ApproveBookingAsync(Input.Id, Input.AdminNote);
+                // Use unified confirm method
+                var result = await _bookingService.ConfirmBookingAsync(Input);
 
-                if (success)
+                if (result != null)
                 {
-                    _logger.LogInformation($"Booking {Input.Id} approved by admin");
-                    TempData["SuccessMessage"] = $"? Booking for '{Booking.RoomName}' by {Booking.UserName} has been approved successfully! User will be notified.";
+                    var actionText = Input.Status == BookingStatus.Approved ? "approved" : "rejected";
+                    var icon = Input.Status == BookingStatus.Approved ? "?" : "?";
+                    
+                    _logger.LogInformation($"Booking {Input.Id} {actionText} by admin");
+                    TempData["SuccessMessage"] = $"{icon} Booking for '{Booking.RoomName}' by {Booking.UserName} has been {actionText} successfully! User will be notified via real-time notification.";
                     return RedirectToPage("Index");
                 }
 
-                ErrorMessage = "Failed to approve booking. Please try again.";
-                
-                // Reload booking for display
-                try
-                {
-                    Booking = await _bookingService.GetBookingByIdAsync(Input.Id);
-                }
-                catch
-                {
-                    // If reload fails, redirect
-                    TempData["ErrorMessage"] = "An error occurred. Please try again.";
-                    return RedirectToPage("Index");
-                }
-                
+                ErrorMessage = "Failed to confirm booking. Please try again.";
                 return Page();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error approving booking: {Input.Id}");
+                _logger.LogError(ex, $"Error confirming booking: {Input.Id}");
                 
                 try
                 {
@@ -148,133 +163,23 @@ namespace UniSpace.Presentation.Pages.Admin.Booking
                     return RedirectToPage("Index");
                 }
                 
-                ErrorMessage = ex.Message ?? "An error occurred while approving the booking. Please try again.";
+                ErrorMessage = ex.Message ?? "An error occurred while confirming the booking. Please try again.";
                 return Page();
             }
         }
 
+        public async Task<IActionResult> OnPostApproveAsync()
+        {
+            // Set status and call unified method
+            Input.Status = BookingStatus.Approved;
+            return await OnPostConfirmAsync();
+        }
+
         public async Task<IActionResult> OnPostRejectAsync()
         {
-            try
-            {
-                if (Input.Id == Guid.Empty)
-                {
-                    TempData["ErrorMessage"] = "Invalid booking ID.";
-                    return RedirectToPage("Index");
-                }
-
-                Booking = await _bookingService.GetBookingByIdAsync(Input.Id);
-
-                if (Booking == null)
-                {
-                    TempData["ErrorMessage"] = "Booking not found.";
-                    return RedirectToPage("Index");
-                }
-
-                if (Booking.Status != BookingStatus.Pending)
-                {
-                    TempData["ErrorMessage"] = $"Cannot reject booking with status: {Booking.StatusDisplay}";
-                    return RedirectToPage("Index");
-                }
-
-                // Admin note is required for rejection
-                if (string.IsNullOrWhiteSpace(Input.AdminNote))
-                {
-                    ErrorMessage = "?? Admin note is required when rejecting a booking. Please provide a clear reason for the user.";
-                    
-                    // Reload booking for display
-                    try
-                    {
-                        Booking = await _bookingService.GetBookingByIdAsync(Input.Id);
-                    }
-                    catch
-                    {
-                        TempData["ErrorMessage"] = "An error occurred. Please try again.";
-                        return RedirectToPage("Index");
-                    }
-                    
-                    return Page();
-                }
-
-                // Validate admin note length
-                if (Input.AdminNote.Length > 500)
-                {
-                    ErrorMessage = "Admin note cannot exceed 500 characters.";
-                    
-                    // Reload booking for display
-                    try
-                    {
-                        Booking = await _bookingService.GetBookingByIdAsync(Input.Id);
-                    }
-                    catch
-                    {
-                        TempData["ErrorMessage"] = "An error occurred. Please try again.";
-                        return RedirectToPage("Index");
-                    }
-                    
-                    return Page();
-                }
-
-                // Ensure note is meaningful (at least 10 characters)
-                if (Input.AdminNote.Trim().Length < 10)
-                {
-                    ErrorMessage = "Please provide a meaningful reason (at least 10 characters) for rejecting this booking.";
-                    
-                    // Reload booking for display
-                    try
-                    {
-                        Booking = await _bookingService.GetBookingByIdAsync(Input.Id);
-                    }
-                    catch
-                    {
-                        TempData["ErrorMessage"] = "An error occurred. Please try again.";
-                        return RedirectToPage("Index");
-                    }
-                    
-                    return Page();
-                }
-
-                var success = await _bookingService.RejectBookingAsync(Input.Id, Input.AdminNote);
-
-                if (success)
-                {
-                    _logger.LogInformation($"Booking {Input.Id} rejected by admin with note: {Input.AdminNote}");
-                    TempData["SuccessMessage"] = $"Booking for '{Booking.RoomName}' by {Booking.UserName} has been rejected. User will be notified with your explanation.";
-                    return RedirectToPage("Index");
-                }
-
-                ErrorMessage = "Failed to reject booking. Please try again.";
-                
-                // Reload booking for display
-                try
-                {
-                    Booking = await _bookingService.GetBookingByIdAsync(Input.Id);
-                }
-                catch
-                {
-                    TempData["ErrorMessage"] = "An error occurred. Please try again.";
-                    return RedirectToPage("Index");
-                }
-                
-                return Page();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error rejecting booking: {Input.Id}");
-                
-                try
-                {
-                    Booking = await _bookingService.GetBookingByIdAsync(Input.Id);
-                }
-                catch
-                {
-                    TempData["ErrorMessage"] = "An error occurred. Please try again.";
-                    return RedirectToPage("Index");
-                }
-                
-                ErrorMessage = ex.Message ?? "An error occurred while rejecting the booking. Please try again.";
-                return Page();
-            }
+            // Set status and call unified method
+            Input.Status = BookingStatus.Rejected;
+            return await OnPostConfirmAsync();
         }
     }
 }

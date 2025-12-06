@@ -240,6 +240,17 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    
+    <!-- SignalR -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.0/signalr.min.js"></script>
+    
+    <!-- Booking Notifications (for authenticated users) -->
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <script src="~/js/booking-notifications.js" asp-append-version="true"></script>
+        <!-- Hidden element to store user ID for JavaScript -->
+        <div data-user-id="@User.Identity.Name" style="display:none;"></div>
+    }
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

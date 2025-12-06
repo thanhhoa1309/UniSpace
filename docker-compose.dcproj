@@ -12,11 +12,14 @@
   <ItemGroup>
     <None Include="ADMIN_BOOKING_FEATURE.md" />
     <None Include="ADMIN_DASHBOARD_BOOKING_ACCESS.md" />
+    <None Include="BOOKING_ARCHITECTURE_DIAGRAM.md" />
     <None Include="BOOKING_NOT_AVAILABLE_FIX.md" />
+    <None Include="BOOKING_SYSTEM_ARCHITECTURE.md" />
     <None Include="BUILD_FIX_SUMMARY.md" />
     <None Include="BULK_SCHEDULE_CALENDAR_GUIDE.md" />
     <None Include="BULK_SCHEDULE_SUMMARY_VI.md" />
     <None Include="BUTTON_LOCATION_GUIDE.md" />
+    <None Include="CONFIRM_BOOKING_SIGNALR_GUIDE.md" />
     <None Include="CONFIRM_BOOKING_UI_GUIDE.md" />
     <None Include="CONFIRM_SUMMARY.md" />
     <None Include="docker-compose.override.yml">
@@ -46,5 +49,6 @@
     <None Include="UniSpace.Service\BackgroundServices\BookingCompletionService.cs" />
     <None Include="UniSpace.Service\Hubs\BookingHub.cs" />
     <None Include="USER_ROOM_REPORT_GUIDE.md" />
+    <None Include="WHY_NOT_DELETE_BOOKING_CLASSES_VI.md" />
   </ItemGroup>
 </Project>
