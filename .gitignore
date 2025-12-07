@@ -6,6 +6,9 @@ project.lock.json
 *.pyc
 nupkg/
 
+# Ignore all Markdown files
+*.md
+
 # Visual Studio Code
 .vscode/
 
