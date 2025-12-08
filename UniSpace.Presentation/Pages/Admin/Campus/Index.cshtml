@@ -4,228 +4,849 @@
     ViewData["Title"] = "Campus Management";
 }
 
-<div class="container-fluid mt-4">
-    <!-- Header -->
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h2><i class="bi bi-building"></i> Campus Management</h2>
-                    <p class="text-muted">Manage all university campus locations</p>
+<style>
+    /* Page Container */
+    .index-page-container {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        min-height: 100vh;
+        padding: 20px 0;
+    }
+
+    /* Glass Card Header */
+    .glass-card-header {
+        background: rgba(45, 45, 45, 0.5);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        transition: all 0.3s ease;
+    }
+
+        .glass-card-header:hover {
+            border: 1px solid rgba(255, 138, 0, 0.4);
+            box-shadow: 0 12px 40px 0 rgba(255, 138, 0, 0.15);
+        }
+
+    /* Neon Text */
+    .neon-text {
+        color: #ff8a00;
+        font-weight: bold;
+    }
+
+    .text-neon {
+        color: #ff8a00;
+    }
+
+    .text-muted-glass {
+        color: #9ca3af;
+    }
+
+    .text-light-glass {
+        color: #e0e0e0;
+    }
+
+    /* Search Form */
+    .search-glass-form {
+        background: rgba(45, 45, 45, 0.5);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 12px;
+        padding: 8px;
+        transition: all 0.3s ease;
+    }
+
+        .search-glass-form:hover {
+            border-color: rgba(255, 138, 0, 0.3);
+        }
+
+    .search-input-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .search-icon {
+        color: #ff8a00;
+        font-size: 1.2rem;
+        padding-left: 8px;
+    }
+
+    .search-input-glass {
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: #ffffff;
+        padding: 10px 12px;
+        font-size: 1rem;
+        outline: none;
+    }
+
+        .search-input-glass::placeholder {
+            color: #6b7280;
+        }
+
+    .btn-search-neon {
+        background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 100%);
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        padding: 10px 24px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 20px rgba(255, 138, 0, 0.4);
+        cursor: pointer;
+    }
+
+        .btn-search-neon:hover {
+            box-shadow: 0 0 30px rgba(255, 138, 0, 0.7);
+            transform: translateY(-2px);
+        }
+
+    .btn-search-clear {
+        background: rgba(255, 255, 255, 0.05);
+        border: none;
+        color: #fff;
+        padding: 10px 16px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+    }
+
+        .btn-search-clear:hover {
+            background: rgba(255, 138, 0, 0.2);
+            color: #ff8a00;
+        }
+
+    /* Buttons */
+    .btn-neon-primary {
+        background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 100%);
+        border: 2px solid #ff8a00;
+        color: #fff;
+        font-weight: 700;
+        padding: 12px 28px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 25px rgba(255, 138, 0, 0.4);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+    }
+
+        .btn-neon-primary:hover {
+            box-shadow: 0 0 35px rgba(255, 138, 0, 0.7), 0 0 50px rgba(255, 138, 0, 0.5);
+            transform: translateY(-2px);
+            color: #fff;
+        }
+
+    .btn-glass-secondary {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        font-weight: 600;
+        padding: 12px 28px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+    }
+
+        .btn-glass-secondary:hover {
+            border: 2px solid rgba(255, 138, 0, 0.5);
+            color: #ff8a00;
+            box-shadow: 0 0 20px rgba(255, 138, 0, 0.2);
+        }
+
+    /* Table Card */
+    .glass-card-table {
+        background: rgba(45, 45, 45, 0.5);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+    }
+
+    .card-header-table {
+        background: rgba(255, 138, 0, 0.15);
+        border-bottom: 2px solid rgba(255, 138, 0, 0.3);
+        padding: 20px 24px;
+    }
+
+    .badge-neon-count {
+        background: rgba(255, 255, 255, 0.1);
+        color: #ff8a00;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-weight: 600;
+        border: 1px solid rgba(255, 138, 0, 0.3);
+    }
+
+    /* View Toggle Buttons */
+    .btn-group-glass {
+        display: flex;
+        gap: 0;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-view-glass {
+        background: rgba(255, 255, 255, 0.05);
+        border: none;
+        color: #fff;
+        padding: 8px 16px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        font-weight: 500;
+    }
+
+        .btn-view-glass.active {
+            background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 100%);
+            color: #fff;
+        }
+
+        .btn-view-glass:hover:not(.active) {
+            background: rgba(255, 138, 0, 0.2);
+            color: #ff8a00;
+        }
+
+    .card-body-table {
+        padding: 0;
+    }
+
+    /* Table Styles */
+    .table-responsive-glass {
+        overflow-x: auto;
+    }
+
+    .table-glass {
+        width: 100%;
+        color: #e0e0e0;
+        margin-bottom: 0;
+    }
+
+        .table-glass thead th {
+            background: rgba(255, 138, 0, 0.1);
+            color: #ff8a00;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid rgba(255, 138, 0, 0.3);
+            padding: 16px 12px;
+            white-space: nowrap;
+        }
+
+        .table-glass tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+            .table-glass tbody tr:hover {
+                background: rgba(255, 138, 0, 0.05);
+                box-shadow: 0 2px 8px rgba(255, 138, 0, 0.1);
+            }
+
+        .table-glass tbody td {
+            padding: 16px 12px;
+            vertical-align: middle;
+            font-size: 0.9rem;
+        }
+
+    .badge-neon-small {
+        background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 100%);
+        color: #fff;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        display: inline-block;
+    }
+
+    /* Action Buttons */
+    .action-buttons-glass {
+        display: flex;
+        gap: 6px;
+        justify-content: center;
+    }
+
+    .btn-action-glass {
+        padding: 8px 12px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+
+    .btn-info-glass {
+        background: rgba(59, 130, 246, 0.2);
+        color: #60a5fa;
+        border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+        .btn-info-glass:hover {
+            background: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+            color: #93c5fd;
+        }
+
+    .btn-warning-glass {
+        background: rgba(251, 191, 36, 0.2);
+        color: #fbbf24;
+        border: 1px solid rgba(251, 191, 36, 0.3);
+    }
+
+        .btn-warning-glass:hover {
+            background: rgba(251, 191, 36, 0.3);
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
+            color: #fcd34d;
+        }
+
+    .btn-danger-glass {
+        background: rgba(239, 68, 68, 0.2);
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+        .btn-danger-glass:hover {
+            background: rgba(239, 68, 68, 0.3);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+        }
+
+    /* Grid View */
+    .grid-view-container {
+        padding: 24px;
+    }
+
+    .campus-card-glass {
+        background: rgba(45, 45, 45, 0.6);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .campus-card-glass:hover {
+            border-color: rgba(255, 138, 0, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(255, 138, 0, 0.2);
+        }
+
+    .campus-card-header {
+        background: rgba(255, 138, 0, 0.15);
+        border-bottom: 1px solid rgba(255, 138, 0, 0.3);
+        padding: 16px 20px;
+    }
+
+    .campus-card-body {
+        padding: 20px;
+        flex: 1;
+    }
+
+    .campus-address {
+        color: #d1d5db;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .campus-card-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .campus-card-footer {
+        background: rgba(255, 255, 255, 0.03);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 16px 20px;
+    }
+
+    .campus-card-actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-card-action {
+        flex: 1;
+        padding: 10px 16px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+
+    /* Empty State */
+    .empty-state-glass {
+        text-align: center;
+        padding: 80px 40px;
+    }
+
+    .empty-icon {
+        font-size: 6rem;
+        color: #6b7280;
+        margin-bottom: 20px;
+    }
+
+    .empty-title {
+        color: #9ca3af;
+        margin-bottom: 12px;
+        font-weight: 600;
+    }
+
+    .empty-text {
+        color: #6b7280;
+        margin-bottom: 0;
+    }
+
+    /* Alerts */
+    .alert-glass-success {
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+        border-radius: 10px;
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #6ee7b7;
+        position: relative;
+    }
+
+    .alert-glass-danger {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        border-radius: 10px;
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #fca5a5;
+        position: relative;
+    }
+
+    .alert-glass-warning {
+        background: rgba(251, 191, 36, 0.1);
+        border: 1px solid rgba(251, 191, 36, 0.3);
+        border-radius: 8px;
+        padding: 12px 16px;
+        color: #fcd34d;
+        display: flex;
+        align-items: center;
+    }
+
+    .btn-close-glass {
+        position: absolute;
+        right: 16px;
+        background: transparent;
+        border: none;
+        color: inherit;
+        font-size: 1.2rem;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: opacity 0.3s ease;
+    }
+
+        .btn-close-glass:hover {
+            opacity: 1;
+        }
+
+    /* Modal */
+    .modal-content-glass {
+        background: rgba(35, 35, 35, 0.95);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 138, 0, 0.3);
+        border-radius: 15px;
+    }
+
+    .modal-header-glass {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 20px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .modal-header-danger {
+        background: rgba(239, 68, 68, 0.15);
+        border-bottom-color: rgba(239, 68, 68, 0.3);
+    }
+
+    .modal-title {
+        color: #f87171;
+        font-weight: 700;
+    }
+
+    .btn-close-modal {
+        background: transparent;
+        border: none;
+        color: #fff;
+        font-size: 1.5rem;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: opacity 0.3s ease;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .btn-close-modal:hover {
+            opacity: 1;
+        }
+
+    .modal-body-glass {
+        padding: 24px;
+        color: #e0e0e0;
+    }
+
+    .text-danger-neon {
+        color: #f87171;
+    }
+
+    .modal-footer-glass {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 20px 24px;
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+    }
+
+    .btn-danger-neon {
+        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        border: 2px solid #dc2626;
+        color: #fff;
+        font-weight: 600;
+        padding: 10px 24px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 20px rgba(220, 38, 38, 0.4);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+    }
+
+        .btn-danger-neon:hover {
+            box-shadow: 0 0 30px rgba(220, 38, 38, 0.7);
+            transform: translateY(-2px);
+        }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .index-page-container {
+            padding: 15px 0;
+        }
+
+        .action-buttons-glass {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .btn-action-glass {
+            width: 100%;
+        }
+
+        .campus-card-actions {
+            flex-direction: column;
+        }
+
+        .search-input-wrapper {
+            flex-wrap: wrap;
+        }
+
+        .btn-search-neon,
+        .btn-search-clear {
+            width: 100%;
+        }
+    }
+
+    /* Custom Scrollbar */
+    .table-responsive-glass::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .table-responsive-glass::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+    }
+
+    .table-responsive-glass::-webkit-scrollbar-thumb {
+        background: rgba(255, 138, 0, 0.3);
+        border-radius: 10px;
+    }
+
+        .table-responsive-glass::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 138, 0, 0.5);
+        }
+</style>
+
+
+<div class="index-page-container">
+    <div class="container-fluid mt-4">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="glass-card-header p-4">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                        <div>
+                            <h2 class="neon-text mb-2">
+                                <i class="bi bi-building"></i> Campus Management
+                            </h2>
+                            <p class="text-muted-glass mb-0">Manage all university campus locations</p>
+                        </div>
+                        <a asp-page="Create" class="btn-neon-primary btn-lg">
+                            <i class="bi bi-plus-circle me-2"></i> Add New Campus
+                        </a>
+                    </div>
                 </div>
-                <a asp-page="Create" class="btn btn-primary btn-lg">
-                    <i class="bi bi-plus-circle"></i> Add New Campus
+            </div>
+        </div>
+
+        <!-- Alerts -->
+        @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+        {
+            <div class="alert-glass-success mb-4" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <span>@Model.SuccessMessage</span>
+                <button type="button" class="btn-close-glass" onclick="this.parentElement.style.display='none'">
+                    <i class="bi bi-x"></i>
+                </button>
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert-glass-danger mb-4" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <span>@Model.ErrorMessage</span>
+                <button type="button" class="btn-close-glass" onclick="this.parentElement.style.display='none'">
+                    <i class="bi bi-x"></i>
+                </button>
+            </div>
+        }
+
+        <!-- Search and Filter Bar -->
+        <div class="row mb-4">
+            <div class="col-lg-8 mb-3 mb-lg-0">
+                <form method="get" class="search-glass-form">
+                    <div class="search-input-wrapper">
+                        <i class="bi bi-search search-icon"></i>
+                        <input type="text" name="search" class="search-input-glass"
+                               placeholder="Search campus by name or address..."
+                               value="@Model.SearchTerm" />
+                        <button class="btn-search-neon" type="submit">
+                            Search
+                        </button>
+                        @if (!string.IsNullOrEmpty(Model.SearchTerm))
+                        {
+                            <a asp-page="Index" class="btn-search-clear">
+                                <i class="bi bi-x-circle"></i>
+                            </a>
+                        }
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a asp-page="Dashboard" class="btn-glass-secondary btn-lg w-100 w-lg-auto">
+                    <i class="bi bi-speedometer2 me-2"></i> Dashboard
                 </a>
             </div>
         </div>
-    </div>
 
-    <!-- Alerts -->
-    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
-    {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle"></i> @Model.SuccessMessage
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    }
-
-    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
-    {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="bi bi-exclamation-triangle"></i> @Model.ErrorMessage
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    }
-
-    <!-- Search and Filter Bar -->
-    <div class="row mb-4">
-        <div class="col-md-8">
-            <form method="get" class="input-group input-group-lg">
-                <span class="input-group-text"><i class="bi bi-search"></i></span>
-                <input type="text" name="search" class="form-control" 
-                       placeholder="Search campus by name or address..." 
-                       value="@Model.SearchTerm" />
-                <button class="btn btn-primary" type="submit">
-                    Search
-                </button>
-                @if (!string.IsNullOrEmpty(Model.SearchTerm))
-                {
-                    <a asp-page="Index" class="btn btn-outline-secondary">
-                        <i class="bi bi-x-circle"></i> Clear
-                    </a>
-                }
-            </form>
-        </div>
-        <div class="col-md-4 text-end">
-            <a asp-page="Dashboard" class="btn btn-info btn-lg">
-                <i class="bi bi-speedometer2"></i> Dashboard
-            </a>
-        </div>
-    </div>
-
-    <!-- Campus Cards/Table -->
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">
-                        <i class="bi bi-list-ul"></i> Campus List 
-                        <span class="badge bg-light text-dark ms-2">@Model.Campuses.Count</span>
-                    </h5>
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-sm btn-light active" id="viewTable">
-                            <i class="bi bi-table"></i> Table
-                        </button>
-                        <button type="button" class="btn btn-sm btn-outline-light" id="viewGrid">
-                            <i class="bi bi-grid-3x3"></i> Grid
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body p-0">
-                    @if (Model.Campuses.Any())
-                    {
-                        <!-- Table View -->
-                        <div id="tableView">
-                            <div class="table-responsive">
-                                <table class="table table-hover table-striped mb-0">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th style="width: 5%">#</th>
-                                            <th style="width: 25%">
-                                                <i class="bi bi-building"></i> Campus Name
-                                            </th>
-                                            <th style="width: 30%">
-                                                <i class="bi bi-geo-alt"></i> Address
-                                            </th>
-                                            <th style="width: 10%" class="text-center">
-                                                <i class="bi bi-door-open"></i> Rooms
-                                            </th>
-                                            <th style="width: 15%">
-                                                <i class="bi bi-calendar"></i> Created
-                                            </th>
-                                            <th style="width: 15%" class="text-center">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @for (int i = 0; i < Model.Campuses.Count; i++)
-                                        {
-                                            var campus = Model.Campuses[i];
-                                            <tr>
-                                                <td><strong>@(i + 1)</strong></td>
-                                                <td>
-                                                    <strong class="text-primary">@campus.Name</strong>
-                                                </td>
-                                                <td>
-                                                    <i class="bi bi-geo-alt text-muted"></i> @campus.Address
-                                                </td>
-                                                <td class="text-center">
-                                                    <span class="badge bg-info rounded-pill">
-                                                        @campus.TotalRooms
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <small class="text-muted">
-                                                        @campus.CreatedAt.ToString("dd MMM yyyy")
-                                                    </small>
-                                                </td>
-                                                <td>
-                                                    <div class="btn-group btn-group-sm" role="group">
-                                                        <a asp-page="Details" asp-route-id="@campus.Id" 
-                                                           class="btn btn-info" title="View Details">
-                                                            <i class="bi bi-eye"></i>
-                                                        </a>
-                                                        <a asp-page="Edit" asp-route-id="@campus.Id" 
-                                                           class="btn btn-warning" title="Edit">
-                                                            <i class="bi bi-pencil"></i>
-                                                        </a>
-                                                        <button type="button" class="btn btn-danger" 
-                                                                onclick="confirmDelete('@campus.Id', '@campus.Name')" 
-                                                                title="Delete">
-                                                            <i class="bi bi-trash"></i>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
+        <!-- Campus Cards/Table -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="glass-card-table">
+                    <div class="card-header-table">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                            <h5 class="mb-0 neon-text">
+                                <i class="bi bi-list-ul me-2"></i> Campus List
+                                <span class="badge-neon-count ms-2">@Model.Campuses.Count</span>
+                            </h5>
+                            <div class="btn-group-glass" role="group">
+                                <button type="button" class="btn-view-glass active" id="viewTable">
+                                    <i class="bi bi-table"></i> Table
+                                </button>
+                                <button type="button" class="btn-view-glass" id="viewGrid">
+                                    <i class="bi bi-grid-3x3"></i> Grid
+                                </button>
                             </div>
                         </div>
+                    </div>
+                    <div class="card-body-table">
+                        @if (Model.Campuses.Any())
+                        {
+                            <!-- Table View -->
+                            <div id="tableView">
+                                <div class="table-responsive-glass">
+                                    <table class="table-glass">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 5%">#</th>
+                                                <th style="width: 25%">
+                                                    <i class="bi bi-building me-1"></i> Campus Name
+                                                </th>
+                                                <th style="width: 30%">
+                                                    <i class="bi bi-geo-alt me-1"></i> Address
+                                                </th>
+                                                <th style="width: 10%" class="text-center">
+                                                    <i class="bi bi-door-open me-1"></i> Rooms
+                                                </th>
+                                                <th style="width: 15%">
+                                                    <i class="bi bi-calendar me-1"></i> Created
+                                                </th>
+                                                <th style="width: 15%" class="text-center">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @for (int i = 0; i < Model.Campuses.Count; i++)
+                                            {
+                                                var campus = Model.Campuses[i];
+                                                <tr>
+                                                    <td><strong class="text-neon">@(i + 1)</strong></td>
+                                                    <td>
+                                                        <strong class="neon-text">@campus.Name</strong>
+                                                    </td>
+                                                    <td>
+                                                        <i class="bi bi-geo-alt text-muted-glass"></i>
+                                                        <span class="text-light-glass">@campus.Address</span>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <span class="badge-neon-small">
+                                                            @campus.TotalRooms
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <small class="text-muted-glass">
+                                                            @campus.CreatedAt.ToString("dd MMM yyyy")
+                                                        </small>
+                                                    </td>
+                                                    <td>
+                                                        <div class="action-buttons-glass">
+                                                            <a asp-page="Details" asp-route-id="@campus.Id"
+                                                               class="btn-action-glass btn-info-glass"
+                                                               title="View Details">
+                                                                <i class="bi bi-eye"></i>
+                                                            </a>
+                                                            <a asp-page="Edit" asp-route-id="@campus.Id"
+                                                               class="btn-action-glass btn-warning-glass"
+                                                               title="Edit">
+                                                                <i class="bi bi-pencil"></i>
+                                                            </a>
+                                                            <button type="button"
+                                                                    class="btn-action-glass btn-danger-glass"
+                                                                    onclick="confirmDelete('@campus.Id', '@campus.Name')"
+                                                                    title="Delete">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
 
-                        <!-- Grid View (Hidden by default) -->
-                        <div id="gridView" class="p-3" style="display: none;">
-                            <div class="row g-3">
-                                @foreach (var campus in Model.Campuses)
-                                {
-                                    <div class="col-md-6 col-lg-4">
-                                        <div class="card h-100 shadow-sm hover-shadow">
-                                            <div class="card-header bg-primary text-white">
-                                                <h6 class="mb-0">
-                                                    <i class="bi bi-building"></i> @campus.Name
-                                                </h6>
-                                            </div>
-                                            <div class="card-body">
-                                                <p class="card-text">
-                                                    <i class="bi bi-geo-alt text-muted"></i> 
-                                                    @campus.Address
-                                                </p>
-                                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                                    <span class="badge bg-info">
-                                                        <i class="bi bi-door-open"></i> @campus.TotalRooms Rooms
-                                                    </span>
-                                                    <small class="text-muted">
-                                                        @campus.CreatedAt.ToString("dd MMM yyyy")
-                                                    </small>
+                            <!-- Grid View (Hidden by default) -->
+                            <div id="gridView" class="grid-view-container" style="display: none;">
+                                <div class="row g-4">
+                                    @foreach (var campus in Model.Campuses)
+                                    {
+                                        <div class="col-md-6 col-lg-4">
+                                            <div class="campus-card-glass">
+                                                <div class="campus-card-header">
+                                                    <h6 class="mb-0 neon-text">
+                                                        <i class="bi bi-building me-2"></i> @campus.Name
+                                                    </h6>
                                                 </div>
-                                            </div>
-                                            <div class="card-footer bg-light">
-                                                <div class="d-flex gap-2">
-                                                    <a asp-page="Details" asp-route-id="@campus.Id" 
-                                                       class="btn btn-sm btn-info flex-fill">
-                                                        <i class="bi bi-eye"></i> View
-                                                    </a>
-                                                    <a asp-page="Edit" asp-route-id="@campus.Id" 
-                                                       class="btn btn-sm btn-warning flex-fill">
-                                                        <i class="bi bi-pencil"></i> Edit
-                                                    </a>
-                                                    <button type="button" 
-                                                            class="btn btn-sm btn-danger flex-fill"
-                                                            onclick="confirmDelete('@campus.Id', '@campus.Name')">
-                                                        <i class="bi bi-trash"></i> Delete
-                                                    </button>
+                                                <div class="campus-card-body">
+                                                    <p class="campus-address">
+                                                        <i class="bi bi-geo-alt text-muted-glass"></i>
+                                                        @campus.Address
+                                                    </p>
+                                                    <div class="campus-card-info">
+                                                        <span class="badge-neon-small">
+                                                            <i class="bi bi-door-open"></i> @campus.TotalRooms Rooms
+                                                        </span>
+                                                        <small class="text-muted-glass">
+                                                            @campus.CreatedAt.ToString("dd MMM yyyy")
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                                <div class="campus-card-footer">
+                                                    <div class="campus-card-actions">
+                                                        <a asp-page="Details" asp-route-id="@campus.Id"
+                                                           class="btn-card-action btn-info-glass">
+                                                            <i class="bi bi-eye"></i> View
+                                                        </a>
+                                                        <a asp-page="Edit" asp-route-id="@campus.Id"
+                                                           class="btn-card-action btn-warning-glass">
+                                                            <i class="bi bi-pencil"></i> Edit
+                                                        </a>
+                                                        <button type="button"
+                                                                class="btn-card-action btn-danger-glass"
+                                                                onclick="confirmDelete('@campus.Id', '@campus.Name')">
+                                                            <i class="bi bi-trash"></i> Delete
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                }
+                                    }
+                                </div>
                             </div>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="text-center py-5">
-                            <i class="bi bi-inbox display-1 text-muted"></i>
-                            <h4 class="text-muted mt-3">
-                                @if (!string.IsNullOrEmpty(Model.SearchTerm))
-                                {
-                                    <text>No campuses found matching "@Model.SearchTerm"</text>
-                                }
-                                else
-                                {
-                                    <text>No campuses available</text>
-                                }
-                            </h4>
-                            <p class="text-muted">
-                                @if (string.IsNullOrEmpty(Model.SearchTerm))
-                                {
-                                    <text>Get started by creating your first campus</text>
-                                }
-                            </p>
-                            <a asp-page="Create" class="btn btn-primary btn-lg mt-3">
-                                <i class="bi bi-plus-circle"></i> Create First Campus
-                            </a>
-                        </div>
-                    }
+                        }
+                        else
+                        {
+                            <div class="empty-state-glass">
+                                <i class="bi bi-inbox empty-icon"></i>
+                                <h4 class="empty-title">
+                                    @if (!string.IsNullOrEmpty(Model.SearchTerm))
+                                    {
+                                        <text>No campuses found matching "@Model.SearchTerm"</text>
+                                    }
+                                    else
+                                    {
+                                        <text>No campuses available</text>
+                                    }
+                                </h4>
+                                <p class="empty-text">
+                                    @if (string.IsNullOrEmpty(Model.SearchTerm))
+                                    {
+                                        <text>Get started by creating your first campus</text>
+                                    }
+                                </p>
+                                <a asp-page="Create" class="btn-neon-primary btn-lg mt-3">
+                                    <i class="bi bi-plus-circle me-2"></i> Create First Campus
+                                </a>
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
@@ -235,44 +856,38 @@
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title">
-                    <i class="bi bi-exclamation-triangle"></i> Confirm Delete
+        <div class="modal-content-glass">
+            <div class="modal-header-glass modal-header-danger">
+                <h5 class="modal-title mb-0">
+                    <i class="bi bi-exclamation-triangle me-2"></i> Confirm Delete
                 </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close-modal" data-bs-dismiss="modal">
+                    <i class="bi bi-x"></i>
+                </button>
             </div>
-            <div class="modal-body">
-                <p class="mb-3">
-                    Are you sure you want to delete campus <strong id="campusName" class="text-danger"></strong>?
+            <div class="modal-body-glass">
+                <p class="mb-3 text-light-glass">
+                    Are you sure you want to delete campus <strong id="campusName" class="text-danger-neon"></strong>?
                 </p>
-                <div class="alert alert-warning">
-                    <i class="bi bi-info-circle"></i> 
+                <div class="alert-glass-warning">
+                    <i class="bi bi-info-circle me-2"></i>
                     <small>This action cannot be undone. All associated data will be marked as deleted.</small>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="bi bi-x-circle"></i> Cancel
+            <div class="modal-footer-glass">
+                <button type="button" class="btn-glass-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-2"></i> Cancel
                 </button>
                 <form method="post" asp-page-handler="Delete" class="d-inline">
                     <input type="hidden" name="id" id="campusId" />
-                    <button type="submit" class="btn btn-danger">
-                        <i class="bi bi-trash"></i> Delete Campus
+                    <button type="submit" class="btn-danger-neon">
+                        <i class="bi bi-trash me-2"></i> Delete Campus
                     </button>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
-<style>
-    .hover-shadow:hover {
-        transform: translateY(-5px);
-        transition: all 0.3s ease;
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-    }
-</style>
 
 @section Scripts {
     <script>
@@ -289,30 +904,21 @@
             document.getElementById('tableView').style.display = 'block';
             document.getElementById('gridView').style.display = 'none';
             this.classList.add('active');
-            this.classList.remove('btn-outline-light');
-            this.classList.add('btn-light');
             document.getElementById('viewGrid').classList.remove('active');
-            document.getElementById('viewGrid').classList.add('btn-outline-light');
-            document.getElementById('viewGrid').classList.remove('btn-light');
         });
 
         document.getElementById('viewGrid').addEventListener('click', function() {
             document.getElementById('tableView').style.display = 'none';
             document.getElementById('gridView').style.display = 'block';
             this.classList.add('active');
-            this.classList.remove('btn-outline-light');
-            this.classList.add('btn-light');
             document.getElementById('viewTable').classList.remove('active');
-            document.getElementById('viewTable').classList.add('btn-outline-light');
-            document.getElementById('viewTable').classList.remove('btn-light');
         });
 
         // Auto-hide alerts
         setTimeout(function() {
-            var alerts = document.querySelectorAll('.alert');
+            var alerts = document.querySelectorAll('[class*="alert-glass"]');
             alerts.forEach(function(alert) {
-                var bsAlert = new bootstrap.Alert(alert);
-                bsAlert.close();
+                alert.style.display = 'none';
             });
         }, 5000);
     </script>

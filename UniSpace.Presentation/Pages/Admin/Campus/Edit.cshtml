@@ -4,124 +4,567 @@
     ViewData["Title"] = "Edit Campus";
 }
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-7">
-            <!-- Breadcrumb -->
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a asp-page="/Admin/Dashboard">
-                            <i class="bi bi-house"></i> Dashboard
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a asp-page="Index">Campus Management</a>
-                    </li>
-                    <li class="breadcrumb-item active">Edit Campus</li>
-                </ol>
-            </nav>
+<div class="edit-page-container">
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-7">
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb-glass">
+                        <li class="breadcrumb-item-glass">
+                            <a asp-page="/Admin/Dashboard" class="breadcrumb-link">
+                                <i class="bi bi-house-door"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item-glass">
+                            <a asp-page="Index" class="breadcrumb-link">Campus Management</a>
+                        </li>
+                        <li class="breadcrumb-item-glass active">Edit Campus</li>
+                    </ol>
+                </nav>
 
-            <!-- Main Card -->
-            <div class="card shadow-lg">
-                <div class="card-header bg-warning">
-                    <h4 class="mb-0">
-                        <i class="bi bi-pencil"></i> Edit Campus
-                    </h4>
-                </div>
-                <div class="card-body p-4">
-                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
-                    {
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <i class="bi bi-exclamation-triangle"></i> @Model.ErrorMessage
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    }
-
-                    <form method="post">
-                        <input type="hidden" asp-for="Input.Id" />
-
-                        <!-- Campus Name -->
-                        <div class="mb-4">
-                            <label asp-for="Input.Name" class="form-label fw-bold">
-                                <i class="bi bi-building text-primary"></i> Campus Name 
-                                <span class="text-danger">*</span>
-                            </label>
-                            <input asp-for="Input.Name" 
-                                   class="form-control form-control-lg" 
-                                   placeholder="Enter campus name"
-                                   autofocus />
-                            <span asp-validation-for="Input.Name" class="text-danger"></span>
-                        </div>
-
-                        <!-- Address -->
-                        <div class="mb-4">
-                            <label asp-for="Input.Address" class="form-label fw-bold">
-                                <i class="bi bi-geo-alt text-success"></i> Address 
-                                <span class="text-danger">*</span>
-                            </label>
-                            <textarea asp-for="Input.Address" 
-                                      class="form-control" 
-                                      rows="3"
-                                      placeholder="Enter complete address"></textarea>
-                            <span asp-validation-for="Input.Address" class="text-danger"></span>
-                        </div>
-
-                        <!-- Campus Info -->
-                        @if (Model.Campus != null)
+                <!-- Main Card -->
+                <div class="glass-card-edit shadow-glow">
+                    <div class="card-header-edit">
+                        <h4 class="mb-0 header-title">
+                            <i class="bi bi-pencil-square me-2"></i> Edit Campus
+                        </h4>
+                    </div>
+                    <div class="card-body-edit">
+                        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
                         {
-                            <div class="alert alert-light border">
-                                <h6 class="alert-heading">
-                                    <i class="bi bi-info-circle text-info"></i> Campus Information
-                                </h6>
-                                <hr/>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <small class="text-muted">
-                                            <strong>Campus ID:</strong><br/>
-                                            <code>@Model.Campus.Id</code>
-                                        </small>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <small class="text-muted">
-                                            <strong>Created:</strong><br/>
-                                            @Model.Campus.CreatedAt.ToString("dd MMM yyyy HH:mm")
-                                        </small>
-                                    </div>
-                                </div>
-                                <div class="row mt-2">
-                                    <div class="col-md-12">
-                                        <small class="text-muted">
-                                            <strong>Total Rooms:</strong>
-                                            <span class="badge bg-info">@Model.Campus.TotalRooms</span>
-                                        </small>
-                                    </div>
-                                </div>
+                            <div class="alert-glass-danger mb-4" role="alert">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                <span>@Model.ErrorMessage</span>
+                                <button type="button" class="btn-close-glass" onclick="this.parentElement.style.display='none'">
+                                    <i class="bi bi-x"></i>
+                                </button>
                             </div>
                         }
 
-                        <!-- Action Buttons -->
-                        <div class="d-flex gap-2 justify-content-between">
-                            <div>
-                                <a asp-page="Index" class="btn btn-outline-secondary">
-                                    <i class="bi bi-arrow-left"></i> Back to List
-                                </a>
-                                <a asp-page="Details" asp-route-id="@Model.Input.Id" 
-                                   class="btn btn-outline-info">
-                                    <i class="bi bi-eye"></i> View Details
-                                </a>
+                        <form method="post" id="editForm">
+                            <input type="hidden" asp-for="Input.Id" />
+
+                            <!-- Campus Name -->
+                            <div class="form-group-glass">
+                                <label asp-for="Input.Name" class="form-label-edit">
+                                    <i class="bi bi-building me-2"></i> Campus Name
+                                    <span class="required-star">*</span>
+                                </label>
+                                <input asp-for="Input.Name"
+                                       class="form-control-edit form-control-lg"
+                                       placeholder="Enter campus name"
+                                       autofocus />
+                                <span asp-validation-for="Input.Name" class="validation-error"></span>
                             </div>
-                            <button type="submit" class="btn btn-warning btn-lg">
-                                <i class="bi bi-save"></i> Update Campus
-                            </button>
-                        </div>
-                    </form>
+
+                            <!-- Address -->
+                            <div class="form-group-glass">
+                                <label asp-for="Input.Address" class="form-label-edit">
+                                    <i class="bi bi-geo-alt-fill me-2"></i> Address
+                                    <span class="required-star">*</span>
+                                </label>
+                                <textarea asp-for="Input.Address"
+                                          class="form-control-edit form-textarea"
+                                          rows="4"
+                                          placeholder="Enter complete address"></textarea>
+                                <span asp-validation-for="Input.Address" class="validation-error"></span>
+                            </div>
+
+                            <!-- Campus Info -->
+                            @if (Model.Campus != null)
+                            {
+                                <div class="info-card-glass">
+                                    <h6 class="info-heading">
+                                        <i class="bi bi-info-circle-fill me-2 neon-text"></i> Campus Information
+                                    </h6>
+                                    <div class="info-divider"></div>
+                                    <div class="info-grid">
+                                        <div class="info-item">
+                                            <div class="info-label">Campus ID:</div>
+                                            <code class="code-glass">@Model.Campus.Id</code>
+                                        </div>
+                                        <div class="info-item">
+                                            <div class="info-label">Created:</div>
+                                            <div class="info-value">@Model.Campus.CreatedAt.ToString("dd MMM yyyy HH:mm")</div>
+                                        </div>
+                                        <div class="info-item info-item-full">
+                                            <div class="info-label">Total Rooms:</div>
+                                            <span>@Model.Campus.TotalRooms</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                            <!-- Action Buttons -->
+                            <div class="action-buttons-edit">
+                                <div class="action-buttons-left">
+                                    <a asp-page="Index" class="btn-edit-secondary">
+                                        <i class="bi bi-arrow-left me-2"></i> Back to List
+                                    </a>
+                                    <a asp-page="Details" asp-route-id="@Model.Input.Id"
+                                       class="btn-edit-info">
+                                        <i class="bi bi-eye me-2"></i> View Details
+                                    </a>
+                                </div>
+                                <button type="submit" class="btn-edit-primary">
+                                    <i class="bi bi-check-circle me-2"></i> Update Campus
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<style>
+    /* Page Container */
+    .edit-page-container {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        min-height: 100vh;
+        padding: 20px 0;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb-glass {
+        background: rgba(45, 45, 45, 0.4);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 14px 20px;
+        margin-bottom: 0;
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+    }
+
+    .breadcrumb-item-glass {
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem;
+    }
+
+        .breadcrumb-item-glass + .breadcrumb-item-glass::before {
+            content: "›";
+            color: #a0a0a0;
+            padding: 0 10px;
+            font-size: 1.2rem;
+        }
+
+        .breadcrumb-item-glass.active {
+            color: #ff8a00;
+            font-weight: 600;
+        }
+
+    .breadcrumb-link {
+        color: #d1d5db;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+        .breadcrumb-link:hover {
+            color: #ff8a00;
+            text-shadow: 0 0 10px rgba(255, 138, 0, 0.5);
+        }
+
+    /* Main Card */
+    .glass-card-edit {
+        background: linear-gradient(135deg, rgba(45, 45, 45, 0.5) 0%, rgba(35, 35, 35, 0.5) 100%);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 16px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .shadow-glow {
+        box-shadow: 0 8px 32px 0 rgba(255, 138, 0, 0.1);
+    }
+
+    .glass-card-edit:hover {
+        border: 1px solid rgba(255, 138, 0, 0.4);
+        box-shadow: 0 12px 40px 0 rgba(255, 138, 0, 0.15);
+    }
+
+    .card-header-edit {
+        background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(245, 158, 11, 0.15) 100%);
+        border-bottom: 2px solid rgba(251, 191, 36, 0.4);
+        padding: 24px 28px;
+    }
+
+    .header-title {
+        color: #fbbf24;
+        font-weight: 700;
+        font-size: 1.5rem;
+        text-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+        display: flex;
+        align-items: center;
+    }
+
+    .card-body-edit {
+        padding: 32px 28px;
+    }
+
+    /* Form Groups */
+    .form-group-glass {
+        margin-bottom: 28px;
+    }
+
+    .form-label-edit {
+        color: #e0e0e0;
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .required-star {
+        color: #ff4444;
+        margin-left: 4px;
+        font-size: 1.1rem;
+    }
+
+    /* Form Controls */
+    .form-control-edit {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        color: #ffffff;
+        padding: 14px 18px;
+        font-size: 1rem;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+        .form-control-edit::placeholder {
+            color: #6b7280;
+        }
+
+        .form-control-edit:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(251, 191, 36, 0.6);
+            outline: none;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
+            color: #ffffff;
+        }
+
+        .form-control-edit:hover {
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
+    .form-textarea {
+        resize: vertical;
+        min-height: 110px;
+    }
+
+    /* Validation */
+    .validation-error {
+        color: #ff4444;
+        font-size: 0.875rem;
+        margin-top: 6px;
+        display: block;
+        font-weight: 500;
+    }
+
+    /* Neon Text */
+    .neon-text {
+        color: #ff8a00;
+    }
+
+    /* Info Card */
+    .info-card-glass {
+        background: rgba(255, 138, 0, 0.05);
+        border: 1px solid rgba(255, 138, 0, 0.25);
+        border-radius: 12px;
+        padding: 20px 24px;
+        margin-bottom: 28px;
+    }
+
+    .info-heading {
+        color: #fbbf24;
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+    }
+
+    .info-divider {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 138, 0, 0.3), transparent);
+        margin-bottom: 16px;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .info-item-full {
+        grid-column: 1 / -1;
+    }
+
+    .info-label {
+        color: #9ca3af;
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+
+    .info-value {
+        color: #d1d5db;
+        font-size: 0.9rem;
+    }
+
+    .code-glass {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 138, 0, 0.3);
+        color: #ff8a00;
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-family: 'Courier New', monospace;
+        font-size: 0.85rem;
+        display: inline-block;
+    }
+
+    /* Compact Badge - Just the number */
+    .badge-neon-compact {
+        background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 100%);
+        color: #fff;
+        padding: 4px 12px;
+        border-radius: 6px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        box-shadow: 0 0 15px rgba(255, 138, 0, 0.5);
+        display: inline-block;
+        min-width: 40px;
+        text-align: center;
+    }
+
+    /* Action Buttons */
+    .action-buttons-edit {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        margin-top: 32px;
+        flex-wrap: wrap;
+    }
+
+    .action-buttons-left {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .btn-edit-secondary {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        font-weight: 600;
+        padding: 12px 24px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        font-size: 0.95rem;
+    }
+
+        .btn-edit-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 138, 0, 0.5);
+            color: #ff8a00;
+            box-shadow: 0 0 20px rgba(255, 138, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+    .btn-edit-info {
+        background: rgba(59, 130, 246, 0.15);
+        border: 2px solid rgba(59, 130, 246, 0.3);
+        color: #60a5fa;
+        font-weight: 600;
+        padding: 12px 24px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        font-size: 0.95rem;
+    }
+
+        .btn-edit-info:hover {
+            background: rgba(59, 130, 246, 0.25);
+            border: 2px solid rgba(59, 130, 246, 0.5);
+            color: #93c5fd;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+            transform: translateY(-2px);
+        }
+
+    .btn-edit-primary {
+        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        border: 2px solid #fbbf24;
+        color: #1a1a1a;
+        font-weight: 700;
+        padding: 14px 36px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 25px rgba(251, 191, 36, 0.4);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        font-size: 1rem;
+    }
+
+        .btn-edit-primary:hover {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+            box-shadow: 0 0 35px rgba(251, 191, 36, 0.7), 0 0 50px rgba(251, 191, 36, 0.5);
+            transform: translateY(-2px);
+            color: #1a1a1a;
+        }
+
+        .btn-edit-primary:active {
+            transform: translateY(0);
+        }
+
+    /* Alerts */
+    .alert-glass-danger {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        border-radius: 10px;
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #fca5a5;
+        position: relative;
+    }
+
+    .btn-close-glass {
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        color: #fca5a5;
+        font-size: 1.3rem;
+        cursor: pointer;
+        padding: 0;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.7;
+        transition: opacity 0.3s ease;
+    }
+
+        .btn-close-glass:hover {
+            opacity: 1;
+        }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .edit-page-container {
+            padding: 15px 0;
+        }
+
+        .card-header-edit {
+            padding: 20px;
+        }
+
+        .card-body-edit {
+            padding: 24px 20px;
+        }
+
+        .header-title {
+            font-size: 1.3rem;
+        }
+
+        .action-buttons-edit {
+            flex-direction: column;
+        }
+
+        .action-buttons-left {
+            width: 100%;
+            flex-direction: column;
+        }
+
+        .btn-edit-secondary,
+        .btn-edit-info,
+        .btn-edit-primary {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .info-item-full {
+            grid-column: 1;
+        }
+    }
+
+    /* Autofill Override */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    textarea:-webkit-autofill,
+    textarea:-webkit-autofill:hover,
+    textarea:-webkit-autofill:focus {
+        -webkit-text-fill-color: #ffffff;
+        -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.05) inset;
+        transition: background-color 5000s ease-in-out 0s;
+    }
+
+    /* Smooth Animations */
+    * {
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+</style>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Form validation feedback
+        const form = document.getElementById('editForm');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                if (!form.checkValidity()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            });
+        }
+
+        // Smooth scroll to validation errors
+        document.addEventListener('DOMContentLoaded', function() {
+            const validationErrors = document.querySelectorAll('.validation-error');
+            if (validationErrors.length > 0) {
+                validationErrors[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+    </script>
 }

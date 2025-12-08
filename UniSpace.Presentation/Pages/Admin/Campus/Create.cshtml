@@ -4,112 +4,117 @@
     ViewData["Title"] = "Create Campus";
 }
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-7">
-            <!-- Breadcrumb -->
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a asp-page="/Admin/Dashboard">
-                            <i class="bi bi-house"></i> Dashboard
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a asp-page="Index">Campus Management</a>
-                    </li>
-                    <li class="breadcrumb-item active">Create Campus</li>
-                </ol>
-            </nav>
-
-            <!-- Main Card -->
-            <div class="card shadow-lg">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">
-                        <i class="bi bi-plus-circle"></i> Create New Campus
-                    </h4>
-                </div>
-                <div class="card-body p-4">
-                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
-                    {
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <i class="bi bi-exclamation-triangle"></i> @Model.ErrorMessage
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    }
-
-                    <form method="post" id="createForm">
-                        <!-- Campus Name -->
-                        <div class="mb-4">
-                            <label asp-for="Input.Name" class="form-label fw-bold">
-                                <i class="bi bi-building text-primary"></i> Campus Name 
-                                <span class="text-danger">*</span>
-                            </label>
-                            <input asp-for="Input.Name" 
-                                   class="form-control form-control-lg" 
-                                   placeholder="e.g., FPT University - Hoa Lac Campus"
-                                   autofocus 
-                                   id="campusName" />
-                            <span asp-validation-for="Input.Name" class="text-danger"></span>
-                            <div class="form-text">
-                                <i class="bi bi-info-circle"></i> Enter a unique campus name (max 100 characters)
-                            </div>
-                        </div>
-
-                        <!-- Address -->
-                        <div class="mb-4">
-                            <label asp-for="Input.Address" class="form-label fw-bold">
-                                <i class="bi bi-geo-alt text-success"></i> Address 
-                                <span class="text-danger">*</span>
-                            </label>
-                            <textarea asp-for="Input.Address" 
-                                      class="form-control" 
-                                      rows="3"
-                                      placeholder="Enter complete address including street, district, city..."
-                                      id="campusAddress"></textarea>
-                            <span asp-validation-for="Input.Address" class="text-danger"></span>
-                            <div class="form-text">
-                                <i class="bi bi-info-circle"></i> Provide detailed address (max 200 characters)
-                            </div>
-                        </div>
-
-                        <!-- Info Alert -->
-                        <div class="alert alert-info">
-                            <i class="bi bi-lightbulb"></i> 
-                            <strong>Tip:</strong> After creating the campus, you can add rooms to it from the campus details page.
-                        </div>
-
-                        <!-- Action Buttons -->
-                        <div class="d-flex gap-2 justify-content-end">
-                            <a asp-page="Index" class="btn btn-outline-secondary btn-lg">
-                                <i class="bi bi-x-circle"></i> Cancel
+<div class="create-page-container">
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-7">
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb-glass">
+                        <li class="breadcrumb-item-glass">
+                            <a asp-page="/Admin/Dashboard" class="breadcrumb-link">
+                                <i class="bi bi-house-door"></i> Dashboard
                             </a>
-                            <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="bi bi-save"></i> Create Campus
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+                        </li>
+                        <li class="breadcrumb-item-glass">
+                            <a asp-page="Index" class="breadcrumb-link">Campus Management</a>
+                        </li>
+                        <li class="breadcrumb-item-glass active">Create Campus</li>
+                    </ol>
+                </nav>
 
-            <!-- Live Preview Card -->
-            <div class="card shadow-lg mt-4" id="previewCard" style="display: none;">
-                <div class="card-header bg-light">
-                    <h5 class="mb-0">
-                        <i class="bi bi-eye text-info"></i> Live Preview
-                    </h5>
+                <!-- Main Card -->
+                <div class="glass-card-create">
+                    <div class="card-header-create">
+                        <h4 class="mb-0 header-title">
+                            <i class="bi bi-plus-circle-fill me-2"></i> Create New Campus
+                        </h4>
+                    </div>
+                    <div class="card-body-create">
+                        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                        {
+                            <div class="alert-glass-danger" role="alert">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                <span>@Model.ErrorMessage</span>
+                                <button type="button" class="btn-close-glass" onclick="this.parentElement.style.display='none'">
+                                    <i class="bi bi-x"></i>
+                                </button>
+                            </div>
+                        }
+
+                        <form method="post" id="createForm">
+                            <!-- Campus Name -->
+                            <div class="form-group-glass">
+                                <label asp-for="Input.Name" class="form-label-create">
+                                    <i class="bi bi-building me-2"></i> Campus Name
+                                    <span class="required-star">*</span>
+                                </label>
+                                <input asp-for="Input.Name"
+                                       class="form-control-create"
+                                       placeholder="e.g., FPT University - Hoa Lac Campus"
+                                       autofocus
+                                       id="campusName" />
+                                <span asp-validation-for="Input.Name" class="validation-error"></span>
+                                <div class="form-hint">
+                                    <i class="bi bi-info-circle me-1"></i> Enter a unique campus name (max 100 characters)
+                                </div>
+                            </div>
+
+                            <!-- Address -->
+                            <div class="form-group-glass">
+                                <label asp-for="Input.Address" class="form-label-create">
+                                    <i class="bi bi-geo-alt-fill me-2"></i> Address
+                                    <span class="required-star">*</span>
+                                </label>
+                                <textarea asp-for="Input.Address"
+                                          class="form-control-create form-textarea"
+                                          rows="4"
+                                          placeholder="Enter complete address including street, district, city..."
+                                          id="campusAddress"></textarea>
+                                <span asp-validation-for="Input.Address" class="validation-error"></span>
+                                <div class="form-hint">
+                                    <i class="bi bi-info-circle me-1"></i> Provide detailed address (max 200 characters)
+                                </div>
+                            </div>
+
+                            <!-- Info Alert -->
+                            <div class="alert-glass-info">
+                                <i class="bi bi-lightbulb-fill me-2"></i>
+                                <strong>Tip:</strong> After creating the campus, you can add rooms to it from the campus details page.
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="action-buttons-create">
+                                <a asp-page="Index" class="btn-cancel-glass">
+                                    <i class="bi bi-x-circle me-2"></i> Cancel
+                                </a>
+                                <button type="submit" class="btn-submit-neon">
+                                    <i class="bi bi-check-circle me-2"></i> Create Campus
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="d-flex align-items-start">
-                        <i class="bi bi-building text-primary me-3" style="font-size: 2.5em;"></i>
-                        <div>
-                            <h5 id="previewName" class="text-primary mb-2">Campus Name</h5>
-                            <p id="previewAddress" class="text-muted mb-0">
-                                <i class="bi bi-geo-alt"></i> Address
-                            </p>
-                            <small class="text-muted">
-                                <i class="bi bi-calendar"></i> Created: @DateTime.Now.ToString("dd MMM yyyy")
-                            </small>
+
+                <!-- Live Preview Card -->
+                <div class="glass-card-preview" id="previewCard" style="display: none;">
+                    <div class="preview-header">
+                        <i class="bi bi-eye-fill me-2"></i> Live Preview
+                    </div>
+                    <div class="preview-body">
+                        <div class="preview-content">
+                            <div class="preview-icon">
+                                <i class="bi bi-building"></i>
+                            </div>
+                            <div class="preview-details">
+                                <h5 id="previewName" class="preview-name">Campus Name</h5>
+                                <p id="previewAddress" class="preview-address">
+                                    <i class="bi bi-geo-alt"></i> Address
+                                </p>
+                                <small class="preview-date">
+                                    <i class="bi bi-calendar-event"></i> Created: @DateTime.Now.ToString("dd MMM yyyy")
+                                </small>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -118,9 +123,416 @@
     </div>
 </div>
 
+<style>
+    /* Page Container */
+    .create-page-container {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        min-height: 100vh;
+        padding: 20px 0;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb-glass {
+        background: rgba(45, 45, 45, 0.4);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 14px 20px;
+        margin-bottom: 0;
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+    }
+
+    .breadcrumb-item-glass {
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem;
+    }
+
+        .breadcrumb-item-glass + .breadcrumb-item-glass::before {
+            content: "›";
+            color: #a0a0a0;
+            padding: 0 10px;
+            font-size: 1.2rem;
+        }
+
+        .breadcrumb-item-glass.active {
+            color: #ff8a00;
+            font-weight: 600;
+        }
+
+    .breadcrumb-link {
+        color: #d1d5db;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+        .breadcrumb-link:hover {
+            color: #ff8a00;
+            text-shadow: 0 0 10px rgba(255, 138, 0, 0.5);
+        }
+
+    /* Main Card */
+    .glass-card-create {
+        background: linear-gradient(135deg, rgba(45, 45, 45, 0.5) 0%, rgba(35, 35, 35, 0.5) 100%);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 16px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+        .glass-card-create:hover {
+            border: 1px solid rgba(255, 138, 0, 0.4);
+            box-shadow: 0 12px 40px 0 rgba(255, 138, 0, 0.15);
+        }
+
+    .card-header-create {
+        background: linear-gradient(135deg, rgba(255, 138, 0, 0.2) 0%, rgba(255, 107, 0, 0.15) 100%);
+        border-bottom: 2px solid rgba(255, 138, 0, 0.4);
+        padding: 24px 28px;
+    }
+
+    .header-title {
+        color: #ff8a00;
+        font-weight: 700;
+        font-size: 1.5rem;
+        text-shadow: 0 0 20px rgba(255, 138, 0, 0.3);
+        display: flex;
+        align-items: center;
+    }
+
+    .card-body-create {
+        padding: 32px 28px;
+    }
+
+    /* Form Groups */
+    .form-group-glass {
+        margin-bottom: 28px;
+    }
+
+    .form-label-create {
+        color: #e0e0e0;
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .required-star {
+        color: #ff4444;
+        margin-left: 4px;
+        font-size: 1.1rem;
+    }
+
+    /* Form Controls */
+    .form-control-create {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        color: #ffffff;
+        padding: 14px 18px;
+        font-size: 1rem;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+        .form-control-create::placeholder {
+            color: #6b7280;
+        }
+
+        .form-control-create:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 138, 0, 0.6);
+            outline: none;
+            box-shadow: 0 0 20px rgba(255, 138, 0, 0.2);
+            color: #ffffff;
+        }
+
+        .form-control-create:hover {
+            border: 1px solid rgba(255, 138, 0, 0.3);
+        }
+
+    .form-textarea {
+        resize: vertical;
+        min-height: 110px;
+    }
+
+    /* Form Hints */
+    .form-hint {
+        color: #9ca3af;
+        font-size: 0.85rem;
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Validation */
+    .validation-error {
+        color: #ff4444;
+        font-size: 0.875rem;
+        margin-top: 6px;
+        display: block;
+        font-weight: 500;
+    }
+
+    /* Alerts */
+    .alert-glass-danger {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        border-radius: 10px;
+        padding: 16px 20px;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #fca5a5;
+        position: relative;
+    }
+
+    .alert-glass-info {
+        background: rgba(255, 138, 0, 0.08);
+        border: 1px solid rgba(255, 138, 0, 0.3);
+        border-radius: 10px;
+        padding: 16px 20px;
+        margin-bottom: 24px;
+        color: #fbbf24;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .btn-close-glass {
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        color: #fca5a5;
+        font-size: 1.3rem;
+        cursor: pointer;
+        padding: 0;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.7;
+        transition: opacity 0.3s ease;
+    }
+
+        .btn-close-glass:hover {
+            opacity: 1;
+        }
+
+    /* Action Buttons */
+    .action-buttons-create {
+        display: flex;
+        gap: 16px;
+        justify-content: flex-end;
+        margin-top: 32px;
+    }
+
+    .btn-cancel-glass {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        font-weight: 600;
+        padding: 14px 32px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        font-size: 1rem;
+    }
+
+        .btn-cancel-glass:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 138, 0, 0.5);
+            color: #ff8a00;
+            box-shadow: 0 0 20px rgba(255, 138, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+    .btn-submit-neon {
+        background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 100%);
+        border: 2px solid #ff8a00;
+        color: #fff;
+        font-weight: 700;
+        padding: 14px 36px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 25px rgba(255, 138, 0, 0.4);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        font-size: 1rem;
+    }
+
+        .btn-submit-neon:hover {
+            background: linear-gradient(135deg, #ff6b00 0%, #ff8a00 100%);
+            box-shadow: 0 0 35px rgba(255, 138, 0, 0.7), 0 0 50px rgba(255, 138, 0, 0.5);
+            transform: translateY(-2px);
+            color: #fff;
+        }
+
+        .btn-submit-neon:active {
+            transform: translateY(0);
+        }
+
+    /* Preview Card */
+    .glass-card-preview {
+        background: rgba(45, 45, 45, 0.5);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 16px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        margin-top: 24px;
+        transition: all 0.3s ease;
+    }
+
+        .glass-card-preview:hover {
+            border: 1px solid rgba(255, 138, 0, 0.4);
+            box-shadow: 0 12px 40px 0 rgba(255, 138, 0, 0.15);
+        }
+
+    .preview-header {
+        background: rgba(255, 138, 0, 0.1);
+        border-bottom: 1px solid rgba(255, 138, 0, 0.3);
+        padding: 18px 24px;
+        color: #ff8a00;
+        font-weight: 600;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .preview-body {
+        padding: 24px;
+    }
+
+    .preview-content {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .preview-icon {
+        width: 64px;
+        height: 64px;
+        min-width: 64px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        color: #1a1a1a;
+        box-shadow: 0 0 25px rgba(255, 138, 0, 0.5);
+    }
+
+    .preview-details {
+        flex: 1;
+    }
+
+    .preview-name {
+        color: #ff8a00;
+        font-weight: 700;
+        font-size: 1.3rem;
+        margin-bottom: 8px;
+    }
+
+    .preview-address {
+        color: #9ca3af;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .preview-date {
+        color: #6b7280;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .create-page-container {
+            padding: 15px 0;
+        }
+
+        .card-header-create {
+            padding: 20px;
+        }
+
+        .card-body-create {
+            padding: 24px 20px;
+        }
+
+        .header-title {
+            font-size: 1.3rem;
+        }
+
+        .action-buttons-create {
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-cancel-glass,
+        .btn-submit-neon {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .preview-icon {
+            width: 56px;
+            height: 56px;
+            min-width: 56px;
+            font-size: 1.7rem;
+        }
+
+        .preview-name {
+            font-size: 1.1rem;
+        }
+    }
+
+    /* Autofill Override */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    textarea:-webkit-autofill,
+    textarea:-webkit-autofill:hover,
+    textarea:-webkit-autofill:focus {
+        -webkit-text-fill-color: #ffffff;
+        -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.05) inset;
+        transition: background-color 5000s ease-in-out 0s;
+    }
+
+    /* Smooth Animations */
+    * {
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+</style>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    
+
     <script>
         // Live preview functionality
         const nameInput = document.getElementById('campusName');
@@ -136,7 +548,7 @@
             if (name || address) {
                 previewCard.style.display = 'block';
                 previewName.textContent = name || 'Campus Name';
-                
+
                 const addressIcon = '<i class="bi bi-geo-alt"></i> ';
                 previewAddress.innerHTML = addressIcon + (address || 'Address');
             } else {
@@ -155,6 +567,14 @@
                 e.stopPropagation();
             }
             form.classList.add('was-validated');
+        });
+
+        // Smooth scroll to validation errors
+        document.addEventListener('DOMContentLoaded', function() {
+            const validationErrors = document.querySelectorAll('.validation-error');
+            if (validationErrors.length > 0) {
+                validationErrors[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
         });
     </script>
 }

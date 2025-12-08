@@ -10,7 +10,7 @@
     <style>
         body, html {
             height: 100%;
-            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
             background-attachment: fixed;
         }
 
@@ -30,16 +30,16 @@
 
         /* Navbar Glassmorphism */
         .navbar-glass {
-            background: rgba(20, 20, 30, 0.8) !important;
+            background: rgba(45, 45, 45, 0.8) !important;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0, 255, 255, 0.2) !important;
+            border-bottom: 1px solid rgba(255, 138, 0, 0.2) !important;
             position: relative;
             z-index: 1;
         }
 
         .navbar-brand {
-            color: #00ffff !important;
+            color: #ff8a00 !important;
             font-weight: 700;
             font-size: 1.5rem;
             transition: color 0.3s ease;
@@ -47,7 +47,8 @@
         }
 
             .navbar-brand:hover {
-                color: #00cccc !important;
+                color: #ff6b00 !important;
+                text-shadow: 0 0 10px rgba(255, 138, 0, 0.5);
             }
 
         .nav-link {
@@ -57,14 +58,14 @@
         }
 
             .nav-link:hover {
-                color: #00ffff !important;
+                color: #ff8a00 !important;
                 transform: translateY(-2px);
             }
 
         .dropdown-menu {
-            background: rgba(20, 20, 30, 0.95);
+            background: rgba(45, 45, 45, 0.95);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 138, 0, 0.2);
             border-radius: 15px;
         }
 
@@ -78,8 +79,8 @@
         }
 
             .dropdown-item:hover {
-                background: rgba(0, 255, 255, 0.1);
-                color: #00ffff;
+                background: rgba(255, 138, 0, 0.1);
+                color: #ff8a00;
             }
 
         .dropdown-divider {
@@ -88,8 +89,8 @@
 
         /* Badge Styles */
         .badge.bg-warning {
-            background: linear-gradient(135deg, #ffa500, #ff8c00) !important;
-            border: 1px solid rgba(255, 165, 0, 0.3);
+            background: linear-gradient(135deg, #ff8a00, #ff6b00) !important;
+            border: 1px solid rgba(255, 138, 0, 0.3);
         }
 
         .badge.bg-info {
@@ -98,26 +99,26 @@
         }
 
         .badge.bg-success {
-            background: linear-gradient(135deg, #00ff88, #00cc66) !important;
-            border: 1px solid rgba(0, 255, 136, 0.3);
+            background: linear-gradient(135deg, #10b981, #059669) !important;
+            border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
         /* Footer Glassmorphism */
         .footer-glass {
-            background: rgba(20, 20, 30, 0.8) !important;
+            background: rgba(45, 45, 45, 0.8) !important;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(0, 255, 255, 0.2) !important;
+            border-top: 1px solid rgba(255, 138, 0, 0.2) !important;
             color: rgba(255, 255, 255, 0.7) !important;
         }
 
         /* Navbar Toggler */
         .navbar-toggler {
-            border-color: rgba(0, 255, 255, 0.3);
+            border-color: rgba(255, 138, 0, 0.3);
         }
 
             .navbar-toggler:focus {
-                box-shadow: 0 0 0 0.25rem rgba(0, 255, 255, 0.25);
+                box-shadow: 0 0 0 0.25rem rgba(255, 138, 0, 0.25);
             }
 
         .navbar-toggler-icon {
