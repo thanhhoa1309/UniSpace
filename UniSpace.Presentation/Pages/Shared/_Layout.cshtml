@@ -10,6 +10,8 @@
     <style>
         body, html {
             height: 100%;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+            background-attachment: fixed;
         }
 
         body {
@@ -25,36 +27,135 @@
         footer {
             margin-top: auto;
         }
+
+        /* Navbar Glassmorphism */
+        .navbar-glass {
+            background: rgba(20, 20, 30, 0.8) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2) !important;
+            position: relative;
+            z-index: 1;
+        }
+
+        .navbar-brand {
+            color: #00ffff !important;
+            font-weight: 700;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+            padding-left: 2.5rem !important
+        }
+
+            .navbar-brand:hover {
+                color: #00cccc !important;
+            }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+            .nav-link:hover {
+                color: #00ffff !important;
+                transform: translateY(-2px);
+            }
+
+        .dropdown-menu {
+            background: rgba(20, 20, 30, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+        }
+
+        /* Ensure dropdown parent has proper stacking context */
+
+        /* Ensure shown dropdown stays on top */
+
+        .dropdown-item {
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.2s ease;
+        }
+
+            .dropdown-item:hover {
+                background: rgba(0, 255, 255, 0.1);
+                color: #00ffff;
+            }
+
+        .dropdown-divider {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Badge Styles */
+        .badge.bg-warning {
+            background: linear-gradient(135deg, #ffa500, #ff8c00) !important;
+            border: 1px solid rgba(255, 165, 0, 0.3);
+        }
+
+        .badge.bg-info {
+            background: linear-gradient(135deg, #00ffff, #0080ff) !important;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .badge.bg-success {
+            background: linear-gradient(135deg, #00ff88, #00cc66) !important;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        /* Footer Glassmorphism */
+        .footer-glass {
+            background: rgba(20, 20, 30, 0.8) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(0, 255, 255, 0.2) !important;
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+
+        /* Navbar Toggler */
+        .navbar-toggler {
+            border-color: rgba(0, 255, 255, 0.3);
+        }
+
+            .navbar-toggler:focus {
+                box-shadow: 0 0 0 0.25rem rgba(0, 255, 255, 0.25);
+            }
+
+        .navbar-toggler-icon {
+            filter: brightness(0) invert(1);
+        }
+
+        /* Guest User Links Padding */
+        .navbar-nav > li:last-child .nav-link {
+            padding-right: 2.5rem !important;
+        }
+
+        .navbar-nav > li:nth-last-child(1) {
+            margin-left: 1rem;
+        }
+
     </style>
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
     <!-- Header Section -->
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-glass border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <!-- Brand/Logo -->
                 <a class="navbar-brand" asp-page="/Index">
                     <i class="bi bi-mortarboard"></i> UniSpace
                 </a>
-                
+
                 <!-- Mobile Toggle Button -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" 
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                
+
                 <!-- Navigation Menu -->
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <!-- Left Side Navigation -->
                     <ul class="navbar-nav flex-grow-1">
-                        <!-- Home Link -->
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-page="/Index">
-                                <i class="bi bi-house"></i> Home
-                            </a>
-                        </li>
-                        
                         <!-- Authenticated User Navigation -->
                         @if (User.Identity?.IsAuthenticated == true)
                         {
@@ -63,14 +164,14 @@
                             {
                                 <!-- Dashboard -->
                                 <li class="nav-item">
-                                    <a class="nav-link text-white" asp-page="/Dashboard">
+                                    <a class="nav-link" asp-page="/Dashboard">
                                         <i class="bi bi-speedometer2"></i> Dashboard
                                     </a>
                                 </li>
 
                                 <!-- Booking Menu -->
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" 
+                                    <a class="nav-link dropdown-toggle" href="#" role="button"
                                        data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="bi bi-calendar-check"></i> Bookings
                                     </a>
@@ -90,17 +191,17 @@
 
                                 <!-- Reports -->
                                 <li class="nav-item">
-                                    <a class="nav-link text-white" asp-page="/RoomReports/MyReports">
+                                    <a class="nav-link" asp-page="/RoomReports/MyReports">
                                         <i class="bi bi-file-text"></i> My Reports
                                     </a>
                                 </li>
                             }
-                            
+
                             <!-- Admin Menu -->
                             @if (User.IsInRole("Admin"))
                             {
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" 
+                                    <a class="nav-link dropdown-toggle" href="#" role="button"
                                        data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="bi bi-gear"></i> Admin
                                     </a>
@@ -112,7 +213,7 @@
                                             </a>
                                         </li>
                                         <li><hr class="dropdown-divider"></li>
-                                        
+
                                         <!-- Campus Management -->
                                         <li>
                                             <a class="dropdown-item" asp-page="/Admin/Campus/Dashboard">
@@ -125,7 +226,7 @@
                                             </a>
                                         </li>
                                         <li><hr class="dropdown-divider"></li>
-                                        
+
                                         <!-- Room Management -->
                                         <li>
                                             <a class="dropdown-item" asp-page="/Admin/Room/Dashboard">
@@ -138,7 +239,7 @@
                                             </a>
                                         </li>
                                         <li><hr class="dropdown-divider"></li>
-                                        
+
                                         <!-- Schedule Management -->
                                         <li>
                                             <a class="dropdown-item" asp-page="/Admin/Schedule/Dashboard">
@@ -151,7 +252,7 @@
                                             </a>
                                         </li>
                                         <li><hr class="dropdown-divider"></li>
-                                        
+
                                         <!-- Reports & Analytics -->
                                         <li>
                                             <a class="dropdown-item" asp-page="/RoomReports/MyReports">
@@ -163,18 +264,18 @@
                             }
                         }
                     </ul>
-                    
+
                     <!-- Right Side - User Account -->
                     <ul class="navbar-nav">
                         @if (User.Identity?.IsAuthenticated == true)
                         {
                             <!-- Logged In User Dropdown -->
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-white" href="#" role="button" 
+                                <a class="nav-link dropdown-toggle" href="#" role="button"
                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-person-circle"></i> 
+                                    <i class="bi bi-person-circle"></i>
                                     @User.Identity.Name
-                                    
+
                                     <!-- Role Badge -->
                                     @if (User.IsInRole("Admin"))
                                     {
@@ -189,7 +290,7 @@
                                         <span class="badge bg-success ms-1">Student</span>
                                     }
                                 </a>
-                                
+
                                 <!-- User Dropdown Menu -->
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li>
@@ -223,12 +324,12 @@
                         {
                             <!-- Guest User Links -->
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-page="/Auth/Login">
+                                <a class="nav-link" asp-page="/Auth/Login">
                                     <i class="bi bi-box-arrow-in-right"></i> Login
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-page="/Auth/Register">
+                                <a class="nav-link" asp-page="/Auth/Register">
                                     <i class="bi bi-person-plus"></i> Register
                                 </a>
                             </li>
@@ -238,7 +339,7 @@
             </div>
         </nav>
     </header>
-    
+
     <!-- Main Content -->
     <div class="container-fluid">
         <main role="main">
@@ -247,7 +348,7 @@
     </div>
 
     <!-- Footer Section -->
-    <footer class="border-top footer text-muted text-center py-3 bg-light">
+    <footer class="border-top footer footer-glass text-center py-3">
         <div class="container">
             <p class="mb-0">
                 &copy; @DateTime.Now.Year UniSpace - University Space Management System

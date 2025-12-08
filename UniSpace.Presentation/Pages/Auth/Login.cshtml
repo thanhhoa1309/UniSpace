@@ -4,44 +4,215 @@
     ViewData["Title"] = "Login";
 }
 
-<div class="d-flex align-items-center justify-content-center" style="min-height: calc(100vh - 200px);">
-    <div class="col-md-6 col-lg-4">
-        <div class="card shadow">
-            <div class="card-body">
-                <h2 class="card-title text-center mb-4">Login to UniSpace</h2>
+<style>
+    .login-container {
+        min-height: calc(100vh - 200px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        padding: 20px;
+    }
 
-                @if (!string.IsNullOrEmpty(Model.ErrorMessage))
-                {
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        @Model.ErrorMessage
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                }
+    .background-shapes {
+        position: absolute;
+        width: 430px;
+        height: 520px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 0;
+    }
 
-                <form method="post">
-                    <div class="mb-3">
-                        <label asp-for="LoginRequest.Email" class="form-label">Email address</label>
-                        <input asp-for="LoginRequest.Email" class="form-control" placeholder="Enter email" />
-                        <span asp-validation-for="LoginRequest.Email" class="text-danger"></span>
-                    </div>
+    .shape {
+        height: 200px;
+        width: 200px;
+        position: absolute;
+        border-radius: 50%;
+    }
 
-                    <div class="mb-3">
-                        <label asp-for="LoginRequest.Password" class="form-label">Password</label>
-                        <input asp-for="LoginRequest.Password" type="password" class="form-control" placeholder="Password" />
-                        <span asp-validation-for="LoginRequest.Password" class="text-danger"></span>
-                    </div>
+        .shape:first-child {
+            background: linear-gradient(#00ffff, #0080ff);
+            left: -80px;
+            top: -80px;
+        }
 
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary btn-lg">Login</button>
-                    </div>
+        .shape:last-child {
+            background: linear-gradient(to right, #8000ff, #00ff88);
+            right: -30px;
+            bottom: -80px;
+        }
 
-                    <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
-                </form>
+    .glass-card {
+        height: auto;
+        min-height: 520px;
+        width: 100%;
+        max-width: 400px;
+        background-color: rgba(255, 255, 255, 0.13);
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+        padding: 50px 35px;
+        position: relative;
+        z-index: 1;
+    }
 
-                <div class="text-center mt-3">
-                    <p>Don't have an account? <a asp-page="Register">Register here</a></p>
-                </div>
+        .glass-card * {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+
+        .glass-card h2 {
+            font-size: 32px;
+            font-weight: 500;
+            line-height: 42px;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ffffff;
+        }
+
+        .glass-card label {
+            display: block;
+            margin-top: 25px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        .glass-card .form-control {
+            display: block;
+            height: 50px;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.07);
+            border-radius: 3px;
+            padding: 0 15px;
+            margin-top: 8px;
+            font-size: 14px;
+            font-weight: 300;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            outline: none;
+        }
+
+            .glass-card .form-control::placeholder {
+                color: #e5e5e5;
+            }
+
+            .glass-card .form-control:focus {
+                background-color: rgba(255, 255, 255, 0.1);
+                border-color: rgba(0, 255, 255, 0.5);
+                box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+            }
+
+        .glass-card .text-danger {
+            color: #ff6b6b !important;
+            font-size: 12px;
+            margin-top: 5px;
+            display: block;
+        }
+
+    .btn-glass-login {
+        margin-top: 30px;
+        width: 100%;
+        background-color: #ffffff;
+        color: #080710;
+        padding: 15px 0;
+        font-size: 18px;
+        font-weight: 600;
+        border-radius: 5px;
+        cursor: pointer;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+        .btn-glass-login:hover {
+            background-color: #00ffff;
+            color: #000;
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+    .register-link {
+        margin-top: 25px;
+        text-align: center;
+        font-size: 14px;
+    }
+
+        .register-link a {
+            color: #00ffff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+            .register-link a:hover {
+                text-decoration: underline;
+            }
+
+    .alert-glass {
+        background-color: rgba(220, 53, 69, 0.2);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(220, 53, 69, 0.5);
+        border-radius: 8px;
+        color: #ffffff;
+        padding: 12px 15px;
+        margin-bottom: 20px;
+    }
+
+    .btn-close {
+        filter: brightness(0) invert(1);
+    }
+
+    @@media (max-width: 576px) {
+        .glass-card {
+            padding: 40px 25px;
+        }
+
+        .background-shapes {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="login-container">
+    <div class="background-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="glass-card">
+        <h2>Login to UniSpace</h2>
+
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert alert-glass alert-dismissible fade show" role="alert">
+                @Model.ErrorMessage
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
+        }
+
+        <form method="post">
+            <div>
+                <label asp-for="LoginRequest.Email">Email address</label>
+                <input asp-for="LoginRequest.Email" class="form-control" placeholder="Enter your email" />
+                <span asp-validation-for="LoginRequest.Email" class="text-danger"></span>
+            </div>
+
+            <div>
+                <label asp-for="LoginRequest.Password">Password</label>
+                <input asp-for="LoginRequest.Password" type="password" class="form-control" placeholder="Enter your password" />
+                <span asp-validation-for="LoginRequest.Password" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn-glass-login">Log In</button>
+
+            <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+        </form>
+
+        <div class="register-link">
+            <p>Don't have an account? <a asp-page="Register">Register here</a></p>
         </div>
     </div>
 </div>

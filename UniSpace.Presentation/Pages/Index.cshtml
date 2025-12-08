@@ -4,143 +4,246 @@
     ViewData["Title"] = "Home";
 }
 
-<div class="container-fluid py-5">
-    <!-- Hero Section -->
-    <div class="text-center mb-5">
-        <h1 class="display-3 fw-bold text-primary">
-            <i class="bi bi-mortarboard"></i> Welcome to UniSpace
-        </h1>
-        <p class="lead fs-4 text-muted">University Space Management System</p>
-        
-        @if (User.Identity?.IsAuthenticated == true)
-        {
-            <div class="mt-4">
-                <h3 class="mb-3">Hello, <span class="text-primary">@User.Identity.Name</span>!</h3>
-                <p class="mb-4">Ready to manage your bookings?</p>
-                <div class="d-flex justify-content-center gap-3">
-                    <a asp-page="/Dashboard" class="btn btn-primary btn-lg">
-                        <i class="bi bi-speedometer2"></i> Dashboard
-                    </a>
-                    <a asp-page="/Bookings/SearchRooms" class="btn btn-success btn-lg">
-                        <i class="bi bi-search"></i> Search Rooms
-                    </a>
-                </div>
-            </div>
-        }
-        else
-        {
-            <div class="mt-4">
-                <p class="fs-5 mb-4">Manage campus rooms, bookings, and reports efficiently.</p>
-                <div class="d-flex justify-content-center gap-3">
-                    <a asp-page="/Auth/Login" class="btn btn-primary btn-lg">
-                        <i class="bi bi-box-arrow-in-right"></i> Login
-                    </a>
-                    <a asp-page="/Auth/Register" class="btn btn-outline-primary btn-lg">
-                        <i class="bi bi-person-plus"></i> Register
-                    </a>
-                </div>
-            </div>
-        }
-    </div>
+<style>
+    .index-dark-bg {
+        background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+        min-height: 100vh;
+        position: relative;
+    }
 
-    <!-- Features Section -->
-    <div class="row mt-5 g-4">
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center p-4">
-                    <div class="mb-3 text-primary">
-                        <i class="bi bi-door-open" style="font-size: 3.5rem;"></i>
-                    </div>
-                    <h5 class="card-title fw-bold">Room Management</h5>
-                    <p class="card-text">Browse and manage available rooms across different campuses. View real-time availability and room details.</p>
-                    @if (User.Identity?.IsAuthenticated == true)
-                    {
-                        <a asp-page="/Bookings/SearchRooms" class="btn btn-outline-primary mt-2">
-                            <i class="bi bi-search"></i> Browse Rooms
-                        </a>
-                    }
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center p-4">
-                    <div class="mb-3 text-success">
-                        <i class="bi bi-calendar-check" style="font-size: 3.5rem;"></i>
-                    </div>
-                    <h5 class="card-title fw-bold">Booking System</h5>
-                    <p class="card-text">Book rooms for classes, meetings, and events easily. Track your bookings and manage reservations.</p>
-                    @if (User.Identity?.IsAuthenticated == true)
-                    {
-                        <a asp-page="/Bookings/MyBookings" class="btn btn-outline-success mt-2">
-                            <i class="bi bi-list-check"></i> My Bookings
-                        </a>
-                    }
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center p-4">
-                    <div class="mb-3 text-warning">
-                        <i class="bi bi-exclamation-triangle" style="font-size: 3.5rem;"></i>
-                    </div>
-                    <h5 class="card-title fw-bold">Report Issues</h5>
-                    <p class="card-text">Report and track room maintenance issues efficiently. Help maintain quality of campus facilities.</p>
-                    @if (User.Identity?.IsAuthenticated == true)
-                    {
-                        <a asp-page="/RoomReports/MyReports" class="btn btn-outline-warning mt-2">
-                            <i class="bi bi-file-text"></i> My Reports
-                        </a>
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
+    .neon-glow-text {
+        color: #00ffff;
+        text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    }
 
-    <!-- How It Works Section -->
-    @if (User.Identity?.IsAuthenticated != true)
-    {
-        <div class="row mt-5">
-            <div class="col-12">
-                <div class="card bg-light">
-                    <div class="card-body p-5">
-                        <h2 class="text-center mb-4">How It Works</h2>
-                        <div class="row text-center">
-                            <div class="col-md-3 mb-3">
-                                <div class="mb-3">
-                                    <i class="bi bi-person-plus-fill text-primary" style="font-size: 3rem;"></i>
+    .glass-morphism {
+        background: rgba(20, 20, 30, 0.6);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        transition: all 0.3s ease;
+    }
+
+        .glass-morphism:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0, 255, 255, 0.3);
+            border-color: rgba(0, 255, 255, 0.5);
+        }
+
+    .neon-button {
+        background: transparent;
+        border: 2px solid #00ffff;
+        color: #00ffff;
+        padding: 0.75rem 2rem;
+        border-radius: 50px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+    }
+
+        .neon-button:hover {
+            background: #00ffff;
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+            transform: scale(1.05);
+        }
+
+    .neon-button-secondary {
+        border-color: #ffa500;
+        color: #ffa500;
+        box-shadow: 0 0 10px rgba(255, 165, 0, 0.3);
+    }
+        .neon-button-secondary:hover {
+            background: #ffa500;
+            box-shadow: 0 0 20px rgba(255, 165, 0, 0.8);
+        }
+
+    .neon-button-success {
+        border-color: #00ff88;
+        color: #00ff88;
+        box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+    }
+
+        .neon-button-success:hover {
+            background: #00ff88;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
+        }
+
+    .neon-button-warning {
+        border-color: #ffa500;
+        color: #ffa500;
+        box-shadow: 0 0 10px rgba(255, 165, 0, 0.3);
+    }
+
+        .neon-button-warning:hover {
+            background: #ffa500;
+            box-shadow: 0 0 20px rgba(255, 165, 0, 0.8);
+        }
+
+    .neon-title {
+        background: linear-gradient(135deg, #00ffff, #0080ff, #8000ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.5));
+    }
+
+    .neon-icon {
+        filter: drop-shadow(0 0 15px currentColor);
+    }
+
+    .text-neon-green {
+        color: #00ff88;
+    }
+
+    .text-neon-orange {
+        color: #ffa500;
+    }
+
+</style>
+
+<div class="index-dark-bg">
+    <div class="container-fluid py-5">
+        <!-- Hero Section -->
+        <div class="text-center mb-5">
+            <h1 class="display-3 fw-bold neon-title">
+                <i class="bi bi-mortarboard neon-icon"></i> Welcome to UniSpace
+            </h1>
+            <p class="lead fs-4 neon-glow-text">University Space Management System</p>
+
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <div class="mt-4">
+                    <h3 class="mb-3 text-white">Hello, <span class="neon-glow-text">@User.Identity.Name</span>!</h3>
+                    <p class="mb-4 text-white">Ready to manage your bookings?</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a asp-page="/Dashboard" class="btn neon-button btn-lg">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                        <a asp-page="/Bookings/SearchRooms" class="btn neon-button neon-button-success btn-lg">
+                            <i class="bi bi-search"></i> Search Rooms
+                        </a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="mt-4">
+                    <p class="fs-5 mb-4 text-white">Manage campus rooms, bookings, and reports efficiently.</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a asp-page="/Auth/Login" class="btn neon-button btn-lg">
+                            <i class="bi bi-box-arrow-in-right"></i> Login
+                        </a>
+                        <a asp-page="/Auth/Register" class="btn neon-button neon-button-secondary btn-lg">
+                            <i class="bi bi-person-plus"></i> Register
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Features Section -->
+        <div class="row mt-5 g-4">
+            <div class="col-md-4">
+                <div class="card h-100 glass-morphism shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3 neon-glow-text">
+                            <i class="bi bi-door-open neon-icon" style="font-size: 3.5rem;"></i>
+                        </div>
+                        <h5 class="card-title fw-bold text-white">Room Management</h5>
+                        <p class="card-text text-white-50">Browse and manage available rooms across different campuses. View real-time availability and room details.</p>
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <a asp-page="/Bookings/SearchRooms" class="btn neon-button mt-2">
+                                <i class="bi bi-search"></i> Browse Rooms
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 glass-morphism shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3 text-neon-green">
+                            <i class="bi bi-calendar-check neon-icon" style="font-size: 3.5rem;"></i>
+                        </div>
+                        <h5 class="card-title fw-bold text-white">Booking System</h5>
+                        <p class="card-text text-white-50">Book rooms for classes, meetings, and events easily. Track your bookings and manage reservations.</p>
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <a asp-page="/Bookings/MyBookings" class="btn neon-button neon-button-success mt-2">
+                                <i class="bi bi-list-check"></i> My Bookings
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 glass-morphism shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3 text-neon-orange">
+                            <i class="bi bi-exclamation-triangle neon-icon" style="font-size: 3.5rem;"></i>
+                        </div>
+                        <h5 class="card-title fw-bold text-white">Report Issues</h5>
+                        <p class="card-text text-white-50">Report and track room maintenance issues efficiently. Help maintain quality of campus facilities.</p>
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <a asp-page="/RoomReports/MyReports" class="btn neon-button neon-button-warning mt-2">
+                                <i class="bi bi-file-text"></i> My Reports
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works Section -->
+        @if (User.Identity?.IsAuthenticated != true)
+        {
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="card glass-morphism">
+                        <div class="card-body p-5">
+                            <h2 class="text-center mb-4 text-white">How It Works</h2>
+                            <div class="row text-center">
+                                <div class="col-md-3 mb-3">
+                                    <div class="mb-3">
+                                        <i class="bi bi-person-plus-fill neon-glow-text neon-icon" style="font-size: 3rem;"></i>
+                                    </div>
+                                    <h5 class="text-white">1. Register</h5>
+                                    <p class="text-white-50">Create your account as a student or lecturer</p>
                                 </div>
-                                <h5>1. Register</h5>
-                                <p class="text-muted">Create your account as a student or lecturer</p>
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <div class="mb-3">
-                                    <i class="bi bi-search text-primary" style="font-size: 3rem;"></i>
+                                <div class="col-md-3 mb-3">
+                                    <div class="mb-3">
+                                        <i class="bi bi-search neon-glow-text neon-icon" style="font-size: 3rem;"></i>
+                                    </div>
+                                    <h5 class="text-white">2. Search Rooms</h5>
+                                    <p class="text-white-50">Find available rooms by campus, type, and capacity</p>
                                 </div>
-                                <h5>2. Search Rooms</h5>
-                                <p class="text-muted">Find available rooms by campus, type, and capacity</p>
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <div class="mb-3">
-                                    <i class="bi bi-calendar-plus text-primary" style="font-size: 3rem;"></i>
+                                <div class="col-md-3 mb-3">
+                                    <div class="mb-3">
+                                        <i class="bi bi-calendar-plus neon-glow-text neon-icon" style="font-size: 3rem;"></i>
+                                    </div>
+                                    <h5 class="text-white">3. Book</h5>
+                                    <p class="text-white-50">Reserve your preferred room for your needs</p>
                                 </div>
-                                <h5>3. Book</h5>
-                                <p class="text-muted">Reserve your preferred room for your needs</p>
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <div class="mb-3">
-                                    <i class="bi bi-check-circle text-primary" style="font-size: 3rem;"></i>
+                                <div class="col-md-3 mb-3">
+                                    <div class="mb-3">
+                                        <i class="bi bi-check-circle neon-glow-text neon-icon" style="font-size: 3rem;"></i>
+                                    </div>
+                                    <h5 class="text-white">4. Manage</h5>
+                                    <p class="text-white-50">Track bookings and report any issues</p>
                                 </div>
-                                <h5>4. Manage</h5>
-                                <p class="text-muted">Track bookings and report any issues</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    }
+        }
+    </div>
 </div>

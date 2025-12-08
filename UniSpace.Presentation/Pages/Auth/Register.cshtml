@@ -4,153 +4,474 @@
     ViewData["Title"] = "Register";
 }
 
-@section Styles {
-    <link rel="stylesheet" href="~/css/register.css" asp-append-version="true" />
-}
+<style>
+    .register-container {
+        min-height: calc(100vh - 200px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        padding: 20px;
+    }
 
-<div class="row justify-content-center mt-5">
-    <div class="col-md-6 col-lg-5">
-        <div class="card shadow">
-            <div class="card-body">
-                <h2 class="card-title text-center mb-4">Create Account</h2>
+    .background-shapes {
+        position: absolute;
+        width: 600px;
+        height: 700px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 0;
+    }
 
-                @if (!string.IsNullOrEmpty(Model.ErrorMessage))
-                {
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        @Model.ErrorMessage
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
+    .shape {
+        height: 200px;
+        width: 200px;
+        position: absolute;
+        border-radius: 50%;
+    }
+
+        .shape:first-child {
+            background: linear-gradient(#00ffff, #0080ff);
+            left: -180px;
+            top: -140px;
+        }
+
+        .shape:last-child {
+            background: linear-gradient(to right, #8000ff, #00ff88);
+            right: -180px;
+            bottom: -140px;
+        }
+
+    .glass-card {
+        height: auto;
+        width: 100%;
+        max-width: 750px;
+        background-color: rgba(255, 255, 255, 0.13);
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+        padding: 30px 40px;
+        position: relative;
+        z-index: 1;
+    }
+
+        .glass-card * {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+
+        .glass-card h2 {
+            font-size: 32px;
+            font-weight: 500;
+            line-height: 42px;
+            text-align: center;
+            margin-bottom: 25px;
+            color: #ffffff;
+        }
+
+    /* Tab Pills Glassmorphism */
+    .nav-pills {
+        background-color: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        padding: 5px;
+        margin-bottom: 25px;
+    }
+
+        .nav-pills .nav-link {
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.7);
+            border: none;
+        }
+
+            .nav-pills .nav-link:not(.active) {
+                background-color: transparent;
+            }
+
+                .nav-pills .nav-link:not(.active):hover {
+                    background-color: rgba(255, 255, 255, 0.1);
+                    color: #00ffff;
                 }
 
-                @if (!string.IsNullOrEmpty(Model.SuccessMessage))
-                {
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        @Model.SuccessMessage
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            .nav-pills .nav-link.active {
+                background-color: rgba(0, 255, 255, 0.3);
+                color: #ffffff;
+                box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+            }
+
+            .nav-pills .nav-link i {
+                margin-right: 5px;
+            }
+
+    /* Alert boxes */
+    .alert-glass {
+        background-color: rgba(0, 255, 255, 0.1);
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(0, 255, 255, 0.3);
+        border-radius: 8px;
+        color: #ffffff;
+        padding: 10px 12px;
+        margin-bottom: 20px;
+        font-size: 13px;
+    }
+
+        .alert-glass.alert-warning {
+            background-color: rgba(255, 193, 7, 0.1);
+            border-color: rgba(255, 193, 7, 0.3);
+        }
+
+        .alert-glass.alert-danger {
+            background-color: rgba(220, 53, 69, 0.2);
+            border-color: rgba(220, 53, 69, 0.5);
+        }
+
+        .alert-glass.alert-success {
+            background-color: rgba(0, 255, 136, 0.1);
+            border-color: rgba(0, 255, 136, 0.3);
+        }
+
+        .alert-glass i {
+            margin-right: 5px;
+        }
+
+    .btn-close {
+        filter: brightness(0) invert(1);
+        opacity: 0.8;
+    }
+
+
+    .glass-card .form-control {
+        display: block;
+        height: 45px;
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.07);
+        border-radius: 3px;
+        padding: 0 15px;
+        font-size: 14px;
+        font-weight: 300;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+        outline: none;
+    }
+
+        .glass-card .form-control::placeholder {
+            color: #e5e5e5;
+        }
+
+        .glass-card .form-control:focus {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: rgba(0, 255, 255, 0.5);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+
+    .glass-card .text-danger {
+        color: #ff6b6b !important;
+        font-size: 11px;
+        margin-top: 3px;
+        display: block;
+        background-color: rgba(220, 53, 69, 0.15);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        border: 1px solid rgba(220, 53, 69, 0.3);
+        border-radius: 5px;
+        padding: 6px 10px;
+        animation: slideIn 0.3s ease-in;
+    }
+
+    .glass-card .form-text {
+        color: rgba(255, 255, 255, 0.6) !important;
+        font-size: 11px;
+        margin-top: 3px;
+        display: block;
+    }
+
+    @@keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-5px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Empty validation messages should not show background */
+    .glass-card .text-danger:empty {
+        display: none;
+    }
+
+    /* Two column layout for form fields */
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .form-group-full {
+        grid-column: 1 / -1;
+    }
+
+    /* Role display badge */
+    .role-display-box {
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 12px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+        .role-display-box strong {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+    #roleDisplay {
+        background-color: rgba(0, 255, 255, 0.3);
+        color: #ffffff;
+        padding: 5px 12px;
+        border-radius: 15px;
+        font-size: 14px;
+        font-weight: 600;
+        border: 1px solid rgba(0, 255, 255, 0.5);
+        margin-left: 8px;
+    }
+
+        #roleDisplay.lecturer-badge {
+            background-color: rgba(255, 193, 7, 0.3);
+            border-color: rgba(255, 193, 7, 0.5);
+        }
+
+    .btn-glass-register {
+        margin-top: 25px;
+        width: 100%;
+        background-color: #ffffff;
+        color: #080710;
+        padding: 15px 0;
+        font-size: 18px;
+        font-weight: 600;
+        border-radius: 5px;
+        cursor: pointer;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+        .btn-glass-register:hover {
+            background-color: #00ffff;
+            color: #000;
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+    .login-link {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 14px;
+    }
+
+        .login-link a {
+            color: #00ffff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+            .login-link a:hover {
+                text-decoration: underline;
+            }
+
+    /* Animation for tab switching */
+    .tab-pane {
+        animation: fadeIn 0.3s ease-in;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .form-row {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+        .glass-card {
+            padding: 30px 25px;
+            max-width: 100%;
+        }
+
+
+        .background-shapes {
+            width: 100%;
+        }
+
+        .glass-card h2 {
+            font-size: 28px;
+        }
+    }
+</style>
+
+<div class="register-container">
+    <div class="background-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="glass-card">
+        <h2>Create Account</h2>
+
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert alert-glass alert-danger alert-dismissible fade show" role="alert">
+                @Model.ErrorMessage
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+        {
+            <div class="alert alert-glass alert-success alert-dismissible fade show" role="alert">
+                @Model.SuccessMessage
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <!-- Tabs for User Type Selection -->
+        <ul class="nav nav-pills nav-justified" id="registrationTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="student-tab" data-bs-toggle="pill"
+                        data-bs-target="#student-content" type="button" role="tab"
+                        aria-controls="student-content" aria-selected="true">
+                    <i class="bi bi-person"></i> Student
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="lecturer-tab" data-bs-toggle="pill"
+                        data-bs-target="#lecturer-content" type="button" role="tab"
+                        aria-controls="lecturer-content" aria-selected="false">
+                    <i class="bi bi-person-badge"></i> Lecturer
+                </button>
+            </li>
+        </ul>
+
+        <form method="post" id="registrationForm">
+            <!-- Hidden field to store selected role -->
+            <input type="hidden" asp-for="SelectedRole" id="selectedRoleInput" value="Student" />
+
+            <!-- Tab Content -->
+            <div class="tab-content" id="registrationTabContent">
+                <!-- Student Tab Content -->
+                <div class="tab-pane fade show active" id="student-content" role="tabpanel" aria-labelledby="student-tab">
+                    <div class="alert-glass">
+                        <small><i class="bi bi-info-circle"></i> Register as a Student to book rooms and report issues.</small>
                     </div>
-                }
+                </div>
 
-                <!-- Tabs for User Type Selection -->
-                <ul class="nav nav-pills nav-justified mb-4" id="registrationTabs" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="student-tab" data-bs-toggle="pill" 
-                                data-bs-target="#student-content" type="button" role="tab" 
-                                aria-controls="student-content" aria-selected="true">
-                            <i class="bi bi-person"></i> Student
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="lecturer-tab" data-bs-toggle="pill" 
-                                data-bs-target="#lecturer-content" type="button" role="tab" 
-                                aria-controls="lecturer-content" aria-selected="false">
-                            <i class="bi bi-person-badge"></i> Lecturer
-                        </button>
-                    </li>
-                </ul>
-
-                <form method="post" id="registrationForm">
-                    <!-- Hidden field to store selected role -->
-                    <input type="hidden" asp-for="SelectedRole" id="selectedRoleInput" value="Student" />
-
-                    <!-- Tab Content -->
-                    <div class="tab-content" id="registrationTabContent">
-                        <!-- Student Tab Content -->
-                        <div class="tab-pane fade show active" id="student-content" role="tabpanel" aria-labelledby="student-tab">
-                            <div class="alert alert-info">
-                                <small><i class="bi bi-info-circle"></i> Register as a Student to book rooms and report issues.</small>
-                            </div>
-                        </div>
-
-                        <!-- Lecturer Tab Content -->
-                        <div class="tab-pane fade" id="lecturer-content" role="tabpanel" aria-labelledby="lecturer-tab">
-                            <div class="alert alert-warning">
-                                <small><i class="bi bi-exclamation-triangle"></i> Register as a Lecturer to manage bookings and access advanced features.</small>
-                            </div>
-                        </div>
+                <!-- Lecturer Tab Content -->
+                <div class="tab-pane fade" id="lecturer-content" role="tabpanel" aria-labelledby="lecturer-tab">
+                    <div class="alert-glass alert-warning">
+                        <small><i class="bi bi-exclamation-triangle"></i> Register as a Lecturer to manage bookings and access advanced features.</small>
                     </div>
-
-                    <!-- Common Registration Fields -->
-                    <div class="mb-3">
-                        <label asp-for="RegistrationRequest.FullName" class="form-label">Full Name</label>
-                        <input asp-for="RegistrationRequest.FullName" class="form-control"
-                               placeholder="Enter your full name" required />
-                        <span asp-validation-for="RegistrationRequest.FullName" class="text-danger"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label asp-for="RegistrationRequest.Email" class="form-label">Email address</label>
-                        <input asp-for="RegistrationRequest.Email" type="email" class="form-control" 
-                               placeholder="Enter email" required />
-                        <span asp-validation-for="RegistrationRequest.Email" class="text-danger"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label asp-for="RegistrationRequest.Phone" class="form-label">Phone Number</label>
-                        <input asp-for="RegistrationRequest.Phone" class="form-control"
-                               placeholder="Enter phone number" required />
-                        <span asp-validation-for="RegistrationRequest.Phone" class="text-danger"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label asp-for="RegistrationRequest.Password" class="form-label">Password</label>
-                        <input asp-for="RegistrationRequest.Password" type="password" class="form-control"
-                               placeholder="Password" required />
-                        <span asp-validation-for="RegistrationRequest.Password" class="text-danger"></span>
-                        <small class="form-text text-muted">Password must be at least 6 characters.</small>
-                    </div>
-
-                    <div class="mb-3">
-                        <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
-                        <input asp-for="ConfirmPassword" type="password" class="form-control"
-                               placeholder="Confirm password" required />
-                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                    </div>
-
-                    <!-- Display Selected Role -->
-                    <div class="mb-3">
-                        <div class="alert alert-light border">
-                            <strong>Registering as:</strong> <span id="roleDisplay" class="badge bg-primary">Student</span>
-                        </div>
-                    </div>
-
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary btn-lg">
-                            <i class="bi bi-person-plus"></i> Register
-                        </button>
-                    </div>
-                </form>
-
-                <div class="text-center mt-3">
-                    <p>Already have an account? <a asp-page="Login">Login here</a></p>
                 </div>
             </div>
+
+            <!-- Two Column Form Fields -->
+            <div class="form-row">
+                <!-- Full Name -->
+                <div>
+                    <label asp-for="RegistrationRequest.FullName">Full Name</label>
+                    <input asp-for="RegistrationRequest.FullName" class="form-control"
+                           placeholder="Enter your full name" required />
+                    <span asp-validation-for="RegistrationRequest.FullName" class="text-danger"></span>
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label asp-for="RegistrationRequest.Email">Email address</label>
+                    <input asp-for="RegistrationRequest.Email" type="email" class="form-control"
+                           placeholder="Enter email" required />
+                    <span asp-validation-for="RegistrationRequest.Email" class="text-danger"></span>
+                </div>
+
+                <!-- Phone -->
+                <div>
+                    <label asp-for="RegistrationRequest.Phone">Phone Number</label>
+                    <input asp-for="RegistrationRequest.Phone" class="form-control"
+                           placeholder="Enter phone number" required />
+                    <span asp-validation-for="RegistrationRequest.Phone" class="text-danger"></span>
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label asp-for="RegistrationRequest.Password">Password</label>
+                    <input asp-for="RegistrationRequest.Password" type="password" class="form-control"
+                           placeholder="Password" required />
+                    <span asp-validation-for="RegistrationRequest.Password" class="text-danger"></span>
+                    <small class="form-text">Min 6 characters</small>
+                </div>
+
+                <!-- Confirm Password - Full Width -->
+                <div class="form-group-full">
+                    <label asp-for="ConfirmPassword">Confirm Password</label>
+                    <input asp-for="ConfirmPassword" type="password" class="form-control"
+                           placeholder="Confirm password" required />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- Display Selected Role -->
+            <div class="role-display-box">
+                <strong>Registering as:</strong><span id="roleDisplay">Student</span>
+            </div>
+
+            <button type="submit" class="btn-glass-register">
+                <i class="bi bi-person-plus"></i> Register
+            </button>
+        </form>
+
+        <div class="login-link">
+            <p>Already have an account? <a asp-page="Login">Login here</a></p>
         </div>
     </div>
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial"/>
-    
+    <partial name="_ValidationScriptsPartial" />
+
     <script>
         // Handle tab switching and update hidden role field
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const studentTab = document.getElementById('student-tab');
             const lecturerTab = document.getElementById('lecturer-tab');
             const roleInput = document.getElementById('selectedRoleInput');
             const roleDisplay = document.getElementById('roleDisplay');
 
             // Student tab click
-            studentTab.addEventListener('click', function() {
+            studentTab.addEventListener('click', function () {
                 roleInput.value = 'Student';
                 roleDisplay.textContent = 'Student';
-                roleDisplay.className = 'badge bg-primary';
+                roleDisplay.classList.remove('lecturer-badge');
             });
 
             // Lecturer tab click
-            lecturerTab.addEventListener('click', function() {
+            lecturerTab.addEventListener('click', function () {
                 roleInput.value = 'Lecturer';
                 roleDisplay.textContent = 'Lecturer';
-                roleDisplay.className = 'badge bg-warning text-dark';
+                roleDisplay.classList.add('lecturer-badge');
             });
         });
     </script>
