@@ -1,199 +1,556 @@
-@page
+﻿@page
 @using UniSpace.BusinessObject.Enums
 @model UniSpace.Presentation.Pages.Admin.Room.CreateModel
 @{
     ViewData["Title"] = "Create Room";
 }
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-10 col-lg-8">
-            <!-- Breadcrumb -->
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a asp-page="/Admin/Dashboard">
-                            <i class="bi bi-house"></i> Dashboard
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a asp-page="Index">Room Management</a>
-                    </li>
-                    <li class="breadcrumb-item active">Create Room</li>
-                </ol>
-            </nav>
+<style>
+    /* Page Container */
+    .create-page-container {
+        background: #1a1a1a;
+        min-height: 100vh;
+        padding: 20px 0;
+    }
 
-            <!-- Main Card -->
-            <div class="card shadow-lg">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">
-                        <i class="bi bi-plus-circle"></i> Create New Room
-                    </h4>
+    /* Breadcrumb Glass */
+    .breadcrumb-glass {
+        background: rgba(45, 45, 45, 0.5);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 10px;
+        padding: 12px 20px;
+        margin-bottom: 20px;
+    }
+
+        .breadcrumb-glass .breadcrumb {
+            margin-bottom: 0;
+            background: transparent;
+        }
+
+        .breadcrumb-glass .breadcrumb-item + .breadcrumb-item::before {
+            color: #9ca3af;
+            content: "›";
+        }
+
+        .breadcrumb-glass .breadcrumb-item a {
+            color: #ff8a00;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+            .breadcrumb-glass .breadcrumb-item a:hover {
+                color: #ff6b00;
+                text-shadow: 0 0 10px rgba(255, 138, 0, 0.5);
+            }
+
+        .breadcrumb-glass .breadcrumb-item.active {
+            color: #e0e0e0;
+        }
+
+    /* Glass Card */
+    .glass-card {
+        background: rgba(45, 45, 45, 0.5);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        margin-bottom: 24px;
+    }
+
+    .glass-card-header {
+        background: rgba(255, 138, 0, 0.15);
+        padding: 24px;
+        border-bottom: 1px solid rgba(255, 138, 0, 0.3);
+    }
+
+    .glass-card-body {
+        padding: 32px;
+        color: #e0e0e0;
+    }
+
+    /* Neon Text */
+    .neon-text {
+        color: #ff8a00;
+        font-weight: bold;
+    }
+
+    .text-muted-glass {
+        color: #9ca3af;
+        font-size: 0.875rem;
+    }
+
+    /* Form Labels */
+    .form-label-glass {
+        color: #ff8a00;
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin-bottom: 12px;
+        display: block;
+    }
+
+        .form-label-glass i {
+            margin-right: 8px;
+        }
+
+        .form-label-glass .required-star {
+            color: #f87171;
+            margin-left: 4px;
+        }
+
+    /* Form Controls */
+    .form-control-glass,
+    .form-select-glass {
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 138, 0, 0.3);
+        border-radius: 8px;
+        color: #ffffff;
+        padding: 12px 16px;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+
+        .form-control-glass::placeholder {
+            color: #6b7280;
+        }
+
+        .form-control-glass:focus,
+        .form-select-glass:focus {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 138, 0, 0.6);
+            outline: none;
+            box-shadow: 0 0 15px rgba(255, 138, 0, 0.3);
+            color: #ffffff;
+        }
+
+        .form-select-glass option {
+            background: rgba(45, 45, 45, 0.95);
+            color: #ffffff;
+            padding: 8px;
+            border: none;
+            outline: none;
+        }
+
+            .form-select-glass option:hover,
+            .form-select-glass option:checked {
+                background: rgba(255, 138, 0, 0.2);
+                color: #ff8a00;
+                border: none;
+            }
+
+    textarea.form-control-glass {
+        min-height: 30px;
+        width: 100%;
+        resize: vertical;
+    }
+
+    /* Helper Text */
+    .helper-text-glass {
+        color: #9ca3af;
+        font-size: 0.875rem;
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    /* Alert Glass */
+    .alert-glass-danger {
+        background: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        border-radius: 10px;
+        padding: 16px 20px;
+        color: #fca5a5;
+        margin-bottom: 20px;
+    }
+
+    .alert-glass-info {
+        background: rgba(59, 130, 246, 0.15);
+        border: 1px solid rgba(59, 130, 246, 0.4);
+        border-radius: 10px;
+        padding: 16px 20px;
+        color: #93c5fd;
+        margin-bottom: 24px;
+    }
+
+        .alert-glass-info strong {
+            color: #60a5fa;
+        }
+
+        .alert-glass-info ul {
+            margin-bottom: 0;
+            margin-top: 8px;
+            padding-left: 20px;
+        }
+
+            .alert-glass-info ul li {
+                margin-bottom: 4px;
+            }
+
+    /* Preview Card */
+    .preview-card-glass {
+        background: rgba(45, 45, 45, 0.5);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        margin-top: 24px;
+        animation: fadeIn 0.3s ease;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .preview-card-header {
+        background: rgba(59, 130, 246, 0.15);
+        padding: 16px 24px;
+        border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+        .preview-card-header h5 {
+            color: #60a5fa;
+            margin: 0;
+            font-weight: 600;
+        }
+
+    .preview-card-body {
+        padding: 24px;
+        color: #e0e0e0;
+    }
+
+    /* Badge Glass */
+    .badge-glass {
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        border: 1px solid;
+    }
+
+    .badge-glass-primary {
+        background: rgba(59, 130, 246, 0.2);
+        border-color: rgba(59, 130, 246, 0.4);
+        color: #93c5fd;
+    }
+
+    .badge-glass-info {
+        background: rgba(14, 165, 233, 0.2);
+        border-color: rgba(14, 165, 233, 0.4);
+        color: #7dd3fc;
+    }
+
+    .badge-glass-warning {
+        background: rgba(245, 158, 11, 0.2);
+        border-color: rgba(245, 158, 11, 0.4);
+        color: #fcd34d;
+    }
+
+    .badge-glass-secondary {
+        background: rgba(156, 163, 175, 0.2);
+        border-color: rgba(156, 163, 175, 0.4);
+        color: #d1d5db;
+    }
+
+    .badge-glass-success {
+        background: rgba(16, 185, 129, 0.2);
+        border-color: rgba(16, 185, 129, 0.4);
+        color: #6ee7b7;
+    }
+
+    /* Buttons */
+    .btn-create-glass {
+        background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 100%);
+        border: 2px solid #ff8a00;
+        color: #1a1a1a;
+        font-weight: 700;
+        padding: 12px 28px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 20px rgba(255, 138, 0, 0.4);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .btn-create-glass:hover {
+            box-shadow: 0 0 30px rgba(255, 138, 0, 0.7);
+            transform: translateY(-2px);
+            color: #1a1a1a;
+        }
+
+    .btn-glass-secondary {
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        font-weight: 600;
+        padding: 12px 28px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .btn-glass-secondary:hover {
+            border: 2px solid rgba(255, 138, 0, 0.5);
+            color: #ff8a00;
+            box-shadow: 0 0 20px rgba(255, 138, 0, 0.2);
+        }
+
+    /* Action Footer */
+    .action-footer-glass {
+        background: rgba(0, 0, 0, 0.3);
+        border-top: 1px solid rgba(255, 138, 0, 0.2);
+        padding: 20px 32px;
+        margin: 0 -32px -32px -32px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    /* Validation */
+    .text-danger {
+        color: #fca5a5 !important;
+        font-size: 0.875rem;
+        margin-top: 6px;
+        display: block;
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .glass-card-header,
+        .glass-card-body {
+            padding: 20px;
+        }
+
+        .action-footer-glass {
+            padding: 16px 20px;
+            margin: 0 -20px -20px -20px;
+        }
+
+        .preview-card-body {
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="create-page-container">
+    <div class="container-fluid mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-9">
+                <!-- Breadcrumb -->
+                <div class="breadcrumb-glass">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a asp-page="/Admin/Dashboard">
+                                    <i class="bi bi-speedometer2"></i> Dashboard
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a asp-page="Index">Room Management</a>
+                            </li>
+                            <li class="breadcrumb-item active">Create Room</li>
+                        </ol>
+                    </nav>
                 </div>
-                <div class="card-body p-4">
-                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
-                    {
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <i class="bi bi-exclamation-triangle"></i> @Model.ErrorMessage
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    }
 
-                    <form method="post" id="createForm">
-                        <div class="row">
-                            <!-- Campus Selection -->
-                            <div class="col-md-6 mb-4">
-                                <label asp-for="Input.CampusId" class="form-label fw-bold">
-                                    <i class="bi bi-building text-primary"></i> Campus 
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <select asp-for="Input.CampusId" class="form-select form-select-lg">
-                                    @foreach (var option in Model.CampusOptions)
-                                    {
-                                        <option value="@option.Value" selected="@option.Selected">
-                                            @option.Text
+                <!-- Main Card -->
+                <div class="glass-card">
+                    <div class="glass-card-header">
+                        <h3 class="mb-0 neon-text">
+                            <i class="bi bi-plus-circle"></i> Create New Room
+                        </h3>
+                    </div>
+                    <div class="glass-card-body">
+                        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                        {
+                            <div class="alert-glass-danger" role="alert">
+                                <i class="bi bi-exclamation-triangle me-2"></i> @Model.ErrorMessage
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" style="filter: brightness(0) invert(1); position: absolute; top: 16px; right: 16px;"></button>
+                            </div>
+                        }
+
+                        <form method="post" id="createForm">
+                            <div class="row">
+                                <!-- Campus Selection -->
+                                <div class="col-md-6 mb-4">
+                                    <label asp-for="Input.CampusId" class="form-label-glass">
+                                        <i class="bi bi-building"></i> Campus
+                                        <span class="required-star">*</span>
+                                    </label>
+                                    <select asp-for="Input.CampusId" class="form-select-glass" id="Input_CampusId">
+                                        @foreach (var option in Model.CampusOptions)
+                                        {
+                                            <option value="@option.Value" selected="@option.Selected">
+                                                @option.Text
+                                            </option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="Input.CampusId" class="text-danger"></span>
+                                    <div class="helper-text-glass">
+                                        <i class="bi bi-info-circle"></i>
+                                        <span>Select the campus where this room is located</span>
+                                    </div>
+                                </div>
+
+                                <!-- Room Name -->
+                                <div class="col-md-6 mb-4">
+                                    <label asp-for="Input.Name" class="form-label-glass">
+                                        <i class="bi bi-door-open"></i> Room Name
+                                        <span class="required-star">*</span>
+                                    </label>
+                                    <input asp-for="Input.Name"
+                                           class="form-control-glass"
+                                           placeholder="e.g., Room 101, Lab A, Main Stadium"
+                                           id="roomName" />
+                                    <span asp-validation-for="Input.Name" class="text-danger"></span>
+                                    <div class="helper-text-glass">
+                                        <i class="bi bi-info-circle"></i>
+                                        <span>Enter unique room name (max 100 characters)</span>
+                                    </div>
+                                </div>
+
+                                <!-- Room Type -->
+                                <div class="col-md-6 mb-4">
+                                    <label asp-for="Input.Type" class="form-label-glass">
+                                        <i class="bi bi-tag"></i> Room Type
+                                        <span class="required-star">*</span>
+                                    </label>
+                                    <select asp-for="Input.Type" class="form-select-glass" id="roomType">
+                                        <option value="">-- Select Type --</option>
+                                        <option value="@((int)RoomType.Classroom)">
+                                            📚 Classroom
                                         </option>
-                                    }
-                                </select>
-                                <span asp-validation-for="Input.CampusId" class="text-danger"></span>
-                                <div class="form-text">
-                                    <i class="bi bi-info-circle"></i> Select the campus where this room is located
+                                        <option value="@((int)RoomType.Lab)">
+                                            🔬 Laboratory
+                                        </option>
+                                        <option value="@((int)RoomType.Stadium)">
+                                            🏟 Stadium
+                                        </option>
+                                    </select>
+                                    <span asp-validation-for="Input.Type" class="text-danger"></span>
+                                    <div class="helper-text-glass">
+                                        <i class="bi bi-info-circle"></i>
+                                        <span>Select the type of facility</span>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <!-- Room Name -->
-                            <div class="col-md-6 mb-4">
-                                <label asp-for="Input.Name" class="form-label fw-bold">
-                                    <i class="bi bi-door-open text-success"></i> Room Name 
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <input asp-for="Input.Name" 
-                                       class="form-control form-control-lg" 
-                                       placeholder="e.g., Room 101, Lab A, Main Stadium"
-                                       id="roomName" />
-                                <span asp-validation-for="Input.Name" class="text-danger"></span>
-                                <div class="form-text">
-                                    <i class="bi bi-info-circle"></i> Enter unique room name (max 100 characters)
-                                </div>
-                            </div>
-
-                            <!-- Room Type -->
-                            <div class="col-md-6 mb-4">
-                                <label asp-for="Input.Type" class="form-label fw-bold">
-                                    <i class="bi bi-tag text-info"></i> Room Type 
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <select asp-for="Input.Type" class="form-select form-select-lg" id="roomType">
-                                    <option value="">-- Select Type --</option>
-                                    <option value="@((int)RoomType.Classroom)">
-                                        ?? Classroom
-                                    </option>
-                                    <option value="@((int)RoomType.Lab)">
-                                        ?? Laboratory
-                                    </option>
-                                    <option value="@((int)RoomType.Stadium)">
-                                        ? Stadium
-                                    </option>
-                                </select>
-                                <span asp-validation-for="Input.Type" class="text-danger"></span>
-                                <div class="form-text">
-                                    <i class="bi bi-info-circle"></i> Select the type of facility
-                                </div>
-                            </div>
-
-                            <!-- Capacity -->
-                            <div class="col-md-6 mb-4">
-                                <label asp-for="Input.Capacity" class="form-label fw-bold">
-                                    <i class="bi bi-people text-warning"></i> Capacity 
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <input asp-for="Input.Capacity" 
-                                       type="number" 
-                                       class="form-control form-control-lg" 
-                                       placeholder="Number of people"
-                                       min="1"
-                                       max="1000"
-                                       id="roomCapacity" />
-                                <span asp-validation-for="Input.Capacity" class="text-danger"></span>
-                                <div class="form-text">
-                                    <i class="bi bi-info-circle"></i> Enter capacity (1-1000 people)
+                                <!-- Capacity -->
+                                <div class="col-md-6 mb-4">
+                                    <label asp-for="Input.Capacity" class="form-label-glass">
+                                        <i class="bi bi-people"></i> Capacity
+                                        <span class="required-star">*</span>
+                                    </label>
+                                    <input asp-for="Input.Capacity"
+                                           type="number"
+                                           class="form-control-glass"
+                                           placeholder="Number of people"
+                                           min="1"
+                                           max="1000"
+                                           id="roomCapacity" />
+                                    <span asp-validation-for="Input.Capacity" class="text-danger"></span>
+                                    <div class="helper-text-glass">
+                                        <i class="bi bi-info-circle"></i>
+                                        <span>Enter capacity (1-1000 people)</span>
+                                    </div>
                                 </div>
                             </div>
 
                             <!-- Description -->
-                            <div class="col-md-12 mb-4">
-                                <label asp-for="Input.Description" class="form-label fw-bold">
-                                    <i class="bi bi-text-paragraph text-secondary"></i> Description 
-                                    <span class="text-muted">(Optional)</span>
+                            <div class="mb-4">
+                                <label asp-for="Input.Description" class="form-label-glass">
+                                    <i class="bi bi-text-paragraph"></i> Description
+                                    <span class="text-muted-glass">(Optional)</span>
                                 </label>
-                                <textarea asp-for="Input.Description" 
-                                          class="form-control" 
-                                          rows="4"
+                                <textarea asp-for="Input.Description"
+                                          class="form-control-glass"
+                                          rows="5"
                                           placeholder="Enter detailed description, amenities, equipment, etc..."
                                           id="roomDescription"></textarea>
                                 <span asp-validation-for="Input.Description" class="text-danger"></span>
-                                <div class="form-text">
-                                    <i class="bi bi-info-circle"></i> Optional details (max 500 characters)
+                                <div class="helper-text-glass">
+                                    <i class="bi bi-info-circle"></i>
+                                    <span>Optional details (max 500 characters)</span>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Info Alert -->
-                        <div class="alert alert-info">
-                            <i class="bi bi-lightbulb"></i> 
-                            <strong>Tips:</strong>
-                            <ul class="mb-0 mt-2">
-                                <li>Room names must be unique within each campus</li>
-                                <li>The room will be available for booking by default</li>
-                                <li>You can update room status later from the edit page</li>
-                            </ul>
-                        </div>
-
-                        <!-- Action Buttons -->
-                        <div class="d-flex gap-2 justify-content-end">
-                            <a asp-page="Index" class="btn btn-outline-secondary btn-lg">
-                                <i class="bi bi-x-circle"></i> Cancel
-                            </a>
-                            <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="bi bi-save"></i> Create Room
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Live Preview Card -->
-            <div class="card shadow-lg mt-4" id="previewCard" style="display: none;">
-                <div class="card-header bg-light">
-                    <h5 class="mb-0">
-                        <i class="bi bi-eye text-info"></i> Live Preview
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <h4 id="previewName" class="text-primary mb-2">
-                                <i class="bi bi-door-open"></i> Room Name
-                            </h4>
-                            <p class="mb-2">
-                                <i class="bi bi-building text-muted"></i> 
-                                <span id="previewCampus">Campus</span>
-                            </p>
-                            <p id="previewDescription" class="text-muted mb-2">Description</p>
-                        </div>
-                        <div class="col-md-4 text-end">
-                            <div class="mb-2">
-                                <span class="badge" id="previewType" style="font-size: 1em;">Type</span>
+                            <!-- Info Alert -->
+                            <div class="alert-glass-info">
+                                <i class="bi bi-lightbulb"></i>
+                                <strong>Tips:</strong>
+                                <ul>
+                                    <li>Room names must be unique within each campus</li>
+                                    <li>The room will be available for booking by default</li>
+                                    <li>You can update room status later from the edit page</li>
+                                </ul>
                             </div>
-                            <div class="mb-2">
-                                <span class="badge bg-secondary" id="previewCapacity" style="font-size: 1em;">
-                                    <i class="bi bi-people"></i> 0 seats
-                                </span>
+
+                            <!-- Action Footer -->
+                            <div class="action-footer-glass">
+                                <div class="d-flex gap-2">
+                                    <a asp-page="Index" class="btn btn-glass-secondary">
+                                        <i class="bi bi-x-circle"></i> Cancel
+                                    </a>
+                                    <button type="submit" class="btn btn-create-glass">
+                                        <i class="bi bi-floppy"></i> Create Room
+                                    </button>
+                                </div>
                             </div>
-                            <div>
-                                <span class="badge bg-success" style="font-size: 1em;">
-                                    <i class="bi bi-check-circle"></i> Available
-                                </span>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Live Preview Card -->
+                <div class="preview-card-glass" id="previewCard" style="display: none;">
+                    <div class="preview-card-header">
+                        <h5>
+                            <i class="bi bi-eye"></i> Live Preview
+                        </h5>
+                    </div>
+                    <div class="preview-card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h4 id="previewName" class="neon-text mb-2">
+                                    <i class="bi bi-door-open"></i> Room Name
+                                </h4>
+                                <p class="mb-2 text-muted-glass">
+                                    <i class="bi bi-building"></i>
+                                    <span id="previewCampus">Campus</span>
+                                </p>
+                                <p id="previewDescription" class="text-muted-glass mb-2">Description</p>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <div class="mb-3">
+                                    <span class="badge-glass badge-glass-secondary" id="previewType">Type</span>
+                                </div>
+                                <div class="mb-3">
+                                    <span class="badge-glass badge-glass-secondary" id="previewCapacity">
+                                        <i class="bi bi-people"></i> 0 seats
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="badge-glass badge-glass-success">
+                                        <i class="bi bi-check-circle"></i> Available
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -205,7 +562,7 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    
+
     <script>
         // Live preview functionality
         const nameInput = document.getElementById('roomName');
@@ -229,34 +586,34 @@
 
             if (name || capacity || description) {
                 previewCard.style.display = 'block';
-                
+
                 // Update name
                 previewName.innerHTML = '<i class="bi bi-door-open"></i> ' + (name || 'Room Name');
-                
+
                 // Update campus
                 previewCampus.textContent = campus !== '-- Select Campus --' ? campus : 'Campus';
-                
+
                 // Update type
-                let typeBadgeClass = 'bg-secondary';
+                let typeBadgeClass = 'badge-glass-secondary';
                 let typeText = 'Type';
-                
+
                 if (typeValue === '0') {
-                    typeBadgeClass = 'bg-primary';
-                    typeText = '?? Classroom';
+                    typeBadgeClass = 'badge-glass-primary';
+                    typeText = '📚 Classroom';
                 } else if (typeValue === '1') {
-                    typeBadgeClass = 'bg-info';
-                    typeText = '?? Laboratory';
+                    typeBadgeClass = 'badge-glass-info';
+                    typeText = '🔬 Laboratory';
                 } else if (typeValue === '2') {
-                    typeBadgeClass = 'bg-warning';
-                    typeText = '? Stadium';
+                    typeBadgeClass = 'badge-glass-warning';
+                    typeText = '🏟 Stadium';
                 }
-                
-                previewType.className = 'badge ' + typeBadgeClass;
+
+                previewType.className = 'badge-glass ' + typeBadgeClass;
                 previewType.textContent = typeText;
-                
+
                 // Update capacity
                 previewCapacity.innerHTML = '<i class="bi bi-people"></i> ' + (capacity || '0') + ' seats';
-                
+
                 // Update description
                 previewDescription.textContent = description || 'No description';
             } else {

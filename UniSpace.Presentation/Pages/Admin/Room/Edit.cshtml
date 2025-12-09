@@ -116,8 +116,7 @@
             color: #6b7280;
         }
 
-        .form-control-glass:focus,
-        .form-select-glass:focus {
+        .form-control-glass:focus {
             background: rgba(0, 0, 0, 0.5);
             border: 1px solid rgba(255, 138, 0, 0.6);
             outline: none;
@@ -126,13 +125,16 @@
         }
 
         .form-select-glass option {
-            background: #2d2d2d;
+            background: rgba(45, 45, 45, 0.95);
             color: #ffffff;
+            padding: 8px;
+            border: none;
+            outline: none;
         }
 
     textarea.form-control-glass {
         min-height: 100px;
-        resize: vertical;
+        width: 100%;
     }
 
     /* Helper Text */
@@ -477,7 +479,7 @@
                                                        value="@((int)BookingStatus.Approved)"
                                                        id="statusAvailable" />
                                                 <div class="radio-label">
-                                                    <strong><i class="bi bi-check-circle" style="color: #10b981;"></i>  Available</strong>
+                                                    <strong><i class="bi bi-check-circle" style="color: #10b981;"></i>    Available</strong>
                                                     <small>Room can be booked</small>
                                                 </div>
                                             </label>
@@ -489,7 +491,7 @@
                                                        value="@((int)BookingStatus.Rejected)"
                                                        id="statusUnavailable" />
                                                 <div class="radio-label">
-                                                    <strong><i class="bi bi-x-circle" style="color: #f87171;"></i>  Unavailable</strong>
+                                                    <strong><i class="bi bi-x-circle" style="color: #f87171;"></i>    Unavailable</strong>
                                                     <small>Room cannot be booked</small>
                                                 </div>
                                             </label>
@@ -497,22 +499,22 @@
                                     </div>
                                     <span asp-validation-for="Input.CurrentStatus" class="text-danger"></span>
                                 </div>
+                            </div>
 
-                                <!-- Description -->
-                                <div class="col-md-12 mb-4">
-                                    <label asp-for="Input.Description" class="form-label-glass">
-                                        <i class="bi bi-text-paragraph"></i> Description
-                                        <span class="text-muted-glass">(Optional)</span>
-                                    </label>
-                                    <textarea asp-for="Input.Description"
-                                              class="form-control-glass"
-                                              rows="3"
-                                              placeholder="Enter detailed description, amenities, equipment, etc..."></textarea>
-                                    <span asp-validation-for="Input.Description" class="text-danger"></span>
-                                    <div class="helper-text-glass">
-                                        <i class="bi bi-info-circle"></i>
-                                        <span>Optional details (max 500 characters)</span>
-                                    </div>
+                            <!-- Description -->
+                            <div class="mb-4">
+                                <label asp-for="Input.Description" class="form-label-glass">
+                                    <i class="bi bi-text-paragraph"></i> Description
+                                    <span class="text-muted-glass">(Optional)</span>
+                                </label>
+                                <textarea asp-for="Input.Description"
+                                          class="form-control-glass"
+                                          rows="5"
+                                          placeholder="Enter detailed description, amenities, equipment, etc..."></textarea>
+                                <span asp-validation-for="Input.Description" class="text-danger"></span>
+                                <div class="helper-text-glass">
+                                    <i class="bi bi-info-circle"></i>
+                                    <span>Optional details (max 500 characters)</span>
                                 </div>
                             </div>
 
