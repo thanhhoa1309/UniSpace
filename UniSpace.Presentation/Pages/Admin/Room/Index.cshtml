@@ -5,390 +5,950 @@
     ViewData["Title"] = "Room Management";
 }
 
-<div class="container-fluid mt-4">
-    <!-- Header -->
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h2><i class="bi bi-door-open"></i> Room Management</h2>
-                    <p class="text-muted">Manage all room facilities across campuses</p>
-                </div>
-                <div>
-                    <a asp-page="Dashboard" class="btn btn-info btn-lg me-2">
-                        <i class="bi bi-speedometer2"></i> Dashboard
-                    </a>
-                    <a asp-page="Create" class="btn btn-primary btn-lg">
-                        <i class="bi bi-plus-circle"></i> Add New Room
-                    </a>
+<style>
+    /* Page Container */
+    .index-page-container {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        min-height: 100vh;
+        padding: 20px 0;
+    }
+
+    /* Glass Card Header */
+    .glass-card-header {
+        background: rgba(45, 45, 45, 0.5);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        padding: 24px;
+        transition: all 0.3s ease;
+    }
+
+        .glass-card-header:hover {
+            border: 1px solid rgba(255, 138, 0, 0.4);
+            box-shadow: 0 12px 40px 0 rgba(255, 138, 0, 0.15);
+        }
+
+    /* Neon Text */
+    .neon-text {
+        color: #ff8a00;
+        font-weight: bold;
+    }
+
+    .text-muted-glass {
+        color: #9ca3af;
+    }
+
+    /* Search Filter Card */
+    .search-filter-card {
+        background: rgba(45, 45, 45, 0.5);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+    }
+
+    .search-filter-header {
+        background: rgba(255, 138, 0, 0.1);
+        border-bottom: 1px solid rgba(255, 138, 0, 0.3);
+        padding: 15px 20px;
+    }
+
+    .search-filter-body {
+        padding: 24px;
+    }
+
+    /* Form Controls */
+    .form-label-glass {
+        color: #e0e0e0;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 8px;
+    }
+
+    .form-control-glass,
+    .form-select-glass {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+        color: #ffffff;
+        padding: 10px 14px;
+        transition: all 0.3s ease;
+    }
+
+        .form-control-glass::placeholder {
+            color: #6b7280;
+        }
+
+        .form-control-glass:focus,
+        .form-select-glass:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 138, 0, 0.6);
+            outline: none;
+            box-shadow: 0 0 15px rgba(255, 138, 0, 0.2);
+            color: #ffffff;
+        }
+
+        .form-select-glass option {
+            background: #2d2d2d;
+            color: #ffffff;
+        }
+
+    /* Buttons */
+    .btn-neon-primary {
+        background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 100%);
+        border: 2px solid #ff8a00;
+        color: #fff;
+        font-weight: 600;
+        padding: 10px 24px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 20px rgba(255, 138, 0, 0.4);
+    }
+
+        .btn-neon-primary:hover {
+            box-shadow: 0 0 30px rgba(255, 138, 0, 0.7);
+            transform: translateY(-2px);
+            color: #fff;
+        }
+
+    .btn-glass-secondary {
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        font-weight: 600;
+        padding: 10px 24px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+        .btn-glass-secondary:hover {
+            border: 2px solid rgba(255, 138, 0, 0.5);
+            color: #ff8a00;
+            box-shadow: 0 0 20px rgba(255, 138, 0, 0.2);
+        }
+
+    .btn-glass-info {
+        background: rgba(6, 182, 212, 0.15);
+        border: 2px solid rgba(6, 182, 212, 0.3);
+        color: #06b6d4;
+        font-weight: 600;
+        padding: 10px 24px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+        .btn-glass-info:hover {
+            background: rgba(6, 182, 212, 0.25);
+            border-color: rgba(6, 182, 212, 0.5);
+            color: #22d3ee;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+        }
+
+    /* Table Card */
+    .table-card-glass {
+        background: rgba(45, 45, 45, 0.5);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+    }
+
+    .table-header-glass {
+        background: rgba(255, 138, 0, 0.15);
+        border-bottom: 2px solid rgba(255, 138, 0, 0.3);
+        padding: 20px 24px;
+    }
+
+    .badge-count {
+        background: rgba(255, 255, 255, 0.1);
+        color: #ff8a00;
+        padding: 6px 12px;
+        border-radius: 12px;
+        font-weight: 600;
+        border: 1px solid rgba(255, 138, 0, 0.3);
+    }
+
+    /* View Toggle */
+    .btn-view-toggle {
+        background: rgba(255, 255, 255, 0.05);
+        border: none;
+        color: #fff;
+        padding: 8px 16px;
+        transition: all 0.3s ease;
+        font-size: 0.875rem;
+    }
+
+        .btn-view-toggle.active {
+            background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 100%);
+            color: #fff;
+        }
+
+        .btn-view-toggle:hover:not(.active) {
+            background: rgba(255, 138, 0, 0.2);
+            color: #ff8a00;
+        }
+
+    /* Table Styles */
+    .table-glass {
+        color: #e0e0e0;
+        margin-bottom: 0;
+    }
+
+        .table-glass thead th {
+            background: rgba(255, 138, 0, 0.1);
+            color: #ff8a00;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid rgba(255, 138, 0, 0.3);
+            padding: 16px 12px;
+        }
+
+        .table-glass tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+            .table-glass tbody tr:hover {
+                background: rgba(255, 138, 0, 0.05);
+            }
+
+        .table-glass tbody td {
+            padding: 16px 12px;
+            vertical-align: middle;
+        }
+
+    /* Badges */
+    .badge-neon {
+        background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 100%);
+        color: #fff;
+        padding: 6px 12px;
+        border-radius: 12px;
+        font-weight: 600;
+        box-shadow: 0 0 15px rgba(255, 138, 0, 0.5);
+    }
+
+    .badge-glass-success {
+        background: rgba(16, 185, 129, 0.2);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+        color: #10b981;
+    }
+
+    .badge-glass-danger {
+        background: rgba(239, 68, 68, 0.2);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        color: #f87171;
+    }
+
+    .badge-glass-info {
+        background: rgba(6, 182, 212, 0.2);
+        border: 1px solid rgba(6, 182, 212, 0.4);
+        color: #06b6d4;
+    }
+
+    .badge-glass-warning {
+        background: rgba(245, 158, 11, 0.2);
+        border: 1px solid rgba(245, 158, 11, 0.4);
+        color: #f59e0b;
+    }
+
+    /* Grid Cards */
+    .room-card-glass {
+        background: rgba(45, 45, 45, 0.6);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+        .room-card-glass:hover {
+            border-color: rgba(255, 138, 0, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(255, 138, 0, 0.2);
+        }
+
+    .room-card-header-glass {
+        padding: 16px 20px;
+    }
+
+    .room-card-body-glass {
+        padding: 20px;
+        color: #e0e0e0;
+    }
+
+    .room-card-footer-glass {
+        background: rgba(255, 255, 255, 0.03);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 16px 20px;
+    }
+
+    /* Action Buttons */
+    .btn-action-glass {
+        padding: 6px 12px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.875rem;
+    }
+
+    .btn-action-info {
+        background: rgba(59, 130, 246, 0.2);
+        color: #60a5fa;
+        border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+        .btn-action-info:hover {
+            background: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+    .btn-action-warning {
+        background: rgba(251, 191, 36, 0.2);
+        color: #fbbf24;
+        border: 1px solid rgba(251, 191, 36, 0.3);
+    }
+
+        .btn-action-warning:hover {
+            background: rgba(251, 191, 36, 0.3);
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
+        }
+
+    .btn-action-danger {
+        background: rgba(239, 68, 68, 0.2);
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+        .btn-action-danger:hover {
+            background: rgba(239, 68, 68, 0.3);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+        }
+
+    .btn-action-primary {
+        background: rgba(255, 138, 0, 0.2);
+        color: #ff8a00;
+        border: 1px solid rgba(255, 138, 0, 0.3);
+    }
+
+        .btn-action-primary:hover {
+            background: rgba(255, 138, 0, 0.3);
+            box-shadow: 0 0 15px rgba(255, 138, 0, 0.4);
+        }
+
+    /* Alerts */
+    .alert-glass-success {
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+        border-radius: 10px;
+        padding: 16px 20px;
+        color: #6ee7b7;
+    }
+
+    .alert-glass-danger {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        border-radius: 10px;
+        padding: 16px 20px;
+        color: #fca5a5;
+    }
+
+    /* Modal */
+    .modal-content-glass {
+        background: rgba(35, 35, 35, 0.95);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 138, 0, 0.3);
+        border-radius: 15px;
+    }
+
+    .modal-header-glass-danger {
+        background: rgba(239, 68, 68, 0.15);
+        border-bottom: 1px solid rgba(239, 68, 68, 0.3);
+        padding: 20px 24px;
+    }
+
+    .modal-body-glass {
+        padding: 24px;
+        color: #e0e0e0;
+    }
+
+    .modal-footer-glass {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 20px 24px;
+    }
+
+    /* Empty State */
+    .empty-state-glass {
+        text-align: center;
+        padding: 80px 40px;
+        color: #9ca3af;
+    }
+
+    /* Pagination Styles */
+    .pagination-glass {
+        display: flex;
+        gap: 8px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .page-item.active .page-link-glass {
+        background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 100%);
+        border-color: #ff8a00;
+        color: #fff;
+        box-shadow: 0 0 20px rgba(255, 138, 0, 0.5);
+    }
+
+    .page-item.disabled .page-link-glass {
+        background: rgba(255, 255, 255, 0.02);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: #6b7280;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    .page-link-glass {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+        color: #ffffff;
+        padding: 8px 14px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-block;
+        min-width: 40px;
+        text-align: center;
+    }
+
+        .page-link-glass:hover:not(.page-item.disabled .page-link-glass) {
+            background: rgba(255, 138, 0, 0.2);
+            border-color: rgba(255, 138, 0, 0.4);
+            color: #ff8a00;
+            box-shadow: 0 0 15px rgba(255, 138, 0, 0.3);
+        }
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .glass-card-header,
+        .search-filter-body {
+            padding: 20px;
+        }
+
+        .table-header-glass {
+            padding: 16px 20px;
+        }
+    }
+</style>
+
+<div class="index-page-container">
+    <div class="container-fluid mt-4">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="glass-card-header">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                        <div>
+                            <h2 class="neon-text mb-2">
+                                <i class="bi bi-door-open"></i> Room Management
+                            </h2>
+                            <p class="text-muted-glass mb-0">Manage all room facilities across campuses</p>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <a asp-page="Dashboard" class="btn btn-glass-info btn-lg">
+                                <i class="bi bi-speedometer2"></i> Dashboard
+                            </a>
+                            <a asp-page="Create" class="btn btn-neon-primary btn-lg">
+                                <i class="bi bi-plus-circle"></i> Add New Room
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Alerts -->
-    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
-    {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle"></i> @Model.SuccessMessage
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    }
+        <!-- Alerts -->
+        @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+        {
+            <div class="alert-glass-success mb-4" role="alert">
+                <i class="bi bi-check-circle me-2"></i> @Model.SuccessMessage
+                <button type="button" class="btn-close" data-bs-dismiss="alert" style="filter: brightness(0) invert(1);"></button>
+            </div>
+        }
 
-    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
-    {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="bi bi-exclamation-triangle"></i> @Model.ErrorMessage
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    }
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert-glass-danger mb-4" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i> @Model.ErrorMessage
+                <button type="button" class="btn-close" data-bs-dismiss="alert" style="filter: brightness(0) invert(1);"></button>
+            </div>
+        }
 
-    <!-- Search and Filter Section -->
-    <div class="card shadow mb-4">
-        <div class="card-header bg-light">
-            <h5 class="mb-0">
-                <i class="bi bi-funnel"></i> Search & Filter
-            </h5>
-        </div>
-        <div class="card-body">
-            <form method="get" class="row g-3">
-                <!-- Search Bar -->
-                <div class="col-md-4">
-                    <label class="form-label">
-                        <i class="bi bi-search"></i> Search
-                    </label>
-                    <input type="text" name="search" class="form-control" 
-                           placeholder="Room name, campus, or description..." 
-                           value="@Model.SearchTerm" />
-                </div>
+        <!-- Search and Filter Section -->
+        <div class="search-filter-card mb-4">
+            <div class="search-filter-header">
+                <h5 class="mb-0 neon-text">
+                    <i class="bi bi-funnel"></i> Search & Filter
+                </h5>
+            </div>
+            <div class="search-filter-body">
+                <form method="get" class="row g-3">
+                    <!-- Search Bar -->
+                    <div class="col-md-4">
+                        <label class="form-label-glass">
+                            <i class="bi bi-search"></i> Search
+                        </label>
+                        <input type="text" name="search" class="form-control-glass"
+                               placeholder="Room name, campus, or description..."
+                               value="@Model.SearchTerm" />
+                    </div>
 
-                <!-- Campus Filter -->
-                <div class="col-md-3">
-                    <label class="form-label">
-                        <i class="bi bi-building"></i> Campus
-                    </label>
-                    <select name="campusId" class="form-select">
-                        @foreach (var option in Model.CampusOptions)
-                        {
-                            <option value="@option.Value" selected="@option.Selected">
-                                @option.Text
+                    <!-- Campus Filter -->
+                    <div class="col-md-3">
+                        <label class="form-label-glass">
+                            <i class="bi bi-building"></i> Campus
+                        </label>
+                        <select name="campusId" class="form-select-glass">
+                            @foreach (var option in Model.CampusOptions)
+                            {
+                                <option value="@option.Value" selected="@option.Selected">
+                                    @option.Text
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Type Filter -->
+                    <div class="col-md-2">
+                        <label class="form-label-glass">
+                            <i class="bi bi-tag"></i> Type
+                        </label>
+                        <select name="type" class="form-select-glass">
+                            <option value="">All Types</option>
+                            <option value="@((int)RoomType.Classroom)"
+                                    selected="@(Model.FilterType == RoomType.Classroom)">
+                                Classroom
                             </option>
-                        }
-                    </select>
-                </div>
+                            <option value="@((int)RoomType.Lab)"
+                                    selected="@(Model.FilterType == RoomType.Lab)">
+                                Laboratory
+                            </option>
+                            <option value="@((int)RoomType.Stadium)"
+                                    selected="@(Model.FilterType == RoomType.Stadium)">
+                                Stadium
+                            </option>
+                        </select>
+                    </div>
 
-                <!-- Type Filter -->
-                <div class="col-md-2">
-                    <label class="form-label">
-                        <i class="bi bi-tag"></i> Type
-                    </label>
-                    <select name="type" class="form-select">
-                        <option value="">All Types</option>
-                        <option value="@((int)RoomType.Classroom)" 
-                                selected="@(Model.FilterType == RoomType.Classroom)">
-                            Classroom
-                        </option>
-                        <option value="@((int)RoomType.Lab)" 
-                                selected="@(Model.FilterType == RoomType.Lab)">
-                            Laboratory
-                        </option>
-                        <option value="@((int)RoomType.Stadium)" 
-                                selected="@(Model.FilterType == RoomType.Stadium)">
-                            Stadium
-                        </option>
-                    </select>
-                </div>
+                    <!-- Status Filter -->
+                    <div class="col-md-2">
+                        <label class="form-label-glass">
+                            <i class="bi bi-circle"></i> Status
+                        </label>
+                        <select name="status" class="form-select-glass">
+                            <option value="">All Status</option>
+                            <option value="@((int)BookingStatus.Approved)"
+                                    selected="@(Model.FilterStatus == BookingStatus.Approved)">
+                                Available
+                            </option>
+                            <option value="@((int)BookingStatus.Rejected)"
+                                    selected="@(Model.FilterStatus == BookingStatus.Rejected)">
+                                Unavailable
+                            </option>
+                        </select>
+                    </div>
 
-                <!-- Status Filter -->
-                <div class="col-md-2">
-                    <label class="form-label">
-                        <i class="bi bi-circle"></i> Status
-                    </label>
-                    <select name="status" class="form-select">
-                        <option value="">All Status</option>
-                        <option value="@((int)BookingStatus.Approved)" 
-                                selected="@(Model.FilterStatus == BookingStatus.Approved)">
-                            Available
-                        </option>
-                        <option value="@((int)BookingStatus.Rejected)" 
-                                selected="@(Model.FilterStatus == BookingStatus.Rejected)">
-                            Unavailable
-                        </option>
-                    </select>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="col-md-1 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary w-100">
-                        <i class="bi bi-search"></i>
-                    </button>
-                </div>
-                <div class="col-md-12 text-end">
-                    @if (!string.IsNullOrEmpty(Model.SearchTerm) || Model.FilterCampusId.HasValue || 
-                         Model.FilterType.HasValue || Model.FilterStatus.HasValue)
-                    {
-                        <a asp-page="Index" class="btn btn-outline-secondary">
-                            <i class="bi bi-x-circle"></i> Clear Filters
-                        </a>
-                    }
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Rooms Table/Grid -->
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">
-                        <i class="bi bi-list-ul"></i> Room List 
-                        <span class="badge bg-light text-dark ms-2">@Model.Rooms.Count</span>
-                    </h5>
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-sm btn-light active" id="viewTable">
-                            <i class="bi bi-table"></i> Table
-                        </button>
-                        <button type="button" class="btn btn-sm btn-outline-light" id="viewGrid">
-                            <i class="bi bi-grid-3x3"></i> Grid
+                    <!-- Action Buttons -->
+                    <div class="col-md-1 d-flex align-items-end">
+                        <button type="submit" class="btn btn-neon-primary w-100">
+                            <i class="bi bi-search"></i>
                         </button>
                     </div>
-                </div>
-                <div class="card-body p-0">
-                    @if (Model.Rooms.Any())
-                    {
-                        <!-- Table View -->
-                        <div id="tableView">
-                            <div class="table-responsive">
-                                <table class="table table-hover table-striped mb-0">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th style="width: 5%">#</th>
-                                            <th style="width: 20%">
-                                                <i class="bi bi-door-open"></i> Room Name
-                                            </th>
-                                            <th style="width: 20%">
-                                                <i class="bi bi-building"></i> Campus
-                                            </th>
-                                            <th style="width: 10%">
-                                                <i class="bi bi-tag"></i> Type
-                                            </th>
-                                            <th style="width: 10%" class="text-center">
-                                                <i class="bi bi-people"></i> Capacity
-                                            </th>
-                                            <th style="width: 10%" class="text-center">
-                                                <i class="bi bi-circle"></i> Status
-                                            </th>
-                                            <th style="width: 10%" class="text-center">
-                                                <i class="bi bi-calendar-check"></i> Bookings
-                                            </th>
-                                            <th style="width: 15%" class="text-center">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @for (int i = 0; i < Model.Rooms.Count; i++)
-                                        {
-                                            var room = Model.Rooms[i];
-                                            var statusBadge = room.CurrentStatus == BookingStatus.Approved 
-                                                ? "bg-success" : "bg-danger";
-                                            var typeBadge = room.Type switch
-                                            {
-                                                RoomType.Classroom => "bg-primary",
-                                                RoomType.Lab => "bg-info",
-                                                RoomType.Stadium => "bg-warning",
-                                                _ => "bg-secondary"
-                                            };
-                                            
+                    <div class="col-md-12 text-end">
+                        @if (!string.IsNullOrEmpty(Model.SearchTerm) || Model.FilterCampusId.HasValue ||
+                                                Model.FilterType.HasValue || Model.FilterStatus.HasValue)
+                        {
+                            <a asp-page="Index" class="btn btn-glass-secondary">
+                                <i class="bi bi-x-circle"></i> Clear Filters
+                            </a>
+                        }
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Rooms Table/Grid -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-card-glass">
+                    <div class="table-header-glass">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                            <h5 class="mb-0 neon-text">
+                                <i class="bi bi-list-ul"></i> Room List
+                                <span class="badge-count ms-2">@Model.Rooms.Count</span>
+                            </h5>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn-view-toggle active" id="viewTable">
+                                    <i class="bi bi-table"></i> Table
+                                </button>
+                                <button type="button" class="btn-view-toggle" id="viewGrid">
+                                    <i class="bi bi-grid-3x3"></i> Grid
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        @if (Model.Rooms.Any())
+                        {
+                            <!-- Table View -->
+                            <div id="tableView">
+                                <div class="table-responsive">
+                                    <table class="table table-glass">
+                                        <thead>
                                             <tr>
-                                                <td><strong>@(i + 1)</strong></td>
-                                                <td>
-                                                    <strong class="text-primary">@room.Name</strong>
-                                                </td>
-                                                <td>
-                                                    <i class="bi bi-building text-muted"></i> @room.CampusName
-                                                </td>
-                                                <td>
-                                                    <span class="badge @typeBadge">@room.TypeDisplay</span>
-                                                </td>
-                                                <td class="text-center">
-                                                    <span class="badge bg-secondary rounded-pill">
-                                                        @room.Capacity
-                                                    </span>
-                                                </td>
-                                                <td class="text-center">
-                                                    <span class="badge @statusBadge">
-                                                        @room.CurrentStatusDisplay
-                                                    </span>
-                                                </td>
-                                                <td class="text-center">
-                                                    @if (room.TotalBookings > 0)
-                                                    {
-                                                        <span class="badge bg-info rounded-pill">
-                                                            @room.TotalBookings
+                                                <th style="width: 5%">#</th>
+                                                <th style="width: 20%">
+                                                    <i class="bi bi-door-open me-1"></i> Room Name
+                                                </th>
+                                                <th style="width: 20%">
+                                                    <i class="bi bi-building me-1"></i> Campus
+                                                </th>
+                                                <th style="width: 10%">
+                                                    <i class="bi bi-tag me-1"></i> Type
+                                                </th>
+                                                <th style="width: 10%" class="text-center">
+                                                    <i class="bi bi-people me-1"></i> Capacity
+                                                </th>
+                                                <th style="width: 10%" class="text-center">
+                                                    <i class="bi bi-circle me-1"></i> Status
+                                                </th>
+                                                <th style="width: 10%" class="text-center">
+                                                    <i class="bi bi-calendar-check me-1"></i> Bookings
+                                                </th>
+                                                <th style="width: 15%" class="text-center">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @for (int i = 0; i < Model.Rooms.Count; i++)
+                                            {
+                                                var room = Model.Rooms[i];
+                                                var statusBadge = room.CurrentStatus == BookingStatus.Approved
+                                                ? "badge-glass-success" : "badge-glass-danger";
+                                                var typeBadge = room.Type switch
+                                                {
+                                                    RoomType.Classroom => "badge-neon",
+                                                    RoomType.Lab => "badge-glass-info",
+                                                    RoomType.Stadium => "badge-glass-warning",
+                                                    _ => "badge-glass-secondary"
+                                                };
+
+                                                <tr>
+                                                    <td><strong class="neon-text">@(i + 1)</strong></td>
+                                                    <td>
+                                                        <strong class="neon-text">@room.Name</strong>
+                                                    </td>
+                                                    <td>
+                                                        <i class="bi bi-building text-muted-glass"></i>
+                                                        <span style="color: #d1d5db;">@room.CampusName</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge @typeBadge">@room.TypeDisplay</span>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <span class="badge badge-neon">
+                                                            @room.Capacity
                                                         </span>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class="text-muted">0</span>
-                                                    }
-                                                </td>
-                                                <td>
-                                                    <div class="btn-group btn-group-sm" role="group">
-                                                        <a asp-page="RoomSchedules" asp-route-id="@room.Id" 
-                                                           class="btn btn-primary" title="View Schedules">
-                                                            <i class="bi bi-calendar-week"></i>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <span class="badge @statusBadge">
+                                                            @room.CurrentStatusDisplay
+                                                        </span>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        @if (room.TotalBookings > 0)
+                                                        {
+                                                            <span class="badge badge-glass-info">
+                                                                @room.TotalBookings
+                                                            </span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="text-muted-glass">0</span>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        <div class="d-flex gap-2 justify-content-center">
+                                                            <a asp-page="RoomSchedules" asp-route-id="@room.Id"
+                                                               class="btn btn-action-glass btn-action-primary" title="View Schedules">
+                                                                <i class="bi bi-calendar-week"></i>
+                                                            </a>
+                                                            <a asp-page="Details" asp-route-id="@room.Id"
+                                                               class="btn btn-action-glass btn-action-info" title="View Details">
+                                                                <i class="bi bi-eye"></i>
+                                                            </a>
+                                                            <a asp-page="Edit" asp-route-id="@room.Id"
+                                                               class="btn btn-action-glass btn-action-warning" title="Edit">
+                                                                <i class="bi bi-pencil"></i>
+                                                            </a>
+                                                            <button type="button" class="btn btn-action-glass btn-action-danger"
+                                                                    onclick="confirmDelete('@room.Id', '@room.Name')"
+                                                                    title="Delete">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Grid View (Hidden by default) -->
+                            <div id="gridView" class="p-3" style="display: none;">
+                                <div class="row g-4">
+                                    @foreach (var room in Model.Rooms)
+                                    {
+                                        var statusBadge = room.CurrentStatus == BookingStatus.Approved
+                                        ? "badge-glass-success" : "badge-glass-danger";
+                                        var typeBadge = room.Type switch
+                                        {
+                                            RoomType.Classroom => "badge-neon",
+                                            RoomType.Lab => "badge-glass-info",
+                                            RoomType.Stadium => "badge-glass-warning",
+                                            _ => "badge-glass-secondary"
+                                        };
+                                        var headerClass = room.Type switch
+                                        {
+                                            RoomType.Classroom => "background: rgba(255, 138, 0, 0.2);",
+                                            RoomType.Lab => "background: rgba(6, 182, 212, 0.2);",
+                                            RoomType.Stadium => "background: rgba(245, 158, 11, 0.2);",
+                                            _ => "background: rgba(255, 255, 255, 0.1);"
+                                        };
+
+                                        <div class="col-md-6 col-lg-4 col-xl-3">
+                                            <div class="room-card-glass">
+                                                <div class="room-card-header-glass" style="@headerClass">
+                                                    <h6 class="mb-0 neon-text">
+                                                        <i class="bi bi-door-open"></i> @room.Name
+                                                    </h6>
+                                                </div>
+                                                <div class="room-card-body-glass">
+                                                    <p class="mb-2 text-muted-glass">
+                                                        <i class="bi bi-building"></i>
+                                                        <small>@room.CampusName</small>
+                                                    </p>
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span class="badge @typeBadge">@room.TypeDisplay</span>
+                                                        <span class="badge @statusBadge">@room.CurrentStatusDisplay</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span class="text-muted-glass">
+                                                            <i class="bi bi-people"></i> Capacity:
+                                                        </span>
+                                                        <strong class="neon-text">@room.Capacity</strong>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between">
+                                                        <span class="text-muted-glass">
+                                                            <i class="bi bi-calendar-check"></i> Bookings:
+                                                        </span>
+                                                        <strong class="neon-text">@room.TotalBookings</strong>
+                                                    </div>
+                                                </div>
+                                                <div class="room-card-footer-glass">
+                                                    <div class="d-flex gap-2">
+                                                        <a asp-page="Details" asp-route-id="@room.Id"
+                                                           class="btn btn-action-glass btn-action-info flex-fill">
+                                                            <i class="bi bi-eye"></i> View
                                                         </a>
-                                                        <a asp-page="Details" asp-route-id="@room.Id" 
-                                                           class="btn btn-info" title="View Details">
-                                                            <i class="bi bi-eye"></i>
+                                                        <a asp-page="Edit" asp-route-id="@room.Id"
+                                                           class="btn btn-action-glass btn-action-warning flex-fill">
+                                                            <i class="bi bi-pencil"></i> Edit
                                                         </a>
-                                                        <a asp-page="Edit" asp-route-id="@room.Id" 
-                                                           class="btn btn-warning" title="Edit">
-                                                            <i class="bi bi-pencil"></i>
-                                                        </a>
-                                                        <button type="button" class="btn btn-danger" 
-                                                                onclick="confirmDelete('@room.Id', '@room.Name')" 
-                                                                title="Delete">
+                                                        <button type="button"
+                                                                class="btn btn-action-glass btn-action-danger flex-fill"
+                                                                onclick="confirmDelete('@room.Id', '@room.Name')">
                                                             <i class="bi bi-trash"></i>
                                                         </button>
                                                     </div>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- Grid View (Hidden by default) -->
-                        <div id="gridView" class="p-3" style="display: none;">
-                            <div class="row g-3">
-                                @foreach (var room in Model.Rooms)
-                                {
-                                    var statusBadge = room.CurrentStatus == BookingStatus.Approved 
-                                        ? "bg-success" : "bg-danger";
-                                    var typeBadge = room.Type switch
-                                    {
-                                        RoomType.Classroom => "bg-primary",
-                                        RoomType.Lab => "bg-info",
-                                        RoomType.Stadium => "bg-warning",
-                                        _ => "bg-secondary"
-                                    };
-                                    
-                                    <div class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="card h-100 shadow-sm hover-shadow">
-                                            <div class="card-header @typeBadge text-white">
-                                                <h6 class="mb-0">
-                                                    <i class="bi bi-door-open"></i> @room.Name
-                                                </h6>
-                                            </div>
-                                            <div class="card-body">
-                                                <p class="mb-2">
-                                                    <i class="bi bi-building text-muted"></i> 
-                                                    <small>@room.CampusName</small>
-                                                </p>
-                                                <div class="d-flex justify-content-between mb-2">
-                                                    <span class="badge @typeBadge">@room.TypeDisplay</span>
-                                                    <span class="badge @statusBadge">@room.CurrentStatusDisplay</span>
-                                                </div>
-                                                <div class="d-flex justify-content-between mb-2">
-                                                    <span>
-                                                        <i class="bi bi-people"></i> Capacity:
-                                                    </span>
-                                                    <strong>@room.Capacity</strong>
-                                                </div>
-                                                <div class="d-flex justify-content-between">
-                                                    <span>
-                                                        <i class="bi bi-calendar-check"></i> Bookings:
-                                                    </span>
-                                                    <strong>@room.TotalBookings</strong>
-                                                </div>
-                                            </div>
-                                            <div class="card-footer bg-light">
-                                                <div class="d-flex gap-2">
-                                                    <a asp-page="Details" asp-route-id="@room.Id" 
-                                                       class="btn btn-sm btn-info flex-fill">
-                                                        <i class="bi bi-eye"></i> View
-                                                    </a>
-                                                    <a asp-page="Edit" asp-route-id="@room.Id" 
-                                                       class="btn btn-sm btn-warning flex-fill">
-                                                        <i class="bi bi-pencil"></i> Edit
-                                                    </a>
-                                                    <button type="button" 
-                                                            class="btn btn-sm btn-danger flex-fill"
-                                                            onclick="confirmDelete('@room.Id', '@room.Name')">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                }
+                                    }
+                                </div>
                             </div>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="text-center py-5">
-                            <i class="bi bi-inbox display-1 text-muted"></i>
-                            <h4 class="text-muted mt-3">
-                                @if (!string.IsNullOrEmpty(Model.SearchTerm) || Model.FilterCampusId.HasValue || 
-                                     Model.FilterType.HasValue || Model.FilterStatus.HasValue)
+                        }
+                        else
+                        {
+                            <div class="empty-state-glass">
+                                <i class="bi bi-inbox" style="font-size: 5rem;"></i>
+                                <h4 class="mt-3">
+                                    @if (!string.IsNullOrEmpty(Model.SearchTerm) || Model.FilterCampusId.HasValue ||
+                                                                    Model.FilterType.HasValue || Model.FilterStatus.HasValue)
+                                    {
+                                        <text>No rooms found matching your filters</text>
+                                    }
+                                    else
+                                    {
+                                        <text>No rooms available</text>
+                                    }
+                                </h4>
+                                @if (string.IsNullOrEmpty(Model.SearchTerm) && !Model.FilterCampusId.HasValue)
                                 {
-                                    <text>No rooms found matching your filters</text>
+                                    <p>Get started by creating your first room</p>
+                                    <a asp-page="Create" class="btn btn-neon-primary btn-lg mt-3">
+                                        <i class="bi bi-plus-circle"></i> Create First Room
+                                    </a>
                                 }
                                 else
                                 {
-                                    <text>No rooms available</text>
+                                    <a asp-page="Index" class="btn btn-glass-secondary mt-3">
+                                        <i class="bi bi-x-circle"></i> Clear Filters
+                                    </a>
                                 }
-                            </h4>
-                            @if (string.IsNullOrEmpty(Model.SearchTerm) && !Model.FilterCampusId.HasValue)
-                            {
-                                <p class="text-muted">Get started by creating your first room</p>
-                                <a asp-page="Create" class="btn btn-primary btn-lg mt-3">
-                                    <i class="bi bi-plus-circle"></i> Create First Room
-                                </a>
-                            }
-                            else
-                            {
-                                <a asp-page="Index" class="btn btn-outline-secondary mt-3">
-                                    <i class="bi bi-x-circle"></i> Clear Filters
-                                </a>
-                            }
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Pagination Controls -->
+                    @if (Model.Rooms.TotalCount > 0)
+                    {
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <div class="glass-card-header">
+                                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                                        <!-- Page Size Selector -->
+                                        <div class="d-flex align-items-center gap-3">
+                                            <label class="form-label-glass mb-0">
+                                                <i class="bi bi-list-ol"></i> Items per page:
+                                            </label>
+                                            <select class="form-select-glass" style="width: auto;" 
+                                                    onchange="changePageSize(this.value)">
+                                                @foreach (var option in Model.PageSizeOptions)
+                                                {
+                                                    <option value="@option.Value" selected="@option.Selected">
+                                                        @option.Text
+                                                    </option>
+                                                }
+                                            </select>
+                                            <span class="text-muted-glass">
+                                                Showing @((Model.Rooms.CurrentPage - 1) * Model.Rooms.PageSize + 1)
+                                                to @Math.Min(Model.Rooms.CurrentPage * Model.Rooms.PageSize, Model.Rooms.TotalCount)
+                                                of @Model.Rooms.TotalCount rooms
+                                            </span>
+                                        </div>
+
+                                        <!-- Page Navigation -->
+                                        @if (Model.Rooms.TotalPages > 1)
+                                        {
+                                            <nav aria-label="Page navigation">
+                                                <ul class="pagination pagination-glass mb-0">
+                                                    <!-- First Page -->
+                                                    <li class="page-item @(Model.Rooms.CurrentPage == 1 ? "disabled" : "")">
+                                                        <a class="page-link-glass" 
+                                                           href="@GetPageUrl(1)"
+                                                           aria-label="First">
+                                                            <i class="bi bi-chevron-double-left"></i>
+                                                        </a>
+                                                    </li>
+
+                                                    <!-- Previous Page -->
+                                                    <li class="page-item @(Model.Rooms.CurrentPage == 1 ? "disabled" : "")">
+                                                        <a class="page-link-glass" 
+                                                           href="@GetPageUrl(Model.Rooms.CurrentPage - 1)"
+                                                           aria-label="Previous">
+                                                            <i class="bi bi-chevron-left"></i>
+                                                        </a>
+                                                    </li>
+
+                                                    <!-- Page Numbers -->
+                                                    @{
+                                                        var startPage = Math.Max(1, Model.Rooms.CurrentPage - 2);
+                                                        var endPage = Math.Min(Model.Rooms.TotalPages, Model.Rooms.CurrentPage + 2);
+
+                                                        // Adjust if we're near the beginning or end
+                                                        if (endPage - startPage < 4)
+                                                        {
+                                                            if (startPage == 1)
+                                                            {
+                                                                endPage = Math.Min(Model.Rooms.TotalPages, startPage + 4);
+                                                            }
+                                                            else if (endPage == Model.Rooms.TotalPages)
+                                                            {
+                                                                startPage = Math.Max(1, endPage - 4);
+                                                            }
+                                                        }
+
+                                                        for (int i = startPage; i <= endPage; i++)
+                                                        {
+                                                            <li class="page-item @(i == Model.Rooms.CurrentPage ? "active" : "")">
+                                                                <a class="page-link-glass" href="@GetPageUrl(i)">@i</a>
+                                                            </li>
+                                                        }
+                                                    }
+
+                                                    <!-- Next Page -->
+                                                    <li class="page-item @(Model.Rooms.CurrentPage == Model.Rooms.TotalPages ? "disabled" : "")">
+                                                        <a class="page-link-glass" 
+                                                           href="@GetPageUrl(Model.Rooms.CurrentPage + 1)"
+                                                           aria-label="Next">
+                                                            <i class="bi bi-chevron-right"></i>
+                                                        </a>
+                                                    </li>
+
+                                                    <!-- Last Page -->
+                                                    <li class="page-item @(Model.Rooms.CurrentPage == Model.Rooms.TotalPages ? "disabled" : "")">
+                                                        <a class="page-link-glass" 
+                                                           href="@GetPageUrl(Model.Rooms.TotalPages)"
+                                                           aria-label="Last">
+                                                            <i class="bi bi-chevron-double-right"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     }
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title">
+        <div class="modal-content-glass">
+            <div class="modal-header-glass-danger">
+                <h5 class="modal-title" style="color: #f87171;">
                     <i class="bi bi-exclamation-triangle"></i> Confirm Delete
                 </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" style="filter: brightness(0) invert(1);"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body-glass">
                 <p class="mb-3">
-                    Are you sure you want to delete room <strong id="roomName" class="text-danger"></strong>?
+                    Are you sure you want to delete room <strong id="roomName" style="color: #f87171;"></strong>?
                 </p>
-                <div class="alert alert-warning">
-                    <i class="bi bi-info-circle"></i> 
+                <div class="alert-glass-danger">
+                    <i class="bi bi-info-circle"></i>
                     <small>This action cannot be undone. The room will be soft deleted.</small>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <div class="modal-footer-glass">
+                <button type="button" class="btn btn-glass-secondary" data-bs-dismiss="modal">
                     <i class="bi bi-x-circle"></i> Cancel
                 </button>
                 <form method="post" asp-page-handler="Delete" class="d-inline">
                     <input type="hidden" name="id" id="roomId" />
-                    <button type="submit" class="btn btn-danger">
+                    <button type="submit" class="btn btn-neon-primary" style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); border-color: #dc2626;">
                         <i class="bi bi-trash"></i> Delete Room
                     </button>
                 </form>
@@ -396,14 +956,6 @@
         </div>
     </div>
 </div>
-
-<style>
-    .hover-shadow:hover {
-        transform: translateY(-5px);
-        transition: all 0.3s ease;
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-    }
-</style>
 
 @section Scripts {
     <script>
@@ -420,31 +972,57 @@
             document.getElementById('tableView').style.display = 'block';
             document.getElementById('gridView').style.display = 'none';
             this.classList.add('active');
-            this.classList.remove('btn-outline-light');
-            this.classList.add('btn-light');
             document.getElementById('viewGrid').classList.remove('active');
-            document.getElementById('viewGrid').classList.add('btn-outline-light');
-            document.getElementById('viewGrid').classList.remove('btn-light');
         });
 
         document.getElementById('viewGrid').addEventListener('click', function() {
             document.getElementById('tableView').style.display = 'none';
             document.getElementById('gridView').style.display = 'block';
             this.classList.add('active');
-            this.classList.remove('btn-outline-light');
-            this.classList.add('btn-light');
             document.getElementById('viewTable').classList.remove('active');
-            document.getElementById('viewTable').classList.add('btn-outline-light');
-            document.getElementById('viewTable').classList.remove('btn-light');
         });
+
+        // Page size change handler
+        function changePageSize(newPageSize) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('pageSize', newPageSize);
+            url.searchParams.set('pageNumber', '1'); // Reset to first page when page size changes
+            window.location.href = url.toString();
+        }
 
         // Auto-hide alerts
         setTimeout(function() {
-            var alerts = document.querySelectorAll('.alert');
+            var alerts = document.querySelectorAll('[class*="alert-glass"]');
             alerts.forEach(function(alert) {
-                var bsAlert = new bootstrap.Alert(alert);
+                var bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
                 bsAlert.close();
             });
         }, 5000);
     </script>
+}
+
+@functions {
+    private string GetPageUrl(int pageNumber)
+    {
+        var queryParams = new Dictionary<string, string>
+        {
+            { "pageNumber", pageNumber.ToString() },
+            { "pageSize", Model.CurrentPageSize.ToString() }
+        };
+
+        if (!string.IsNullOrEmpty(Model.SearchTerm))
+            queryParams["search"] = Model.SearchTerm;
+
+        if (Model.FilterCampusId.HasValue)
+            queryParams["campusId"] = Model.FilterCampusId.Value.ToString();
+
+        if (Model.FilterType.HasValue)
+            queryParams["type"] = ((int)Model.FilterType.Value).ToString();
+
+        if (Model.FilterStatus.HasValue)
+            queryParams["status"] = ((int)Model.FilterStatus.Value).ToString();
+
+        var queryString = string.Join("&", queryParams.Select(kvp => $"{kvp.Key}={Uri.EscapeDataString(kvp.Value)}"));
+        return $"?{queryString}";
+    }
 }

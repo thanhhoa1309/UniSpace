@@ -5,199 +5,346 @@
 }
 
 <style>
+    /* Dark Background */
     .index-dark-bg {
-        background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
         min-height: 100vh;
         position: relative;
+        padding: 40px 0;
     }
 
-    .neon-glow-text {
-        color: #00ffff;
-        text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-    }
-
+    /* Glassmorphism Card */
     .glass-morphism {
-        background: rgba(20, 20, 30, 0.6);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 20px;
+        background: rgba(45, 45, 45, 0.5);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
         transition: all 0.3s ease;
     }
 
         .glass-morphism:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 40px rgba(0, 255, 255, 0.3);
-            border-color: rgba(0, 255, 255, 0.5);
+            box-shadow: 0 12px 40px 0 rgba(255, 138, 0, 0.2);
+            border: 1px solid rgba(255, 138, 0, 0.4);
         }
 
-    .neon-button {
-        background: transparent;
-        border: 2px solid #00ffff;
-        color: #00ffff;
-        padding: 0.75rem 2rem;
-        border-radius: 50px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        transition: all 0.3s ease;
-        box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+    /* Hero Glass Card */
+    .hero-glass-card {
+        background: rgba(45, 45, 45, 0.4);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 20px;
+        padding: 60px 40px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
     }
 
-        .neon-button:hover {
-            background: #00ffff;
-            color: #000;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
-            transform: scale(1.05);
-        }
-
-    .neon-button-secondary {
-        border-color: #ffa500;
-        color: #ffa500;
-        box-shadow: 0 0 10px rgba(255, 165, 0, 0.3);
-    }
-        .neon-button-secondary:hover {
-            background: #ffa500;
-            box-shadow: 0 0 20px rgba(255, 165, 0, 0.8);
-        }
-
-    .neon-button-success {
-        border-color: #00ff88;
-        color: #00ff88;
-        box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
-    }
-
-        .neon-button-success:hover {
-            background: #00ff88;
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
-        }
-
-    .neon-button-warning {
-        border-color: #ffa500;
-        color: #ffa500;
-        box-shadow: 0 0 10px rgba(255, 165, 0, 0.3);
-    }
-
-        .neon-button-warning:hover {
-            background: #ffa500;
-            box-shadow: 0 0 20px rgba(255, 165, 0, 0.8);
-        }
-
+    /* Neon Text */
     .neon-title {
-        background: linear-gradient(135deg, #00ffff, #0080ff, #8000ff);
+        background: linear-gradient(135deg, #ff8a00, #ffb700, #ff8a00);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.5));
+        filter: drop-shadow(0 0 20px rgba(255, 138, 0, 0.5));
+        font-weight: 800;
     }
 
+    .neon-glow-text {
+        color: #ff8a00;
+        text-shadow: 0 0 10px rgba(255, 138, 0, 0.5);
+        font-weight: 600;
+    }
+
+    .text-neon-green {
+        color: #10b981;
+    }
+
+    .text-neon-orange {
+        color: #ff8a00;
+    }
+
+    .text-neon-cyan {
+        color: #06b6d4;
+    }
+
+    /* Neon Icons */
     .neon-icon {
         filter: drop-shadow(0 0 15px currentColor);
     }
 
-    .text-neon-green {
-        color: #00ff88;
+    /* Buttons */
+    .neon-button {
+        background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 100%);
+        border: 2px solid #ff8a00;
+        color: #fff;
+        padding: 12px 32px;
+        border-radius: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 20px rgba(255, 138, 0, 0.4);
+        text-decoration: none;
+        display: inline-block;
     }
 
-    .text-neon-orange {
-        color: #ffa500;
+        .neon-button:hover {
+            background: linear-gradient(135deg, #ff6b00 0%, #ff8a00 100%);
+            box-shadow: 0 0 30px rgba(255, 138, 0, 0.7), 0 0 40px rgba(255, 138, 0, 0.5);
+            transform: translateY(-2px);
+            color: #fff;
+        }
+
+    .neon-button-secondary {
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        color: #fff;
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        font-weight: 700;
     }
 
+        .neon-button-secondary:hover {
+            background: rgba(255, 138, 0, 0.2);
+            border-color: rgba(255, 138, 0, 0.5);
+            color: #ff8a00;
+            box-shadow: 0 0 25px rgba(255, 138, 0, 0.4);
+        }
+
+    .neon-button-success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        border: 2px solid #10b981;
+        color: #fff;
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+        font-weight: 700;
+    }
+
+        .neon-button-success:hover {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.7);
+            transform: translateY(-2px);
+            color: #fff;
+        }
+
+    .neon-button-warning {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        border: 2px solid #f59e0b;
+        color: #1a1a1a;
+        box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+    }
+
+        .neon-button-warning:hover {
+            background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.7);
+            transform: translateY(-2px);
+            color: #1a1a1a;
+        }
+
+    /* Feature Cards */
+    .feature-card {
+        background: linear-gradient(135deg, rgba(45, 45, 45, 0.6) 0%, rgba(35, 35, 35, 0.6) 100%);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 15px;
+        padding: 40px 30px;
+        height: 100%;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 138, 0, 0.5);
+            box-shadow: 0 12px 40px 0 rgba(255, 138, 0, 0.2);
+        }
+
+    .feature-icon-wrapper {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: rgba(255, 138, 0, 0.1);
+        border: 2px solid rgba(255, 138, 0, 0.3);
+    }
+
+    .feature-card:hover .feature-icon-wrapper {
+        background: rgba(255, 138, 0, 0.2);
+        border-color: rgba(255, 138, 0, 0.5);
+    }
+
+    /* How It Works Section */
+    .how-it-works-card {
+        background: rgba(45, 45, 45, 0.5);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 15px;
+        padding: 50px 40px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    }
+
+    .step-card {
+        background: rgba(255, 138, 0, 0.05);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 12px;
+        padding: 30px 20px;
+        transition: all 0.3s ease;
+    }
+
+        .step-card:hover {
+            background: rgba(255, 138, 0, 0.1);
+            border-color: rgba(255, 138, 0, 0.4);
+            transform: translateY(-5px);
+        }
+
+    .step-number {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1a1a1a;
+        box-shadow: 0 0 20px rgba(255, 138, 0, 0.5);
+    }
+
+    /* Text Colors */
+    .text-light-glass {
+        color: #e0e0e0;
+    }
+
+    .text-muted-glass {
+        color: #9ca3af;
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .hero-glass-card {
+            padding: 40px 30px;
+        }
+
+        .neon-title {
+            font-size: 2.5rem !important;
+        }
+
+        .feature-card {
+            padding: 30px 20px;
+            margin-bottom: 20px;
+        }
+
+        .how-it-works-card {
+            padding: 40px 30px;
+        }
+    }
 </style>
 
 <div class="index-dark-bg">
     <div class="container-fluid py-5">
         <!-- Hero Section -->
-        <div class="text-center mb-5">
-            <h1 class="display-3 fw-bold neon-title">
-                <i class="bi bi-mortarboard neon-icon"></i> Welcome to UniSpace
-            </h1>
-            <p class="lead fs-4 neon-glow-text">University Space Management System</p>
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-10">
+                <div class="hero-glass-card text-center">
+                    <h1 class="display-3 fw-bold neon-title mb-4">
+                        <i class="bi bi-mortarboard neon-icon"></i> Welcome to UniSpace
+                    </h1>
+                    <p class="lead fs-4 neon-glow-text mb-4">University Space Management System</p>
 
-            @if (User.Identity?.IsAuthenticated == true)
-            {
-                <div class="mt-4">
-                    <h3 class="mb-3 text-white">Hello, <span class="neon-glow-text">@User.Identity.Name</span>!</h3>
-                    <p class="mb-4 text-white">Ready to manage your bookings?</p>
-                    <div class="d-flex justify-content-center gap-3">
-                        <a asp-page="/Dashboard" class="btn neon-button btn-lg">
-                            <i class="bi bi-speedometer2"></i> Dashboard
-                        </a>
-                        <a asp-page="/Bookings/SearchRooms" class="btn neon-button neon-button-success btn-lg">
-                            <i class="bi bi-search"></i> Search Rooms
-                        </a>
-                    </div>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <div class="mt-4">
+                            <h3 class="mb-3 text-light-glass">Hello, <span class="neon-glow-text">@User.Identity.Name</span>!</h3>
+                            <p class="mb-4 text-muted-glass fs-5">Ready to manage your bookings?</p>
+                            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                                <a asp-page="/Dashboard" class="btn neon-button btn-lg">
+                                    <i class="bi bi-speedometer2"></i> Dashboard
+                                </a>
+                                <a asp-page="/Bookings/SearchRooms" class="btn neon-button-success btn-lg">
+                                    <i class="bi bi-search"></i> Search Rooms
+                                </a>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="mt-4">
+                            <p class="fs-5 mb-4 text-light-glass">Manage campus rooms, bookings, and reports efficiently.</p>
+                            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                                <a asp-page="/Auth/Login" class="btn neon-button btn-lg">
+                                    <i class="bi bi-box-arrow-in-right"></i> Login
+                                </a>
+                                <a asp-page="/Auth/Register" class="btn neon-button-secondary btn-lg">
+                                    <i class="bi bi-person-plus"></i> Register
+                                </a>
+                            </div>
+                        </div>
+                    }
                 </div>
-            }
-            else
-            {
-                <div class="mt-4">
-                    <p class="fs-5 mb-4 text-white">Manage campus rooms, bookings, and reports efficiently.</p>
-                    <div class="d-flex justify-content-center gap-3">
-                        <a asp-page="/Auth/Login" class="btn neon-button btn-lg">
-                            <i class="bi bi-box-arrow-in-right"></i> Login
-                        </a>
-                        <a asp-page="/Auth/Register" class="btn neon-button neon-button-secondary btn-lg">
-                            <i class="bi bi-person-plus"></i> Register
-                        </a>
-                    </div>
-                </div>
-            }
+            </div>
         </div>
 
         <!-- Features Section -->
         <div class="row mt-5 g-4">
             <div class="col-md-4">
-                <div class="card h-100 glass-morphism shadow-sm">
-                    <div class="card-body text-center p-4">
-                        <div class="mb-3 neon-glow-text">
-                            <i class="bi bi-door-open neon-icon" style="font-size: 3.5rem;"></i>
-                        </div>
-                        <h5 class="card-title fw-bold text-white">Room Management</h5>
-                        <p class="card-text text-white-50">Browse and manage available rooms across different campuses. View real-time availability and room details.</p>
-                        @if (User.Identity?.IsAuthenticated == true)
-                        {
-                            <a asp-page="/Bookings/SearchRooms" class="btn neon-button mt-2">
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="bi bi-door-open neon-icon text-neon-orange" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h5 class="card-title fw-bold text-center mb-3 neon-glow-text">Room Management</h5>
+                    <p class="card-text text-center text-muted-glass mb-4">Browse and manage available rooms across different campuses. View real-time availability and room details.</p>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <div class="text-center">
+                            <a asp-page="/Bookings/SearchRooms" class="btn neon-button">
                                 <i class="bi bi-search"></i> Browse Rooms
                             </a>
-                        }
-                    </div>
+                        </div>
+                    }
                 </div>
             </div>
 
             <div class="col-md-4">
-                <div class="card h-100 glass-morphism shadow-sm">
-                    <div class="card-body text-center p-4">
-                        <div class="mb-3 text-neon-green">
-                            <i class="bi bi-calendar-check neon-icon" style="font-size: 3.5rem;"></i>
-                        </div>
-                        <h5 class="card-title fw-bold text-white">Booking System</h5>
-                        <p class="card-text text-white-50">Book rooms for classes, meetings, and events easily. Track your bookings and manage reservations.</p>
-                        @if (User.Identity?.IsAuthenticated == true)
-                        {
-                            <a asp-page="/Bookings/MyBookings" class="btn neon-button neon-button-success mt-2">
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="bi bi-calendar-check neon-icon text-neon-green" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h5 class="card-title fw-bold text-center mb-3 text-neon-green">Booking System</h5>
+                    <p class="card-text text-center text-muted-glass mb-4">Book rooms for classes, meetings, and events easily. Track your bookings and manage reservations.</p>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <div class="text-center">
+                            <a asp-page="/Bookings/MyBookings" class="btn neon-button-success">
                                 <i class="bi bi-list-check"></i> My Bookings
                             </a>
-                        }
-                    </div>
+                        </div>
+                    }
                 </div>
             </div>
 
             <div class="col-md-4">
-                <div class="card h-100 glass-morphism shadow-sm">
-                    <div class="card-body text-center p-4">
-                        <div class="mb-3 text-neon-orange">
-                            <i class="bi bi-exclamation-triangle neon-icon" style="font-size: 3.5rem;"></i>
-                        </div>
-                        <h5 class="card-title fw-bold text-white">Report Issues</h5>
-                        <p class="card-text text-white-50">Report and track room maintenance issues efficiently. Help maintain quality of campus facilities.</p>
-                        @if (User.Identity?.IsAuthenticated == true)
-                        {
-                            <a asp-page="/RoomReports/MyReports" class="btn neon-button neon-button-warning mt-2">
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="bi bi-exclamation-triangle neon-icon" style="font-size: 2.5rem; color: #f59e0b;"></i>
+                    </div>
+                    <h5 class="card-title fw-bold text-center mb-3" style="color: #f59e0b;">Report Issues</h5>
+                    <p class="card-text text-center text-muted-glass mb-4">Report and track room maintenance issues efficiently. Help maintain quality of campus facilities.</p>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <div class="text-center">
+                            <a asp-page="/RoomReports/MyReports" class="btn neon-button-warning">
                                 <i class="bi bi-file-text"></i> My Reports
                             </a>
-                        }
-                    </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
@@ -207,37 +354,43 @@
         {
             <div class="row mt-5">
                 <div class="col-12">
-                    <div class="card glass-morphism">
-                        <div class="card-body p-5">
-                            <h2 class="text-center mb-4 text-white">How It Works</h2>
-                            <div class="row text-center">
-                                <div class="col-md-3 mb-3">
+                    <div class="how-it-works-card">
+                        <h2 class="text-center mb-5 neon-glow-text fw-bold">How It Works</h2>
+                        <div class="row g-4">
+                            <div class="col-md-3">
+                                <div class="step-card text-center">
                                     <div class="mb-3">
-                                        <i class="bi bi-person-plus-fill neon-glow-text neon-icon" style="font-size: 3rem;"></i>
+                                        <i class="bi bi-person-plus-fill neon-icon neon-glow-text" style="font-size: 2.5rem;"></i>
                                     </div>
-                                    <h5 class="text-white">1. Register</h5>
-                                    <p class="text-white-50">Create your account as a student or lecturer</p>
+                                    <h5 class="text-light-glass fw-bold mb-2">1. Register</h5>
+                                    <p class="text-muted-glass mb-0">Create your account as a student or lecturer</p>
                                 </div>
-                                <div class="col-md-3 mb-3">
+                            </div>
+                            <div class="col-md-3">
+                                <div class="step-card text-center">
                                     <div class="mb-3">
-                                        <i class="bi bi-search neon-glow-text neon-icon" style="font-size: 3rem;"></i>
+                                        <i class="bi bi-search neon-icon neon-glow-text" style="font-size: 2.5rem;"></i>
                                     </div>
-                                    <h5 class="text-white">2. Search Rooms</h5>
-                                    <p class="text-white-50">Find available rooms by campus, type, and capacity</p>
+                                    <h5 class="text-light-glass fw-bold mb-2">2. Search Rooms</h5>
+                                    <p class="text-muted-glass mb-0">Find available rooms by campus, type, and capacity</p>
                                 </div>
-                                <div class="col-md-3 mb-3">
+                            </div>
+                            <div class="col-md-3">
+                                <div class="step-card text-center">
                                     <div class="mb-3">
-                                        <i class="bi bi-calendar-plus neon-glow-text neon-icon" style="font-size: 3rem;"></i>
+                                        <i class="bi bi-calendar-plus neon-icon neon-glow-text" style="font-size: 2.5rem;"></i>
                                     </div>
-                                    <h5 class="text-white">3. Book</h5>
-                                    <p class="text-white-50">Reserve your preferred room for your needs</p>
+                                    <h5 class="text-light-glass fw-bold mb-2">3. Book</h5>
+                                    <p class="text-muted-glass mb-0">Reserve your preferred room for your needs</p>
                                 </div>
-                                <div class="col-md-3 mb-3">
+                            </div>
+                            <div class="col-md-3">
+                                <div class="step-card text-center">
                                     <div class="mb-3">
-                                        <i class="bi bi-check-circle neon-glow-text neon-icon" style="font-size: 3rem;"></i>
+                                        <i class="bi bi-check-circle neon-icon neon-glow-text" style="font-size: 2.5rem;"></i>
                                     </div>
-                                    <h5 class="text-white">4. Manage</h5>
-                                    <p class="text-white-50">Track bookings and report any issues</p>
+                                    <h5 class="text-light-glass fw-bold mb-2">4. Manage</h5>
+                                    <p class="text-muted-glass mb-0">Track bookings and report any issues</p>
                                 </div>
                             </div>
                         </div>

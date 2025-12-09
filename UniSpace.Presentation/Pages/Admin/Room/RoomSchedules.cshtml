@@ -5,385 +5,837 @@
     ViewData["Title"] = $"{Model.Room?.Name} - Schedules";
 }
 
-<div class="container-fluid px-4">
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb" class="mt-4 mb-3">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a asp-page="/Admin/Dashboard">
-                    <i class="bi bi-house"></i> Dashboard
-                </a>
-            </li>
-            <li class="breadcrumb-item">
-                <a asp-page="Index">Room Management</a>
-            </li>
-            @if (Model.Room != null)
-            {
-                <li class="breadcrumb-item">
-                    <a asp-page="Details" asp-route-id="@Model.Room.Id">
-                        @Model.Room.Name
+<style>
+    /* Page Container */
+    .schedules-page-container {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        min-height: 100vh;
+        padding: 20px 0;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb-glass {
+        background: rgba(45, 45, 45, 0.4);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 14px 20px;
+        margin-bottom: 0;
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+    }
+
+    .breadcrumb-item-glass {
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem;
+    }
+
+        .breadcrumb-item-glass + .breadcrumb-item-glass::before {
+            content: "›";
+            color: #a0a0a0;
+            padding: 0 10px;
+            font-size: 1.2rem;
+        }
+
+        .breadcrumb-item-glass.active {
+            color: #ff8a00;
+            font-weight: 600;
+        }
+
+    .breadcrumb-link {
+        color: #d1d5db;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+        .breadcrumb-link:hover {
+            color: #ff8a00;
+            text-shadow: 0 0 10px rgba(255, 138, 0, 0.5);
+        }
+
+    /* Room Info Header Card */
+    .room-header-glass {
+        background: rgba(45, 45, 45, 0.5);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+    }
+
+    .room-header-content {
+        background: linear-gradient(135deg, rgba(255, 138, 0, 0.2) 0%, rgba(255, 107, 0, 0.15) 100%);
+        border-bottom: 2px solid rgba(255, 138, 0, 0.4);
+        padding: 24px 28px;
+    }
+
+    .neon-text {
+        color: #ff8a00;
+        font-weight: bold;
+    }
+
+    .text-light-glass {
+        color: #e0e0e0;
+    }
+
+    .text-muted-glass {
+        color: #9ca3af;
+    }
+
+    /* Statistics Cards */
+    .stat-card-schedules {
+        background: linear-gradient(135deg, #2a2520 0%, #1f1d1a 100%);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 12px;
+        padding: 0;
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+
+        .stat-card-schedules:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 138, 0, 0.15);
+            border-color: rgba(255, 138, 0, 0.4);
+        }
+
+        .stat-card-schedules.border-left-primary {
+            border-left: 4px solid #ff8a00;
+        }
+
+        .stat-card-schedules.border-left-info {
+            border-left: 4px solid #06b6d4;
+        }
+
+        .stat-card-schedules.border-left-warning {
+            border-left: 4px solid #f59e0b;
+        }
+
+    .stat-card-body {
+        padding: 24px;
+    }
+
+    .text-xs {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .text-primary-neon {
+        color: #ff8a00;
+    }
+
+    .text-info-neon {
+        color: #06b6d4;
+    }
+
+    .text-warning-neon {
+        color: #f59e0b;
+    }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #ffffff;
+        margin: 8px 0;
+    }
+
+    .stat-icon {
+        opacity: 0.15;
+        font-size: 4rem;
+    }
+
+    /* Glass Cards */
+    .glass-card-schedule {
+        background: rgba(45, 45, 45, 0.5);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+    }
+
+    .card-header-glass {
+        background: rgba(255, 138, 0, 0.1);
+        border-bottom: 1px solid rgba(255, 138, 0, 0.3);
+        padding: 18px 24px;
+    }
+
+    .card-body-glass {
+        padding: 24px;
+        color: #e0e0e0;
+    }
+
+    /* Schedule Day Cards */
+    .schedule-card-glass {
+        background: rgba(45, 45, 45, 0.6);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+        .schedule-card-glass:hover {
+            border-color: rgba(255, 138, 0, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(255, 138, 0, 0.2);
+        }
+
+        .schedule-card-glass.border-primary {
+            border-color: rgba(255, 138, 0, 0.3);
+        }
+
+        .schedule-card-glass.border-warning {
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+    .schedule-card-header-primary {
+        background: rgba(255, 138, 0, 0.2);
+        border-bottom: 1px solid rgba(255, 138, 0, 0.3);
+        padding: 16px 20px;
+    }
+
+    .schedule-card-header-warning {
+        background: rgba(245, 158, 11, 0.2);
+        border-bottom: 1px solid rgba(245, 158, 11, 0.3);
+        padding: 16px 20px;
+    }
+
+    .schedule-card-body {
+        padding: 20px;
+        color: #e0e0e0;
+    }
+
+    .schedule-card-footer {
+        background: rgba(255, 255, 255, 0.03);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 16px 20px;
+    }
+
+    /* Badges */
+    .badge-neon {
+        background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 100%);
+        color: #fff;
+        padding: 6px 12px;
+        border-radius: 12px;
+        font-weight: 600;
+        box-shadow: 0 0 15px rgba(255, 138, 0, 0.5);
+    }
+
+    .badge-glass-primary {
+        background: rgba(255, 138, 0, 0.2);
+        border: 1px solid rgba(255, 138, 0, 0.4);
+        color: #ff8a00;
+    }
+
+    .badge-glass-info {
+        background: rgba(6, 182, 212, 0.2);
+        border: 1px solid rgba(6, 182, 212, 0.4);
+        color: #06b6d4;
+    }
+
+    .badge-glass-warning {
+        background: rgba(245, 158, 11, 0.2);
+        border: 1px solid rgba(245, 158, 11, 0.4);
+        color: #f59e0b;
+    }
+
+    .badge-glass-success {
+        background: rgba(16, 185, 129, 0.2);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+        color: #10b981;
+    }
+
+    .badge-glass-secondary {
+        background: rgba(255, 255, 255, 0.1);
+        color: #d1d5db;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Day Badges */
+    .badge-day {
+        padding: 8px 16px;
+        font-size: 1rem;
+        border-radius: 8px;
+    }
+
+    /* Table */
+    .table-glass {
+        color: #e0e0e0;
+    }
+
+        .table-glass thead th {
+            background: rgba(255, 138, 0, 0.1);
+            color: #ff8a00;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid rgba(255, 138, 0, 0.3);
+            padding: 16px 12px;
+        }
+
+        .table-glass tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+            .table-glass tbody tr:hover {
+                background: rgba(255, 138, 0, 0.05);
+            }
+
+        .table-glass tbody td {
+            padding: 16px 12px;
+            vertical-align: middle;
+        }
+
+    /* Buttons */
+    .btn-neon-primary {
+        background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 100%);
+        border: 2px solid #ff8a00;
+        color: #fff;
+        font-weight: 600;
+        padding: 10px 24px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 20px rgba(255, 138, 0, 0.4);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+    }
+
+        .btn-neon-primary:hover {
+            box-shadow: 0 0 30px rgba(255, 138, 0, 0.7);
+            transform: translateY(-2px);
+            color: #fff;
+        }
+
+    .btn-glass-light {
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        font-weight: 600;
+        padding: 10px 24px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+        .btn-glass-light:hover {
+            border: 2px solid rgba(255, 138, 0, 0.5);
+            color: #ff8a00;
+            box-shadow: 0 0 20px rgba(255, 138, 0, 0.2);
+        }
+
+    .btn-glass-info {
+        background: rgba(6, 182, 212, 0.15);
+        border: 2px solid rgba(6, 182, 212, 0.3);
+        color: #06b6d4;
+        font-weight: 600;
+        padding: 8px 16px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        font-size: 0.875rem;
+    }
+
+        .btn-glass-info:hover {
+            background: rgba(6, 182, 212, 0.25);
+            border-color: rgba(6, 182, 212, 0.5);
+            color: #22d3ee;
+        }
+
+    .btn-glass-warning {
+        background: rgba(245, 158, 11, 0.15);
+        border: 2px solid rgba(245, 158, 11, 0.3);
+        color: #f59e0b;
+        font-weight: 600;
+        padding: 8px 16px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        font-size: 0.875rem;
+    }
+
+        .btn-glass-warning:hover {
+            background: rgba(245, 158, 11, 0.25);
+            border-color: rgba(245, 158, 11, 0.5);
+            color: #fbbf24;
+        }
+
+    .btn-glass-secondary {
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        font-weight: 600;
+        padding: 10px 24px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+        .btn-glass-secondary:hover {
+            border: 2px solid rgba(255, 138, 0, 0.5);
+            color: #ff8a00;
+            box-shadow: 0 0 20px rgba(255, 138, 0, 0.2);
+        }
+
+    /* Unified Quick Actions Button Style */
+    .btn-quick-action {
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        font-weight: 600;
+        padding: 14px 24px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-align: center;
+    }
+
+    .btn-quick-action:hover {
+        border: 2px solid rgba(255, 138, 0, 0.5);
+        color: #ff8a00;
+        box-shadow: 0 0 20px rgba(255, 138, 0, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .btn-quick-action.primary {
+        background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 100%);
+        border: 2px solid #ff8a00;
+        box-shadow: 0 0 20px rgba(255, 138, 0, 0.4);
+    }
+
+    .btn-quick-action.primary:hover {
+        box-shadow: 0 0 30px rgba(255, 138, 0, 0.7);
+        color: #fff;
+    }
+
+    .btn-quick-action.info {
+        background: rgba(6, 182, 212, 0.15);
+        border: 2px solid rgba(6, 182, 212, 0.3);
+        color: #06b6d4;
+    }
+
+    .btn-quick-action.info:hover {
+        background: rgba(6, 182, 212, 0.25);
+        border-color: rgba(6, 182, 212, 0.5);
+        color: #22d3ee;
+        box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+    }
+
+    /* Empty State */
+    .empty-state-glass {
+        text-align: center;
+        padding: 80px 40px;
+        color: #9ca3af;
+    }
+
+    .empty-icon {
+        font-size: 6rem;
+        color: #6b7280;
+        margin-bottom: 20px;
+    }
+
+    /* Alert */
+    .alert-glass-danger {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        border-radius: 10px;
+        padding: 16px 20px;
+        color: #fca5a5;
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .schedules-page-container {
+            padding: 15px 0;
+        }
+
+        .room-header-content {
+            padding: 20px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+<div class="schedules-page-container">
+    <div class="container-fluid px-4">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mt-4 mb-4">
+            <ol class="breadcrumb-glass">
+                <li class="breadcrumb-item-glass">
+                    <a asp-page="/Admin/Dashboard" class="breadcrumb-link">
+                        <i class="bi bi-house"></i> Dashboard
                     </a>
                 </li>
-            }
-            <li class="breadcrumb-item active">Schedules</li>
-        </ol>
-    </nav>
-
-    @if (Model.Room != null)
-    {
-        <!-- Room Info Header -->
-        <div class="card shadow-lg mb-4">
-            <div class="card-header bg-gradient-primary text-white">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h3 class="mb-1">
-                            <i class="bi bi-door-open"></i> @Model.Room.Name
-                        </h3>
-                        <p class="mb-0">
-                            <i class="bi bi-building me-1"></i>@Model.Room.CampusName
-                            <span class="mx-2">|</span>
-                            <i class="bi bi-tag me-1"></i>@Model.Room.TypeDisplay
-                            <span class="mx-2">|</span>
-                            <i class="bi bi-people me-1"></i>@Model.Room.Capacity seats
-                        </p>
-                    </div>
-                    <div class="text-end">
-                        <a asp-page="Details" asp-route-id="@Model.Room.Id" class="btn btn-light">
-                            <i class="bi bi-arrow-left"></i> Back to Room
+                <li class="breadcrumb-item-glass">
+                    <a asp-page="Index" class="breadcrumb-link">Room Management</a>
+                </li>
+                @if (Model.Room != null)
+                {
+                    <li class="breadcrumb-item-glass">
+                        <a asp-page="Details" asp-route-id="@Model.Room.Id" class="breadcrumb-link">
+                            @Model.Room.Name
                         </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+                    </li>
+                }
+                <li class="breadcrumb-item-glass active">Schedules</li>
+            </ol>
+        </nav>
 
-        <!-- Statistics Cards -->
-        <div class="row mb-4">
-            <div class="col-xl-4 col-md-6 mb-3">
-                <div class="card border-left-primary shadow h-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                    Total Schedules
-                                </div>
-                                <div class="h4 mb-0 font-weight-bold text-gray-800">
-                                    @Model.TotalSchedules
-                                </div>
-                            </div>
-                            <i class="bi bi-calendar-week display-4 text-primary opacity-25"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-4 col-md-6 mb-3">
-                <div class="card border-left-info shadow h-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                    Academic Courses
-                                </div>
-                                <div class="h4 mb-0 font-weight-bold text-gray-800">
-                                    @Model.AcademicSchedules
-                                </div>
-                            </div>
-                            <i class="bi bi-book display-4 text-info opacity-25"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-4 col-md-6 mb-3">
-                <div class="card border-left-warning shadow h-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                    Maintenance
-                                </div>
-                                <div class="h4 mb-0 font-weight-bold text-gray-800">
-                                    @Model.MaintenanceSchedules
-                                </div>
-                            </div>
-                            <i class="bi bi-tools display-4 text-warning opacity-25"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        @if (Model.Schedules.Any())
+        @if (Model.Room != null)
         {
-            <!-- Weekly Schedule View -->
-            <div class="card shadow-lg mb-4">
-                <div class="card-header bg-light">
-                    <h5 class="mb-0">
-                        <i class="bi bi-calendar-week me-2"></i>Weekly Schedule
-                    </h5>
+            <!-- Room Info Header -->
+            <div class="room-header-glass mb-4">
+                <div class="room-header-content">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                        <div>
+                            <h3 class="mb-2 neon-text">
+                                <i class="bi bi-door-open"></i> @Model.Room.Name
+                            </h3>
+                            <p class="mb-0 text-light-glass">
+                                <i class="bi bi-building me-1"></i>@Model.Room.CampusName
+                                <span class="mx-2">|</span>
+                                <i class="bi bi-tag me-1"></i>@Model.Room.TypeDisplay
+                                <span class="mx-2">|</span>
+                                <i class="bi bi-people me-1"></i>@Model.Room.Capacity seats
+                            </p>
+                        </div>
+                        <div>
+                            <a asp-page="Details" asp-route-id="@Model.Room.Id" class="btn btn-glass-light">
+                                <i class="bi bi-arrow-left"></i> Back to Room
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    @foreach (var dayGroup in Model.SchedulesByDay)
-                    {
-                        var dayOfWeek = dayGroup.Key;
-                        var daySchedules = dayGroup.Value;
-                        var dayColor = Model.GetDayColor(dayOfWeek);
-                        
-                        <div class="mb-4">
-                            <h5 class="border-bottom pb-2 mb-3">
-                                <span class="badge bg-@dayColor">
-                                    @Model.GetDayName(dayOfWeek)
-                                </span>
-                                <small class="text-muted ms-2">(@daySchedules.Count schedule(s))</small>
-                            </h5>
-                            
-                            <div class="row g-3">
-                                @foreach (var schedule in daySchedules)
-                                {
-                                    <div class="col-md-6 col-lg-4">
-                                        <div class="card h-100 @(schedule.ScheduleType == ScheduleType.Academic_Course ? "border-primary" : "border-warning")">
-                                            <div class="card-header @(schedule.ScheduleType == ScheduleType.Academic_Course ? "bg-primary" : "bg-warning") text-white">
-                                                <div class="d-flex justify-content-between align-items-start">
-                                                    <h6 class="mb-0">
-                                                        <i class="bi @(schedule.ScheduleType == ScheduleType.Academic_Course ? "bi-book" : "bi-tools")"></i>
-                                                        @schedule.Title
-                                                    </h6>
-                                                    @if (schedule.ScheduleType == ScheduleType.Academic_Course)
-                                                    {
-                                                        <span class="badge bg-light text-primary">Academic</span>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class="badge bg-light text-warning">Maintenance</span>
-                                                    }
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-xl-4 col-md-6 mb-3">
+                    <div class="stat-card-schedules border-left-primary h-100">
+                        <div class="stat-card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="text-xs text-primary-neon mb-1">
+                                        Total Schedules
+                                    </div>
+                                    <div class="stat-value">
+                                        @Model.TotalSchedules
+                                    </div>
+                                </div>
+                                <i class="bi bi-calendar-week stat-icon text-primary-neon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-md-6 mb-3">
+                    <div class="stat-card-schedules border-left-info h-100">
+                        <div class="stat-card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="text-xs text-info-neon mb-1">
+                                        Academic Courses
+                                    </div>
+                                    <div class="stat-value">
+                                        @Model.AcademicSchedules
+                                    </div>
+                                </div>
+                                <i class="bi bi-book stat-icon text-info-neon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-md-6 mb-3">
+                    <div class="stat-card-schedules border-left-warning h-100">
+                        <div class="stat-card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="text-xs text-warning-neon mb-1">
+                                        Maintenance
+                                    </div>
+                                    <div class="stat-value">
+                                        @Model.MaintenanceSchedules
+                                    </div>
+                                </div>
+                                <i class="bi bi-tools stat-icon text-warning-neon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.Schedules.Any())
+            {
+                <!-- Weekly Schedule View -->
+                <div class="glass-card-schedule mb-4">
+                    <div class="card-header-glass">
+                        <h5 class="mb-0 neon-text">
+                            <i class="bi bi-calendar-week me-2"></i>Weekly Schedule
+                        </h5>
+                    </div>
+                    <div class="card-body-glass">
+                        @foreach (var dayGroup in Model.SchedulesByDay)
+                        {
+                            var dayOfWeek = dayGroup.Key;
+                            var daySchedules = dayGroup.Value;
+                            var dayColor = Model.GetDayColor(dayOfWeek);
+
+                            <div class="mb-4">
+                                <h5 class="pb-2 mb-3" style="border-bottom: 1px solid rgba(255, 138, 0, 0.2);">
+                                    <span class="badge badge-neon badge-day">
+                                        @Model.GetDayName(dayOfWeek)
+                                    </span>
+                                    <small class="text-muted-glass ms-2">(@daySchedules.Count schedule(s))</small>
+                                </h5>
+
+                                <div class="row g-3">
+                                    @foreach (var schedule in daySchedules)
+                                    {
+                                        <div class="col-md-6 col-lg-4">
+                                            <div class="schedule-card-glass @(schedule.ScheduleType == ScheduleType.Academic_Course ? "border-primary" : "border-warning")">
+                                                <div class="@(schedule.ScheduleType == ScheduleType.Academic_Course ? "schedule-card-header-primary" : "schedule-card-header-warning")">
+                                                    <div class="d-flex justify-content-between align-items-start">
+                                                        <h6 class="mb-0 text-light-glass">
+                                                            <i class="bi @(schedule.ScheduleType == ScheduleType.Academic_Course ? "bi-book" : "bi-tools")"></i>
+                                                            @schedule.Title
+                                                        </h6>
+                                                        @if (schedule.ScheduleType == ScheduleType.Academic_Course)
+                                                        {
+                                                            <span class="badge badge-glass-primary">Academic</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="badge badge-glass-warning">Maintenance</span>
+                                                        }
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="mb-2">
-                                                    <i class="bi bi-clock text-primary"></i>
-                                                    <strong>Time:</strong>
-                                                    <span class="badge bg-secondary">
-                                                        @schedule.StartTime.ToString(@"hh\:mm") - @schedule.EndTime.ToString(@"hh\:mm")
-                                                    </span>
+                                                <div class="schedule-card-body">
+                                                    <div class="mb-2">
+                                                        <i class="bi bi-clock neon-text"></i>
+                                                        <strong class="text-light-glass">Time:</strong>
+                                                        <span class="badge badge-glass-secondary">
+                                                            @schedule.StartTime.ToString(@"hh\:mm") - @schedule.EndTime.ToString(@"hh\:mm")
+                                                        </span>
+                                                    </div>
+                                                    <div class="mb-2">
+                                                        <i class="bi bi-calendar-range text-info-neon"></i>
+                                                        <strong class="text-light-glass">Period:</strong><br />
+                                                        <small class="text-muted-glass">
+                                                            @schedule.StartDate.ToString("MMM dd, yyyy") -
+                                                            @schedule.EndDate.ToString("MMM dd, yyyy")
+                                                        </small>
+                                                    </div>
+                                                    <div class="mb-2">
+                                                        <i class="bi bi-hourglass text-info-neon"></i>
+                                                        <strong class="text-light-glass">Duration:</strong>
+                                                        <span class="badge badge-glass-info">
+                                                            @((schedule.EndTime - schedule.StartTime).Hours)h
+                                                            @((schedule.EndTime - schedule.StartTime).Minutes)m
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                                <div class="mb-2">
-                                                    <i class="bi bi-calendar-range text-success"></i>
-                                                    <strong>Period:</strong><br/>
-                                                    <small>
-                                                        @schedule.StartDate.ToString("MMM dd, yyyy") - 
-                                                        @schedule.EndDate.ToString("MMM dd, yyyy")
-                                                    </small>
-                                                </div>
-                                                <div class="mb-2">
-                                                    <i class="bi bi-hourglass text-info"></i>
-                                                    <strong>Duration:</strong>
-                                                    <span class="badge bg-info">
-                                                        @((schedule.EndTime - schedule.StartTime).Hours)h 
-                                                        @((schedule.EndTime - schedule.StartTime).Minutes)m
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="card-footer bg-light">
-                                                <div class="d-flex justify-content-between">
-                                                    <a asp-page="/Admin/Schedule/Details" 
-                                                       asp-route-id="@schedule.Id" 
-                                                       class="btn btn-sm btn-outline-primary">
-                                                        <i class="bi bi-eye"></i> View
-                                                    </a>
-                                                    <a asp-page="/Admin/Schedule/Edit" 
-                                                       asp-route-id="@schedule.Id" 
-                                                       class="btn btn-sm btn-outline-warning">
-                                                        <i class="bi bi-pencil"></i> Edit
-                                                    </a>
+                                                <div class="schedule-card-footer">
+                                                    <div class="d-flex justify-content-between gap-2">
+                                                        <a asp-page="/Admin/Schedule/Details"
+                                                           asp-route-id="@schedule.Id"
+                                                           class="btn btn-glass-info flex-fill">
+                                                            <i class="bi bi-eye"></i> View
+                                                        </a>
+                                                        <a asp-page="/Admin/Schedule/Edit"
+                                                           asp-route-id="@schedule.Id"
+                                                           class="btn btn-glass-warning flex-fill">
+                                                            <i class="bi bi-pencil"></i> Edit
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                }
+                                    }
+                                </div>
                             </div>
-                        </div>
-                    }
+                        }
+                    </div>
                 </div>
-            </div>
 
-            <!-- Timeline View -->
-            <div class="card shadow-lg">
-                <div class="card-header bg-light">
-                    <h5 class="mb-0">
-                        <i class="bi bi-list-ul me-2"></i>All Schedules (Timeline View)
+                <!-- Timeline View -->
+                <div class="glass-card-schedule">
+                    <div class="card-header-glass">
+                        <h5 class="mb-0 neon-text">
+                            <i class="bi bi-list-ul me-2"></i>All Schedules (Timeline View)
+                        </h5>
+                    </div>
+                    <div class="card-body-glass">
+                        <div class="table-responsive">
+                            <table class="table table-glass">
+                                <thead>
+                                    <tr>
+                                        <th width="200">Title</th>
+                                        <th width="100">Type</th>
+                                        <th width="120">Day</th>
+                                        <th width="150">Time</th>
+                                        <th width="200">Period</th>
+                                        <th width="100">Duration</th>
+                                        <th width="120" class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var schedule in Model.Schedules)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong class="text-light-glass">@schedule.Title</strong>
+                                            </td>
+                                            <td>
+                                                @if (schedule.ScheduleType == ScheduleType.Academic_Course)
+                                                {
+                                                    <span class="badge badge-neon">
+                                                        <i class="bi bi-book"></i> Academic
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge badge-glass-warning">
+                                                        <i class="bi bi-tools"></i> Maintenance
+                                                    </span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-neon">
+                                                    @schedule.DayOfWeekDisplay
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <i class="bi bi-clock text-muted-glass"></i>
+                                                <span class="text-light-glass">
+                                                    @schedule.StartTime.ToString(@"hh\:mm") -
+                                                    @schedule.EndTime.ToString(@"hh\:mm")
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted-glass">
+                                                    @schedule.StartDate.ToString("MMM dd") -
+                                                    @schedule.EndDate.ToString("MMM dd, yyyy")
+                                                </small>
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-glass-info">
+                                                    @((schedule.EndTime - schedule.StartTime).Hours)h
+                                                    @((schedule.EndTime - schedule.StartTime).Minutes)m
+                                                </span>
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="d-flex gap-2 justify-content-center">
+                                                    <a asp-page="/Admin/Schedule/Details"
+                                                       asp-route-id="@schedule.Id"
+                                                       class="btn btn-glass-info"
+                                                       title="View Details">
+                                                        <i class="bi bi-eye"></i>
+                                                    </a>
+                                                    <a asp-page="/Admin/Schedule/Edit"
+                                                       asp-route-id="@schedule.Id"
+                                                       class="btn btn-glass-warning"
+                                                       title="Edit">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <!-- Empty State -->
+                <div class="glass-card-schedule">
+                    <div class="card-body-glass">
+                        <div class="empty-state-glass">
+                            <i class="bi bi-calendar-x empty-icon"></i>
+                            <h4>No Schedules Found</h4>
+                            <p>This room doesn't have any schedules yet.</p>
+                            <a asp-page="/Admin/Schedule/Create"
+                               asp-route-roomId="@Model.Room.Id"
+                               class="btn btn-neon-primary btn-lg mt-3">
+                                <i class="bi bi-plus-circle"></i> Create First Schedule
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <!-- Quick Actions -->
+            <div class="glass-card-schedule mt-4">
+                <div class="card-header-glass">
+                    <h5 class="mb-0 neon-text">
+                        <i class="bi bi-lightning me-2"></i>Quick Actions
                     </h5>
                 </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle">
-                            <thead class="table-light">
-                                <tr>
-                                    <th width="200">Title</th>
-                                    <th width="100">Type</th>
-                                    <th width="120">Day</th>
-                                    <th width="150">Time</th>
-                                    <th width="200">Period</th>
-                                    <th width="100">Duration</th>
-                                    <th width="120" class="text-center">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var schedule in Model.Schedules)
-                                {
-                                    <tr>
-                                        <td>
-                                            <strong>@schedule.Title</strong>
-                                        </td>
-                                        <td>
-                                            @if (schedule.ScheduleType == ScheduleType.Academic_Course)
-                                            {
-                                                <span class="badge bg-primary">
-                                                    <i class="bi bi-book"></i> Academic
-                                                </span>
-                                            }
-                                            else
-                                            {
-                                                <span class="badge bg-warning">
-                                                    <i class="bi bi-tools"></i> Maintenance
-                                                </span>
-                                            }
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-@Model.GetDayColor(schedule.DayOfWeek)">
-                                                @schedule.DayOfWeekDisplay
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <i class="bi bi-clock"></i>
-                                            @schedule.StartTime.ToString(@"hh\:mm") - 
-                                            @schedule.EndTime.ToString(@"hh\:mm")
-                                        </td>
-                                        <td>
-                                            <small>
-                                                @schedule.StartDate.ToString("MMM dd") - 
-                                                @schedule.EndDate.ToString("MMM dd, yyyy")
-                                            </small>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-info">
-                                                @((schedule.EndTime - schedule.StartTime).Hours)h 
-                                                @((schedule.EndTime - schedule.StartTime).Minutes)m
-                                            </span>
-                                        </td>
-                                        <td class="text-center">
-                                            <div class="btn-group btn-group-sm" role="group">
-                                                <a asp-page="/Admin/Schedule/Details" 
-                                                   asp-route-id="@schedule.Id" 
-                                                   class="btn btn-outline-info"
-                                                   title="View Details">
-                                                    <i class="bi bi-eye"></i>
-                                                </a>
-                                                <a asp-page="/Admin/Schedule/Edit" 
-                                                   asp-route-id="@schedule.Id" 
-                                                   class="btn btn-outline-warning"
-                                                   title="Edit">
-                                                    <i class="bi bi-pencil"></i>
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
+                <div class="card-body-glass">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <a asp-page="/Admin/Schedule/Create"
+                               asp-route-roomId="@Model.Room.Id"
+                               class="btn btn-quick-action primary w-100">
+                                <i class="bi bi-plus-circle"></i> Add Schedule
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a asp-page="Details"
+                               asp-route-id="@Model.Room.Id"
+                               class="btn btn-quick-action info w-100">
+                                <i class="bi bi-info-circle"></i> Room Details
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a asp-page="/Admin/Schedule/Index"
+                               asp-route-roomId="@Model.Room.Id"
+                               class="btn btn-quick-action w-100">
+                                <i class="bi bi-list"></i> All Schedules
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a asp-page="Index" class="btn btn-quick-action w-100">
+                                <i class="bi bi-arrow-left"></i> Back to Rooms
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         }
         else
         {
-            <!-- Empty State -->
-            <div class="card shadow-lg">
-                <div class="card-body text-center py-5">
-                    <i class="bi bi-calendar-x display-1 text-muted mb-3"></i>
-                    <h4 class="text-muted">No Schedules Found</h4>
-                    <p class="text-muted">This room doesn't have any schedules yet.</p>
-                    <a asp-page="/Admin/Schedule/Create" 
-                       asp-route-roomId="@Model.Room.Id" 
-                       class="btn btn-primary btn-lg mt-3">
-                        <i class="bi bi-plus-circle"></i> Create First Schedule
-                    </a>
-                </div>
+            <!-- Error State -->
+            <div class="alert-glass-danger">
+                <i class="bi bi-exclamation-triangle"></i>
+                @(Model.ErrorMessage ?? "Room not found.")
             </div>
+            <a asp-page="Index" class="btn btn-neon-primary">
+                <i class="bi bi-arrow-left"></i> Back to Rooms
+            </a>
         }
-
-        <!-- Quick Actions -->
-        <div class="card shadow-lg mt-4">
-            <div class="card-header bg-light">
-                <h5 class="mb-0">
-                    <i class="bi bi-lightning me-2"></i>Quick Actions
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-md-3">
-                        <a asp-page="/Admin/Schedule/Create" 
-                           asp-route-roomId="@Model.Room.Id" 
-                           class="btn btn-primary w-100">
-                            <i class="bi bi-plus-circle"></i> Add Schedule
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <a asp-page="Details" 
-                           asp-route-id="@Model.Room.Id" 
-                           class="btn btn-info w-100">
-                            <i class="bi bi-info-circle"></i> Room Details
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <a asp-page="/Admin/Schedule/Index" 
-                           asp-route-roomId="@Model.Room.Id" 
-                           class="btn btn-secondary w-100">
-                            <i class="bi bi-list"></i> All Schedules
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <a asp-page="Index" class="btn btn-outline-secondary w-100">
-                            <i class="bi bi-arrow-left"></i> Back to Rooms
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
-    else
-    {
-        <!-- Error State -->
-        <div class="alert alert-danger">
-            <i class="bi bi-exclamation-triangle"></i>
-            @(Model.ErrorMessage ?? "Room not found.")
-        </div>
-        <a asp-page="Index" class="btn btn-primary">
-            <i class="bi bi-arrow-left"></i> Back to Rooms
-        </a>
-    }
+    </div>
 </div>
-
-<style>
-    .border-left-primary {
-        border-left: 0.25rem solid #4e73df !important;
-    }
-    .border-left-info {
-        border-left: 0.25rem solid #36b9cc !important;
-    }
-    .border-left-warning {
-        border-left: 0.25rem solid #f6c23e !important;
-    }
-    .text-xs {
-        font-size: 0.7rem;
-    }
-    .bg-gradient-primary {
-        background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
-    }
-    .opacity-25 {
-        opacity: 0.25;
-    }
-    .card:hover {
-        transform: translateY(-2px);
-        transition: all 0.3s ease;
-    }
-</style>

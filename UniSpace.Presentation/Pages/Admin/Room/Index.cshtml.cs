@@ -31,7 +31,10 @@ namespace UniSpace.Presentation.Pages.Admin.Room
         public Guid? FilterCampusId { get; set; }
         public RoomType? FilterType { get; set; }
         public BookingStatus? FilterStatus { get; set; }
+        public int CurrentPageNumber { get; set; }
+        public int CurrentPageSize { get; set; }
         public List<SelectListItem> CampusOptions { get; set; } = new();
+        public List<SelectListItem> PageSizeOptions { get; set; } = new();
         public string? SuccessMessage { get; set; }
         public string? ErrorMessage { get; set; }
 
@@ -49,6 +52,8 @@ namespace UniSpace.Presentation.Pages.Admin.Room
                 FilterCampusId = campusId;
                 FilterType = type;
                 FilterStatus = status;
+                CurrentPageNumber = pageNumber;
+                CurrentPageSize = pageSize;
 
                 // Use the unified GetRoomsAsync method with all filters
                 Rooms = await _roomService.GetRoomsAsync(
@@ -74,6 +79,15 @@ namespace UniSpace.Presentation.Pages.Admin.Room
                     Text = "All Campuses",
                     Selected = !FilterCampusId.HasValue
                 });
+
+                // Page size options
+                PageSizeOptions = new List<SelectListItem>
+                {
+                    new SelectListItem { Value = "10", Text = "10 per page", Selected = pageSize == 10 },
+                    new SelectListItem { Value = "20", Text = "20 per page", Selected = pageSize == 20 },
+                    new SelectListItem { Value = "50", Text = "50 per page", Selected = pageSize == 50 },
+                    new SelectListItem { Value = "100", Text = "100 per page", Selected = pageSize == 100 }
+                };
 
                 // Success/Error messages from TempData
                 if (TempData["SuccessMessage"] != null)
