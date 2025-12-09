@@ -3,20 +3,506 @@
 @model UniSpace.Presentation.Pages.Admin.Room.DetailsModel
 @{
     ViewData["Title"] = "Room Details";
-    var statusBadge = Model.Room.CurrentStatus == BookingStatus.Approved ? "bg-success" : "bg-danger";
+    var statusBadge = Model.Room.CurrentStatus == BookingStatus.Approved ? "badge-glass-success" : "badge-glass-danger";
     var typeBadge = Model.Room.Type switch
     {
-        RoomType.Classroom => "bg-primary",
-        RoomType.Lab => "bg-info",
-        RoomType.Stadium => "bg-warning",
-        _ => "bg-secondary"
+        RoomType.Classroom => "badge-neon",
+        RoomType.Lab => "badge-glass-info",
+        RoomType.Stadium => "badge-glass-warning",
+        _ => "badge-glass-secondary"
+    };
+    var headerClass = Model.Room.Type switch
+    {
+        RoomType.Classroom => "background: rgba(255, 138, 0, 0.2);",
+        RoomType.Lab => "background: rgba(6, 182, 212, 0.2);",
+        RoomType.Stadium => "background: rgba(245, 158, 11, 0.2);",
+        _ => "background: rgba(255, 255, 255, 0.1);"
     };
 }
 
-<div class="container-fluid mt-4">
-    <div class="row">
-        <div class="col-md-12">
-            <!-- Breadcrumb -->
+<style>
+    /* Page Container */
+    .details-page-container {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        min-height: 100vh;
+        padding: 20px 0;
+    }
+
+    /* Breadcrumb Glass */
+    .breadcrumb-glass {
+        background: rgba(45, 45, 45, 0.5);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 10px;
+        padding: 12px 20px;
+        margin-bottom: 20px;
+    }
+
+        .breadcrumb-glass .breadcrumb {
+            margin-bottom: 0;
+            background: transparent;
+        }
+
+        .breadcrumb-glass .breadcrumb-item + .breadcrumb-item::before {
+            color: #9ca3af;
+            content: "›";
+        }
+
+        .breadcrumb-glass .breadcrumb-item a {
+            color: #ff8a00;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+            .breadcrumb-glass .breadcrumb-item a:hover {
+                color: #ff6b00;
+                text-shadow: 0 0 10px rgba(255, 138, 0, 0.5);
+            }
+
+        .breadcrumb-glass .breadcrumb-item.active {
+            color: #e0e0e0;
+        }
+
+    /* Glass Card */
+    .glass-card {
+        background: rgba(45, 45, 45, 0.5);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        margin-bottom: 24px;
+    }
+
+        .glass-card:hover {
+            border: 1px solid rgba(255, 138, 0, 0.4);
+            box-shadow: 0 12px 40px 0 rgba(255, 138, 0, 0.15);
+        }
+
+    .glass-card-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid rgba(255, 138, 0, 0.3);
+    }
+
+    .glass-card-body {
+        padding: 24px;
+        color: #e0e0e0;
+    }
+
+    /* Neon Text */
+    .neon-text {
+        color: #ff8a00;
+        font-weight: bold;
+    }
+
+    .text-muted-glass {
+        color: #9ca3af;
+    }
+
+    /* Badges */
+    .badge-neon {
+        background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 100%);
+        color: #fff;
+        padding: 8px 16px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1em;
+        box-shadow: 0 0 15px rgba(255, 138, 0, 0.5);
+    }
+
+    .badge-glass-success {
+        background: rgba(16, 185, 129, 0.2);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+        color: #10b981;
+        padding: 8px 16px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1em;
+    }
+
+    .badge-glass-danger {
+        background: rgba(239, 68, 68, 0.2);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        color: #f87171;
+        padding: 8px 16px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1em;
+    }
+
+    .badge-glass-info {
+        background: rgba(6, 182, 212, 0.2);
+        border: 1px solid rgba(6, 182, 212, 0.4);
+        color: #06b6d4;
+        padding: 8px 16px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1em;
+    }
+
+    .badge-glass-warning {
+        background: rgba(245, 158, 11, 0.2);
+        border: 1px solid rgba(245, 158, 11, 0.4);
+        color: #f59e0b;
+        padding: 8px 16px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1em;
+    }
+
+    .badge-glass-secondary {
+        background: rgba(156, 163, 175, 0.2);
+        border: 1px solid rgba(156, 163, 175, 0.4);
+        color: #9ca3af;
+        padding: 8px 16px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1em;
+    }
+
+    /* Alert Glass */
+    .alert-glass-success {
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+        border-radius: 10px;
+        padding: 16px 20px;
+        color: #6ee7b7;
+    }
+
+    .alert-glass-danger {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        border-radius: 10px;
+        padding: 16px 20px;
+        color: #fca5a5;
+    }
+
+    .alert-glass-info {
+        background: rgba(6, 182, 212, 0.1);
+        border: 1px solid rgba(6, 182, 212, 0.4);
+        border-radius: 10px;
+        padding: 16px 20px;
+        color: #67e8f9;
+    }
+
+    .alert-glass-warning {
+        background: rgba(245, 158, 11, 0.1);
+        border: 1px solid rgba(245, 158, 11, 0.4);
+        border-radius: 10px;
+        padding: 16px 20px;
+        color: #fcd34d;
+    }
+
+    .alert-glass-light {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        padding: 16px 20px;
+        color: #e0e0e0;
+    }
+
+    /* Location Alert */
+    .location-alert {
+        background: rgba(59, 130, 246, 0.1);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        border-radius: 10px;
+        padding: 16px 20px;
+        margin-bottom: 0;
+    }
+
+    /* Stat Cards */
+    .stat-card-glass {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 12px;
+        padding: 24px;
+        text-align: center;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+        .stat-card-glass:hover {
+            border-color: rgba(255, 138, 0, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 138, 0, 0.2);
+        }
+
+        .stat-card-glass i {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+
+        .stat-card-glass .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff8a00;
+            margin-bottom: 8px;
+        }
+
+        .stat-card-glass .stat-label {
+            color: #9ca3af;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+    /* Description Card */
+    .description-glass {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 20px;
+        color: #d1d5db;
+    }
+
+    /* Statistics Card */
+    .statistics-card-glass {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 10px;
+        padding: 20px;
+        transition: all 0.3s ease;
+    }
+
+        .statistics-card-glass:hover {
+            border-color: rgba(255, 138, 0, 0.4);
+            box-shadow: 0 4px 15px rgba(255, 138, 0, 0.15);
+        }
+
+        .statistics-card-glass .stat-box {
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            transition: all 0.3s ease;
+        }
+
+            .statistics-card-glass .stat-box:hover {
+                background: rgba(255, 138, 0, 0.05);
+                border-color: rgba(255, 138, 0, 0.3);
+            }
+
+            .statistics-card-glass .stat-box h3 {
+                font-size: 2rem;
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+
+            .statistics-card-glass .stat-box small {
+                color: #9ca3af;
+                font-size: 0.875rem;
+            }
+
+    /* Buttons */
+    .btn-neon-primary {
+        background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 100%);
+        border: 2px solid #ff8a00;
+        color: #fff;
+        font-weight: 600;
+        padding: 12px 24px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 20px rgba(255, 138, 0, 0.4);
+        width: 100%;
+    }
+
+        .btn-neon-primary:hover {
+            box-shadow: 0 0 30px rgba(255, 138, 0, 0.7);
+            transform: translateY(-2px);
+            color: #fff;
+        }
+
+    .btn-glass-info {
+        background: rgba(6, 182, 212, 0.15);
+        border: 2px solid rgba(6, 182, 212, 0.3);
+        color: #06b6d4;
+        font-weight: 600;
+        padding: 12px 24px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+        .btn-glass-info:hover {
+            background: rgba(6, 182, 212, 0.25);
+            border-color: rgba(6, 182, 212, 0.5);
+            color: #22d3ee;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+        }
+
+    .btn-glass-warning {
+        background: rgba(251, 191, 36, 0.15);
+        border: 2px solid rgba(251, 191, 36, 0.3);
+        color: #fbbf24;
+        font-weight: 600;
+        padding: 12px 24px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+        .btn-glass-warning:hover {
+            background: rgba(251, 191, 36, 0.25);
+            border-color: rgba(251, 191, 36, 0.5);
+            color: #fcd34d;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+        }
+
+    .btn-glass-danger {
+        background: rgba(239, 68, 68, 0.15);
+        border: 2px solid rgba(239, 68, 68, 0.3);
+        color: #f87171;
+        font-weight: 600;
+        padding: 12px 24px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+        .btn-glass-danger:hover {
+            background: rgba(239, 68, 68, 0.25);
+            border-color: rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+        }
+
+    .btn-glass-secondary {
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        font-weight: 600;
+        padding: 12px 24px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+        .btn-glass-secondary:hover {
+            border: 2px solid rgba(255, 138, 0, 0.5);
+            color: #ff8a00;
+            box-shadow: 0 0 20px rgba(255, 138, 0, 0.2);
+        }
+
+    .btn-glass-dark {
+        background: rgba(17, 24, 39, 0.5);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        font-weight: 600;
+        padding: 12px 24px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+        .btn-glass-dark:hover {
+            border-color: rgba(255, 138, 0, 0.5);
+            color: #ff8a00;
+            box-shadow: 0 0 20px rgba(255, 138, 0, 0.2);
+        }
+
+    /* Quick Info List */
+    .info-list-glass {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+        .info-list-glass li {
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+            .info-list-glass li:last-child {
+                border-bottom: none;
+            }
+
+            .info-list-glass li strong {
+                color: #e0e0e0;
+                display: block;
+                margin-bottom: 8px;
+            }
+
+            .info-list-glass li small,
+            .info-list-glass li .text-muted {
+                color: #9ca3af;
+            }
+
+            .info-list-glass li .font-monospace {
+                font-family: 'Courier New', monospace;
+                font-size: 0.875rem;
+                word-break: break-all;
+            }
+
+    /* Modal */
+    .modal-content-glass {
+        background: rgba(35, 35, 35, 0.95);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 138, 0, 0.3);
+        border-radius: 15px;
+    }
+
+    .modal-header-glass-danger {
+        background: rgba(239, 68, 68, 0.15);
+        border-bottom: 1px solid rgba(239, 68, 68, 0.3);
+        padding: 20px 24px;
+    }
+
+        .modal-header-glass-danger .modal-title {
+            color: #f87171;
+        }
+
+    .modal-body-glass {
+        padding: 24px;
+        color: #e0e0e0;
+    }
+
+        .modal-body-glass h5 {
+            color: #f87171;
+        }
+
+    .modal-footer-glass {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 20px 24px;
+    }
+
+    /* Empty State */
+    .empty-state-glass {
+        text-align: center;
+        padding: 40px 20px;
+        color: #9ca3af;
+    }
+
+        .empty-state-glass i {
+            font-size: 4rem;
+            opacity: 0.5;
+        }
+
+    /* Divider */
+    .divider-glass {
+        border-top: 1px solid rgba(255, 138, 0, 0.2);
+        margin: 16px 0;
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .glass-card-header,
+        .glass-card-body {
+            padding: 20px;
+        }
+
+        .stat-card-glass {
+            margin-bottom: 16px;
+        }
+    }
+</style>
+
+<div class="details-page-container">
+    <div class="container-fluid mt-4">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb-glass">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
@@ -30,269 +516,273 @@
                     <li class="breadcrumb-item active">@Model.Room.Name</li>
                 </ol>
             </nav>
+        </div>
 
-            <!-- Alerts -->
-            @if (!string.IsNullOrEmpty(Model.SuccessMessage))
-            {
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="bi bi-check-circle"></i> @Model.SuccessMessage
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <!-- Alerts -->
+        @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+        {
+            <div class="alert-glass-success mb-4" role="alert">
+                <i class="bi bi-check-circle me-2"></i> @Model.SuccessMessage
+                <button type="button" class="btn-close" data-bs-dismiss="alert" style="filter: brightness(0) invert(1);"></button>
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert-glass-danger mb-4" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i> @Model.ErrorMessage
+                <button type="button" class="btn-close" data-bs-dismiss="alert" style="filter: brightness(0) invert(1);"></button>
+            </div>
+        }
+
+        <!-- Main Content -->
+        <div class="row">
+            <!-- Left Column: Room Details -->
+            <div class="col-lg-8 mb-4">
+                <!-- Header Card -->
+                <div class="glass-card">
+                    <div class="glass-card-header" style="@headerClass">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                            <h3 class="mb-0 neon-text">
+                                <i class="bi bi-door-open"></i> @Model.Room.Name
+                            </h3>
+                            <div>
+                                <span class="@statusBadge">
+                                    @Model.Room.CurrentStatusDisplay
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card-body">
+                        <!-- Campus Info -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <h5 class="text-muted-glass mb-3">
+                                    <i class="bi bi-building"></i> Location
+                                </h5>
+                                <div class="location-alert">
+                                    <h5 class="mb-0">
+                                        <i class="bi bi-geo-alt-fill" style="color: #60a5fa;"></i>
+                                        <span style="color: #93c5fd;">@Model.Room.CampusName</span>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Room Specs -->
+                        <div class="row mb-4">
+                            <div class="col-md-4 mb-3 mb-md-0">
+                                <div class="stat-card-glass">
+                                    <i class="bi bi-tag" style="color: #ff8a00;"></i>
+                                    <h6 class="stat-label mt-2">Type</h6>
+                                    <div class="stat-value">@Model.Room.TypeDisplay</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3 mb-md-0">
+                                <div class="stat-card-glass">
+                                    <i class="bi bi-people" style="color: #f59e0b;"></i>
+                                    <h6 class="stat-label mt-2">Capacity</h6>
+                                    <div class="stat-value">@Model.Room.Capacity</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stat-card-glass">
+                                    <i class="bi bi-calendar-check" style="color: #06b6d4;"></i>
+                                    <h6 class="stat-label mt-2">Bookings</h6>
+                                    <div class="stat-value">@Model.Room.TotalBookings</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5 class="text-muted-glass mb-3">
+                                    <i class="bi bi-text-paragraph"></i> Description
+                                </h5>
+                                <div class="description-glass">
+                                    @if (!string.IsNullOrWhiteSpace(Model.Room.Description))
+                                    {
+                                        <p class="mb-0">@Model.Room.Description</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="text-muted-glass mb-0">
+                                            <em>No description available</em>
+                                        </p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            }
 
-            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
-            {
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="bi bi-exclamation-triangle"></i> @Model.ErrorMessage
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <!-- Statistics Card -->
+                <div class="glass-card">
+                    <div class="glass-card-header" style="background: rgba(6, 182, 212, 0.15);">
+                        <h5 class="mb-0 neon-text">
+                            <i class="bi bi-bar-chart"></i> Room Statistics
+                        </h5>
+                    </div>
+                    <div class="glass-card-body">
+                        <div class="row text-center">
+                            <div class="col-md-3 col-6 mb-3">
+                                <div class="stat-box">
+                                    <h3 style="color: #60a5fa;">@Model.Room.TotalBookings</h3>
+                                    <small>Total Bookings</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6 mb-3">
+                                <div class="stat-box">
+                                    <h3 style="color: #f87171;">@Model.Room.PendingReports</h3>
+                                    <small>Pending Reports</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6 mb-3">
+                                <div class="stat-box">
+                                    <h3 style="color: #10b981;">
+                                        @(Model.Room.CurrentStatus == BookingStatus.Approved ? "Yes" : "No")
+                                    </h3>
+                                    <small>Available</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6 mb-3">
+                                <div class="stat-box">
+                                    <h3 style="color: #06b6d4;">@Model.Room.Capacity</h3>
+                                    <small>Max Capacity</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            }
 
-            <!-- Main Content -->
-            <div class="row">
-                <!-- Left Column: Room Details -->
-                <div class="col-lg-8 mb-4">
-                    <!-- Header Card -->
-                    <div class="card shadow-lg mb-4">
-                        <div class="card-header @typeBadge text-white">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h3 class="mb-0">
-                                    <i class="bi bi-door-open"></i> @Model.Room.Name
-                                </h3>
-                                <div>
-                                    <span class="badge @statusBadge" style="font-size: 1em;">
-                                        @Model.Room.CurrentStatusDisplay
+                <!-- Booking History -->
+                <div class="glass-card">
+                    <div class="glass-card-header" style="background: rgba(156, 163, 175, 0.15);">
+                        <h5 class="mb-0 neon-text">
+                            <i class="bi bi-clock-history"></i> Recent Bookings
+                        </h5>
+                    </div>
+                    <div class="glass-card-body">
+                        @if (Model.Room.TotalBookings > 0)
+                        {
+                            <div class="alert-glass-info">
+                                <i class="bi bi-info-circle"></i>
+                                This room has <strong>@Model.Room.TotalBookings</strong> booking(s).
+                                <p class="mb-0 mt-2">
+                                    <small>Booking details will be displayed here when the booking system is implemented.</small>
+                                </p>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="empty-state-glass">
+                                <i class="bi bi-inbox"></i>
+                                <p class="mt-3 mb-0">No bookings yet</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Actions & Info -->
+            <div class="col-lg-4 mb-4">
+                <!-- Action Buttons -->
+                <div class="glass-card">
+                    <div class="glass-card-header" style="background: rgba(17, 24, 39, 0.5);">
+                        <h5 class="mb-0 neon-text">
+                            <i class="bi bi-lightning"></i> Actions
+                        </h5>
+                    </div>
+                    <div class="glass-card-body">
+                        <div class="d-grid gap-3">
+                            <a asp-page="RoomSchedules" asp-route-id="@Model.Room.Id"
+                               class="btn btn-glass-info">
+                                <i class="bi bi-calendar-week"></i> View Schedules
+                            </a>
+                            <hr class="divider-glass" />
+                            <a asp-page="Edit" asp-route-id="@Model.Room.Id"
+                               class="btn btn-glass-warning">
+                                <i class="bi bi-pencil-square"></i> Edit Room
+                            </a>
+                            <button type="button"
+                                    class="btn btn-glass-danger"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal">
+                                <i class="bi bi-trash"></i> Delete Room
+                            </button>
+                            <hr class="divider-glass" />
+                            <a asp-page="Index" class="btn btn-glass-secondary">
+                                <i class="bi bi-arrow-left"></i> Back to List
+                            </a>
+                            <a asp-page="Dashboard" class="btn btn-glass-dark">
+                                <i class="bi bi-speedometer2"></i> Dashboard
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Info Card -->
+                <div class="glass-card" style="border-color: rgba(59, 130, 246, 0.3);">
+                    <div class="glass-card-header" style="background: rgba(59, 130, 246, 0.15);">
+                        <h5 class="mb-0 neon-text">
+                            <i class="bi bi-info-circle"></i> Quick Info
+                        </h5>
+                    </div>
+                    <div class="glass-card-body">
+                        <ul class="info-list-glass">
+                            <li>
+                                <strong><i class="bi bi-hash text-muted-glass"></i> Room ID:</strong>
+                                <small class="text-muted-glass font-monospace">@Model.Room.Id</small>
+                            </li>
+                            <li>
+                                <strong><i class="bi bi-calendar-plus text-muted-glass"></i> Created:</strong>
+                                <small class="text-muted-glass">@Model.Room.CreatedAt.ToString("dd/MM/yyyy HH:mm")</small>
+                            </li>
+                            <li>
+                                <strong><i class="bi bi-building text-muted-glass"></i> Campus:</strong>
+                                <small class="text-muted-glass">@Model.Room.CampusName</small>
+                            </li>
+                            <li>
+                                <strong class="mb-2 d-block">
+                                    <i class="bi bi-info-square text-muted-glass"></i> Details:
+                                </strong>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="@typeBadge" style="font-size: 0.875rem; padding: 6px 12px;">
+                                        <i class="bi bi-tag me-1"></i>@Model.Room.TypeDisplay
+                                    </span>
+                                    <span class="@statusBadge" style="font-size: 0.875rem; padding: 6px 12px;">
+                                        <i class="bi bi-circle me-1"></i>@Model.Room.CurrentStatusDisplay
+                                    </span>
+                                    <span class="badge-glass-secondary" style="font-size: 0.875rem; padding: 6px 12px; border-radius: 12px;">
+                                        <i class="bi bi-people me-1"></i>@Model.Room.Capacity seats
                                     </span>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="card-body p-4">
-                            <!-- Campus Info -->
-                            <div class="row mb-4">
-                                <div class="col-md-12">
-                                    <h5 class="text-muted mb-3">
-                                        <i class="bi bi-building"></i> Location
-                                    </h5>
-                                    <div class="alert alert-light border">
-                                        <h5 class="mb-0">
-                                            <i class="bi bi-geo-alt-fill text-primary"></i> 
-                                            @Model.Room.CampusName
-                                        </h5>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Room Specs -->
-                            <div class="row mb-4">
-                                <div class="col-md-4">
-                                    <div class="card border-0 bg-light text-center p-3">
-                                        <i class="bi bi-tag display-4 @typeBadge.Replace("bg-", "text-")"></i>
-                                        <h6 class="text-muted mt-2">Type</h6>
-                                        <h5 class="mb-0">@Model.Room.TypeDisplay</h5>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="card border-0 bg-light text-center p-3">
-                                        <i class="bi bi-people display-4 text-warning"></i>
-                                        <h6 class="text-muted mt-2">Capacity</h6>
-                                        <h5 class="mb-0">@Model.Room.Capacity</h5>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="card border-0 bg-light text-center p-3">
-                                        <i class="bi bi-calendar-check display-4 text-info"></i>
-                                        <h6 class="text-muted mt-2">Bookings</h6>
-                                        <h5 class="mb-0">@Model.Room.TotalBookings</h5>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Description -->
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h5 class="text-muted mb-3">
-                                        <i class="bi bi-text-paragraph"></i> Description
-                                    </h5>
-                                    <div class="card border-0 bg-light p-3">
-                                        @if (!string.IsNullOrWhiteSpace(Model.Room.Description))
-                                        {
-                                            <p class="mb-0">@Model.Room.Description</p>
-                                        }
-                                        else
-                                        {
-                                            <p class="text-muted mb-0">
-                                                <em>No description available</em>
-                                            </p>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Statistics Card -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header bg-info text-white">
-                            <h5 class="mb-0">
-                                <i class="bi bi-bar-chart"></i> Room Statistics
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="row text-center">
-                                <div class="col-md-3 mb-3">
-                                    <div class="p-3 border rounded">
-                                        <h3 class="text-primary mb-1">@Model.Room.TotalBookings</h3>
-                                        <small class="text-muted">Total Bookings</small>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <div class="p-3 border rounded">
-                                        <h3 class="text-danger mb-1">@Model.Room.PendingReports</h3>
-                                        <small class="text-muted">Pending Reports</small>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <div class="p-3 border rounded">
-                                        <h3 class="text-success mb-1">
-                                            @(Model.Room.CurrentStatus == BookingStatus.Approved ? "Yes" : "No")
-                                        </h3>
-                                        <small class="text-muted">Available</small>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <div class="p-3 border rounded">
-                                        <h3 class="text-info mb-1">@Model.Room.Capacity</h3>
-                                        <small class="text-muted">Max Capacity</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Booking History (Placeholder) -->
-                    <div class="card shadow">
-                        <div class="card-header bg-secondary text-white">
-                            <h5 class="mb-0">
-                                <i class="bi bi-clock-history"></i> Recent Bookings
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            @if (Model.Room.TotalBookings > 0)
-                            {
-                                <div class="alert alert-info">
-                                    <i class="bi bi-info-circle"></i> 
-                                    This room has <strong>@Model.Room.TotalBookings</strong> booking(s).
-                                    <p class="mb-0 mt-2">
-                                        <small>Booking details will be displayed here when the booking system is implemented.</small>
-                                    </p>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="text-center py-4">
-                                    <i class="bi bi-inbox display-4 text-muted"></i>
-                                    <p class="text-muted mt-3">No bookings yet</p>
-                                </div>
-                            }
-                        </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
-                <!-- Right Column: Actions & Info -->
-                <div class="col-lg-4 mb-4">
-                    <!-- Action Buttons -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header bg-dark text-white">
-                            <h5 class="mb-0">
-                                <i class="bi bi-lightning"></i> Actions
+                <!-- Reports Card -->
+                @if (Model.Room.PendingReports > 0)
+                {
+                    <div class="glass-card" style="border-color: rgba(239, 68, 68, 0.4);">
+                        <div class="glass-card-header" style="background: rgba(239, 68, 68, 0.15);">
+                            <h5 class="mb-0" style="color: #f87171;">
+                                <i class="bi bi-exclamation-triangle"></i> Attention Required
                             </h5>
                         </div>
-                        <div class="card-body">
-                            <div class="d-grid gap-2">
-                                <a asp-page="RoomSchedules" asp-route-id="@Model.Room.Id" 
-                                   class="btn btn-info btn-lg">
-                                    <i class="bi bi-calendar-week"></i> View Schedules
-                                </a>
-                                <hr class="my-2" />
-                                <a asp-page="Edit" asp-route-id="@Model.Room.Id" 
-                                   class="btn btn-warning btn-lg">
-                                    <i class="bi bi-pencil-square"></i> Edit Room
-                                </a>
-                                <button type="button" 
-                                        class="btn btn-danger btn-lg" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#deleteModal">
-                                    <i class="bi bi-trash"></i> Delete Room
+                        <div class="glass-card-body">
+                            <div class="alert-glass-warning mb-0">
+                                <strong>@Model.Room.PendingReports</strong> pending report(s) require attention.
+                                <hr class="divider-glass" />
+                                <button class="btn btn-glass-warning" style="width: auto; padding: 8px 16px;" disabled>
+                                    <i class="bi bi-flag"></i> View Reports (Coming Soon)
                                 </button>
-                                <hr class="my-2" />
-                                <a asp-page="Index" class="btn btn-outline-secondary btn-lg">
-                                    <i class="bi bi-arrow-left"></i> Back to List
-                                </a>
-                                <a asp-page="Dashboard" class="btn btn-outline-info btn-lg">
-                                    <i class="bi bi-speedometer2"></i> Dashboard
-                                </a>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Quick Info Card -->
-                    <div class="card shadow mb-4 border-primary">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="mb-0">
-                                <i class="bi bi-info-circle"></i> Quick Info
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-unstyled mb-0">
-                                <li class="mb-3 pb-3 border-bottom">
-                                    <strong><i class="bi bi-hash text-muted"></i> Room ID:</strong><br/>
-                                    <small class="text-muted font-monospace">@Model.Room.Id</small>
-                                </li>
-                                <li class="mb-3 pb-3 border-bottom">
-                                    <strong><i class="bi bi-calendar-plus text-muted"></i> Created:</strong><br/>
-                                    <small>@Model.Room.CreatedAt.ToString("dd/MM/yyyy HH:mm")</small>
-                                </li>
-                                <li class="mb-3 pb-3 border-bottom">
-                                    <strong><i class="bi bi-building text-muted"></i> Campus:</strong><br/>
-                                    <small>@Model.Room.CampusName</small>
-                                </li>
-                                <li class="mb-3 pb-3 border-bottom">
-                                    <strong><i class="bi bi-tag text-muted"></i> Type:</strong><br/>
-                                    <span class="badge @typeBadge">@Model.Room.TypeDisplay</span>
-                                </li>
-                                <li class="mb-3 pb-3 border-bottom>
-                                    <strong><i class="bi bi-circle text-muted"></i> Status:</strong><br/>
-                                    <span class="badge @statusBadge">@Model.Room.CurrentStatusDisplay</span>
-                                </li>
-                                <li>
-                                    <strong><i class="bi bi-people text-muted"></i> Capacity:</strong><br/>
-                                    <span class="badge bg-secondary rounded-pill">@Model.Room.Capacity seats</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Reports Card -->
-                    @if (Model.Room.PendingReports > 0)
-                    {
-                        <div class="card shadow border-danger">
-                            <div class="card-header bg-danger text-white">
-                                <h5 class="mb-0">
-                                    <i class="bi bi-exclamation-triangle"></i> Attention Required
-                                </h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="alert alert-warning mb-0">
-                                    <strong>@Model.Room.PendingReports</strong> pending report(s) require attention.
-                                    <hr />
-                                    <button class="btn btn-sm btn-warning" disabled>
-                                        <i class="bi bi-flag"></i> View Reports (Coming Soon)
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                </div>
+                }
             </div>
         </div>
     </div>
@@ -301,43 +791,43 @@
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
+        <div class="modal-content-glass">
+            <div class="modal-header-glass-danger">
                 <h5 class="modal-title">
                     <i class="bi bi-exclamation-triangle"></i> Confirm Delete
                 </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" style="filter: brightness(0) invert(1);"></button>
             </div>
-            <div class="modal-body">
-                <h5 class="text-danger mb-3">Are you sure?</h5>
+            <div class="modal-body-glass">
+                <h5 class="mb-3">Are you sure?</h5>
                 <p>You are about to delete:</p>
-                <div class="alert alert-light border">
-                    <strong>@Model.Room.Name</strong><br/>
-                    <small class="text-muted">
+                <div class="alert-glass-light mb-3">
+                    <strong style="color: #ff8a00;">@Model.Room.Name</strong><br />
+                    <small class="text-muted-glass">
                         @Model.Room.CampusName • @Model.Room.TypeDisplay • @Model.Room.Capacity seats
                     </small>
                 </div>
-                
+
                 @if (Model.Room.TotalBookings > 0)
                 {
-                    <div class="alert alert-warning">
-                        <i class="bi bi-exclamation-triangle"></i> 
-                        <strong>Warning:</strong> This room has @Model.Room.TotalBookings booking(s). 
+                    <div class="alert-glass-warning mb-3">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        <strong>Warning:</strong> This room has @Model.Room.TotalBookings booking(s).
                         Only rooms without active bookings can be deleted.
                     </div>
                 }
-                
-                <div class="alert alert-info">
-                    <i class="bi bi-info-circle"></i> 
+
+                <div class="alert-glass-info mb-0">
+                    <i class="bi bi-info-circle"></i>
                     <small>This is a soft delete. The room data will be preserved in the database.</small>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <div class="modal-footer-glass">
+                <button type="button" class="btn btn-glass-secondary" data-bs-dismiss="modal" style="width: auto;">
                     <i class="bi bi-x-circle"></i> Cancel
                 </button>
                 <form method="post" asp-page-handler="Delete" asp-route-id="@Model.Room.Id" class="d-inline">
-                    <button type="submit" class="btn btn-danger">
+                    <button type="submit" class="btn btn-neon-primary" style="width: auto; background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); border-color: #dc2626;">
                         <i class="bi bi-trash"></i> Delete Room
                     </button>
                 </form>
@@ -350,9 +840,9 @@
     <script>
         // Auto-hide alerts
         setTimeout(function() {
-            var alerts = document.querySelectorAll('.alert');
+            var alerts = document.querySelectorAll('[class*="alert-glass"]');
             alerts.forEach(function(alert) {
-                var bsAlert = new bootstrap.Alert(alert);
+                var bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
                 bsAlert.close();
             });
         }, 5000);
