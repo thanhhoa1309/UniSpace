@@ -37,7 +37,7 @@ namespace UniSpace.Presentation.Pages.Admin.Schedule
 
         public async Task OnGetAsync(
             int pageNumber = 1,
-            int pageSize = 20,
+            int pageSize = 10,
             string? search = null,
             Guid? roomId = null,
             ScheduleType? type = null,
@@ -90,7 +90,7 @@ namespace UniSpace.Presentation.Pages.Admin.Schedule
             {
                 _logger.LogError(ex, "Error loading schedules");
                 ErrorMessage = "Error loading schedules. Please try again.";
-                Schedules = new Pagination<ScheduleDto>(new List<ScheduleDto>(), 0, 1, 20);
+                Schedules = new Pagination<ScheduleDto>(new List<ScheduleDto>(), 0, 1, 10);
             }
         }
 

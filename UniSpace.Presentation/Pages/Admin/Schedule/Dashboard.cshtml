@@ -8,15 +8,12 @@
 <style>
     /* Page Container */
     .dashboard-page-container {
-        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
         min-height: 100vh;
         padding: 20px 0;
     }
 
     /* Glass Card Header */
     .glass-card-header {
-        background: rgba(45, 45, 45, 0.5);
-        backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         border: 1px solid rgba(255, 138, 0, 0.2);
         border-radius: 15px;
@@ -43,7 +40,6 @@
 
     /* Statistics Cards */
     .stat-card-glass {
-        background: rgba(45, 45, 45, 0.5);
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         border: 1px solid rgba(255, 138, 0, 0.2);
@@ -104,8 +100,6 @@
 
     /* Chart Cards */
     .chart-card-glass {
-        background: rgba(45, 45, 45, 0.5);
-        backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         border: 1px solid rgba(255, 138, 0, 0.2);
         border-radius: 15px;
@@ -126,9 +120,6 @@
 
     /* List Cards */
     .list-card-glass {
-        background: rgba(45, 45, 45, 0.5);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
         border: 1px solid rgba(255, 138, 0, 0.2);
         border-radius: 15px;
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
@@ -347,8 +338,6 @@
 
     /* Quick Action Cards */
     .action-card-glass {
-        background: rgba(45, 45, 45, 0.5);
-        backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         border: 1px solid rgba(255, 138, 0, 0.2);
         border-radius: 15px;
@@ -580,7 +569,7 @@
         <div class="row g-3 mb-4">
             <!-- Schedules by Day Chart -->
             <div class="col-xl-8">
-                <div class="chart-card-glass">
+                <div class="chart-card-glass h-100">
                     <div class="chart-card-header">
                         <div class="d-flex justify-content-between align-items-center">
                             <h5 class="mb-0 neon-text">
@@ -591,7 +580,9 @@
                         </div>
                     </div>
                     <div class="chart-card-body">
-                        <canvas id="dayChart" height="80"></canvas>
+                        .<div style="postition: relative; height: 200px">
+                            <canvas id="dayChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -609,9 +600,9 @@
                         <canvas id="typeChart" height="200"></canvas>
                     </div>
                     <div class="stat-card-footer">
-                        <div class="d-flex justify-content-between" style="font-size: 0.875rem;">
-                            <span><i class="bi bi-circle-fill" style="color: #ff8a00;"></i> Academic</span>
-                            <span><i class="bi bi-circle-fill" style="color: #f59e0b;"></i> Maintenance</span>
+                        <div class="d-flex justify-content-center" style="font-size: 0.875rem;">
+                            <span style="color: #ffffff; padding-right: 20px"><i class="bi bi-circle-fill" style="color: #ff8a00;"></i> Academic</span>
+                            <span style="color: #ffffff"><i class="bi bi-circle-fill" style="color: #f59e0b;"></i> Maintenance</span>
                         </div>
                     </div>
                 </div>
@@ -622,7 +613,7 @@
         <div class="row g-3 mb-4">
             <!-- Recent Schedules -->
             <div class="col-xl-6">
-                <div class="list-card-glass">
+                <div class="list-card-glass h-100 d-flex flex-column">
                     <div class="chart-card-header">
                         <div class="d-flex justify-content-between align-items-center">
                             <h5 class="mb-0 neon-text">
@@ -632,7 +623,7 @@
                             <a asp-page="Index" class="btn btn-glass-secondary btn-sm">View All</a>
                         </div>
                     </div>
-                    <div class="p-0">
+                    <div class="flex-grow-1 p-0">
                         @if (Model.RecentSchedules.Any())
                         {
                             @foreach (var schedule in Model.RecentSchedules.Take(5))
@@ -683,7 +674,7 @@
 
             <!-- Upcoming Schedules -->
             <div class="col-xl-6">
-                <div class="list-card-glass">
+                <div class="list-card-glass h-100 d-flex flex-column">
                     <div class="chart-card-header">
                         <div class="d-flex justify-content-between align-items-center">
                             <h5 class="mb-0 neon-text">
@@ -693,7 +684,7 @@
                             <span class="badge-glass-info">Next 5</span>
                         </div>
                     </div>
-                    <div class="p-0">
+                    <div class="flex-grow-1 p-0">
                         @if (Model.UpcomingSchedules.Any())
                         {
                             @foreach (var schedule in Model.UpcomingSchedules.Take(5))

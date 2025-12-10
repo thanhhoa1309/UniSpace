@@ -15,8 +15,6 @@
 
     /* Glassmorphism Card */
     .glass-morphism {
-        background: rgba(45, 45, 45, 0.5);
-        backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         border: 1px solid rgba(255, 138, 0, 0.2);
         border-radius: 15px;
@@ -32,8 +30,6 @@
 
     /* Hero Glass Card */
     .hero-glass-card {
-        background: rgba(45, 45, 45, 0.4);
-        backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 138, 0, 0.2);
         border-radius: 20px;
@@ -131,7 +127,8 @@
     .neon-button-warning {
         background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
         border: 2px solid #f59e0b;
-        color: #1a1a1a;
+        color: #fff;
+        font-weight: 700;
         box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
     }
 
@@ -180,8 +177,6 @@
 
     /* How It Works Section */
     .how-it-works-card {
-        background: rgba(45, 45, 45, 0.5);
-        backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         border: 1px solid rgba(255, 138, 0, 0.2);
         border-radius: 15px;
@@ -323,7 +318,7 @@
                     {
                         <div class="text-center">
                             <a asp-page="/Bookings/MyBookings" class="btn neon-button-success">
-                                <i class="bi bi-list-check"></i> My Bookings
+                                <i class="bi bi-list-check"></i> MY BOOKINGS
                             </a>
                         </div>
                     }
@@ -341,7 +336,7 @@
                     {
                         <div class="text-center">
                             <a asp-page="/RoomReports/MyReports" class="btn neon-button-warning">
-                                <i class="bi bi-file-text"></i> My Reports
+                                <i class="bi bi-file-text"></i> MY REPORTS
                             </a>
                         </div>
                     }

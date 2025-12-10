@@ -341,23 +341,21 @@ namespace UniSpace.Service.Services
                 // Get total count before pagination
                 var totalCount = query.Count();
 
-                // Apply sorting
-                query = query.OrderBy(s => s.DayOfWeek)
-                    .ThenBy(s => s.StartTime);
+                // Apply sorting and pagination with includes
+                var schedules = await _unitOfWork.Schedule.GetAllAsync(
+                    predicate: query.Expression as Expression<Func<Schedule, bool>> ?? (s => !s.IsDeleted),
+                    includes: new Expression<Func<Schedule, object>>[] { s => s.Room, s => s.Room.Campus }
+                );
 
-                // Apply pagination
-                var schedules = query
+                // Apply sorting in memory (since we already have the data)
+                var sortedSchedules = schedules
+                    .OrderBy(s => s.DayOfWeek)
+                    .ThenBy(s => s.StartTime)
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
-                    .Select(s => new
-                    {
-                        Schedule = s,
-                        RoomName = s.Room.Name,
-                        CampusName = s.Room.Campus.Name
-                    })
                     .ToList();
 
-                var scheduleDtos = schedules.Select(s => MapToDto(s.Schedule)).ToList();
+                var scheduleDtos = sortedSchedules.Select(MapToDto).ToList();
 
                 _logger.LogInformation("Retrieved {Count} schedules for page {Page}", scheduleDtos.Count, pageNumber);
 
