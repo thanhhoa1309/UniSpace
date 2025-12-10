@@ -1,0 +1,405 @@
+@page
+@model UniSpace.Presentation.Pages.Admin.Reports.DashboardModel
+@{
+    ViewData["Title"] = "Reports Dashboard";
+}
+
+<div class="container-fluid mt-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2><i class="bi bi-file-earmark-bar-graph"></i> Reports Dashboard</h2>
+                    <p class="text-muted">Overview of system reports and analytics</p>
+                </div>
+                <div>
+                    <a asp-page="/Admin/Dashboard" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Period Filter -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form method="get" class="row align-items-center">
+                        <div class="col-auto">
+                            <label class="form-label mb-0">Period:</label>
+                        </div>
+                        <div class="col-auto">
+                            <div class="btn-group" role="group">
+                                <input type="radio" class="btn-check" name="Period" id="periodDay" value="day" 
+                                       checked="@(Model.Period == "day")" onchange="this.form.submit()" />
+                                <label class="btn btn-outline-primary" for="periodDay">Today</label>
+
+                                <input type="radio" class="btn-check" name="Period" id="periodWeek" value="week" 
+                                       checked="@(Model.Period == "week")" onchange="this.form.submit()" />
+                                <label class="btn btn-outline-primary" for="periodWeek">This Week</label>
+
+                                <input type="radio" class="btn-check" name="Period" id="periodMonth" value="month" 
+                                       checked="@(Model.Period == "month")" onchange="this.form.submit()" />
+                                <label class="btn btn-outline-primary" for="periodMonth">This Month</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <!-- Total Bookings -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Total Bookings
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @Model.TotalBookings
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-calendar-check" style="font-size: 2em; color: #f6c23e;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Bookings -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Pending Bookings
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @Model.PendingBookings
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-clock-history" style="font-size: 2em; color: #4e73df;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-light">
+                    <a asp-page="/Admin/Booking/Dashboard" class="small text-primary">
+                        View Details <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Reports -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                Total Reports
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @Model.TotalReports
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-exclamation-triangle" style="font-size: 2em; color: #e74a3b;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Open Reports -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Open Reports
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @Model.OpenReports
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-flag" style="font-size: 2em; color: #36b9cc;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-light">
+                    <a asp-page="/Admin/RoomReports/Index" class="small text-info">
+                        View Details <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row 1 -->
+    <div class="row mb-4">
+        <!-- Bookings Trend -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="bi bi-graph-up"></i> Bookings Trend</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="bookingsTrendChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Trend -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0"><i class="bi bi-graph-up"></i> Reports Trend</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="reportsTrendChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row 2 -->
+    <div class="row mb-4">
+        <!-- Bookings by Room Type -->
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-pie-chart"></i> Bookings by Room Type</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="bookingsByRoomTypeChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bookings by Status -->
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="bi bi-pie-chart"></i> Bookings by Status</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="bookingsByStatusChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports by Status -->
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="bi bi-pie-chart"></i> Reports by Status</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="reportsByStatusChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reports by Issue Type -->
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <div class="card shadow">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0"><i class="bi bi-bar-chart"></i> Top 10 Issue Types</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="reportsByIssueTypeChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0"><i class="bi bi-lightning"></i> Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="btn-group" role="group">
+                        <a asp-page="/Admin/Booking/Dashboard" class="btn btn-warning">
+                            <i class="bi bi-calendar-check"></i> View All Bookings
+                        </a>
+                        <a asp-page="/Admin/RoomReports/Index" class="btn btn-danger">
+                            <i class="bi bi-exclamation-triangle"></i> View All Reports
+                        </a>
+                        <a asp-page="/Admin/Booking/Index" asp-route-status="0" class="btn btn-primary">
+                            <i class="bi bi-clipboard-check"></i> Review Pending Bookings
+                        </a>
+                        <a asp-page="/Admin/RoomReports/Index" asp-route-status="0" class="btn btn-info">
+                            <i class="bi bi-flag"></i> Review Open Reports
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .border-left-primary {
+        border-left: 0.25rem solid #4e73df !important;
+    }
+    .border-left-success {
+        border-left: 0.25rem solid #1cc88a !important;
+    }
+    .border-left-info {
+        border-left: 0.25rem solid #36b9cc !important;
+    }
+    .border-left-warning {
+        border-left: 0.25rem solid #f6c23e !important;
+    }
+    .border-left-danger {
+        border-left: 0.25rem solid #e74a3b !important;
+    }
+    .text-xs {
+        font-size: 0.7rem;
+    }
+</style>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Bookings Trend Chart
+        const bookingsTrendCtx = document.getElementById('bookingsTrendChart').getContext('2d');
+        new Chart(bookingsTrendCtx, {
+            type: 'line',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.BookingsTrend.Keys)),
+                datasets: [{
+                    label: 'Bookings',
+                    data: @Html.Raw(Json.Serialize(Model.BookingsTrend.Values)),
+                    borderColor: '#f6c23e',
+                    backgroundColor: 'rgba(246, 194, 62, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { display: true }
+                }
+            }
+        });
+
+        // Reports Trend Chart
+        const reportsTrendCtx = document.getElementById('reportsTrendChart').getContext('2d');
+        new Chart(reportsTrendCtx, {
+            type: 'line',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.ReportsTrend.Keys)),
+                datasets: [{
+                    label: 'Reports',
+                    data: @Html.Raw(Json.Serialize(Model.ReportsTrend.Values)),
+                    borderColor: '#e74a3b',
+                    backgroundColor: 'rgba(231, 74, 59, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { display: true }
+                }
+            }
+        });
+
+        // Bookings by Room Type Chart
+        const bookingsByRoomTypeCtx = document.getElementById('bookingsByRoomTypeChart').getContext('2d');
+        new Chart(bookingsByRoomTypeCtx, {
+            type: 'doughnut',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.BookingsByRoomType.Keys)),
+                datasets: [{
+                    data: @Html.Raw(Json.Serialize(Model.BookingsByRoomType.Values)),
+                    backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true
+            }
+        });
+
+        // Bookings by Status Chart
+        const bookingsByStatusCtx = document.getElementById('bookingsByStatusChart').getContext('2d');
+        new Chart(bookingsByStatusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.BookingsByStatus.Keys)),
+                datasets: [{
+                    data: @Html.Raw(Json.Serialize(Model.BookingsByStatus.Values)),
+                    backgroundColor: ['#f6c23e', '#1cc88a', '#e74a3b', '#36b9cc', '#858796']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true
+            }
+        });
+
+        // Reports by Status Chart
+        const reportsByStatusCtx = document.getElementById('reportsByStatusChart').getContext('2d');
+        new Chart(reportsByStatusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.ReportsByStatus.Keys)),
+                datasets: [{
+                    data: @Html.Raw(Json.Serialize(Model.ReportsByStatus.Values)),
+                    backgroundColor: ['#e74a3b', '#1cc88a']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true
+            }
+        });
+
+        // Reports by Issue Type Chart
+        const reportsByIssueTypeCtx = document.getElementById('reportsByIssueTypeChart').getContext('2d');
+        new Chart(reportsByIssueTypeCtx, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.ReportsByIssueType.Keys)),
+                datasets: [{
+                    label: 'Number of Reports',
+                    data: @Html.Raw(Json.Serialize(Model.ReportsByIssueType.Values)),
+                    backgroundColor: '#858796'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    </script>
+}

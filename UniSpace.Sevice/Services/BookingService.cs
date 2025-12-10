@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
@@ -7,6 +8,7 @@ using UniSpace.Domain.Entities;
 using UniSpace.Domain.Interfaces;
 using UniSpace.Service.Interfaces;
 using UniSpace.Services.Utils;
+using UniSpace.Service.Hubs;
 
 namespace UniSpace.Service.Services
 {
@@ -16,17 +18,20 @@ namespace UniSpace.Service.Services
         private readonly IClaimsService _claimsService;
         private readonly ICurrentTime _currentTime;
         private readonly ILogger<BookingService> _logger;
+        private readonly IHubContext<BookingHub> _hubContext;
 
         public BookingService(
             IUnitOfWork unitOfWork,
             IClaimsService claimsService,
             ICurrentTime currentTime,
-            ILogger<BookingService> logger)
+            ILogger<BookingService> logger,
+            IHubContext<BookingHub> hubContext)
         {
             _unitOfWork = unitOfWork;
             _claimsService = claimsService;
             _currentTime = currentTime;
             _logger = logger;
+            _hubContext = hubContext;
         }
 
         #region Create
@@ -356,6 +361,102 @@ namespace UniSpace.Service.Services
             }
         }
 
+        /// <summary>
+        /// Unified method for confirming bookings (Approve or Reject)
+        /// </summary>
+        public async Task<BookingDto?> ConfirmBookingAsync(ConfirmBookingDto confirmDto)
+        {
+            try
+            {
+                var currentUserId = _claimsService.GetCurrentUserId;
+                _logger.LogInformation($"Admin {currentUserId} is confirming booking {confirmDto.Id} with status: {confirmDto.Status}");
+
+                // Validate status
+                if (confirmDto.Status != BookingStatus.Approved && confirmDto.Status != BookingStatus.Rejected)
+                {
+                    throw ErrorHelper.BadRequest("Status must be either Approved or Rejected");
+                }
+
+                // Get booking with related data
+                var booking = await _unitOfWork.Booking.GetByIdAsync(
+                    confirmDto.Id, 
+                    b => b.Room, 
+                    b => b.Room.Campus,
+                    b => b.User);
+
+                if (booking == null || booking.IsDeleted)
+                {
+                    throw ErrorHelper.NotFound($"Booking with ID '{confirmDto.Id}' not found");
+                }
+
+                if (booking.Status != BookingStatus.Pending)
+                {
+                    throw ErrorHelper.BadRequest($"Can only confirm pending bookings. Current status: {booking.Status}");
+                }
+
+                // Validate admin note for rejection
+                if (confirmDto.Status == BookingStatus.Rejected && string.IsNullOrWhiteSpace(confirmDto.AdminNote))
+                {
+                    throw ErrorHelper.BadRequest("Admin note is required when rejecting a booking");
+                }
+
+                var currentTime = _currentTime.GetCurrentTime();
+
+                // Update booking
+                booking.Status = confirmDto.Status;
+                booking.AdminNote = confirmDto.AdminNote?.Trim() ?? string.Empty;
+                booking.UpdatedAt = currentTime;
+                booking.UpdatedBy = currentUserId;
+
+                await _unitOfWork.Booking.Update(booking);
+                await _unitOfWork.SaveChangesAsync();
+
+                var statusText = confirmDto.Status == BookingStatus.Approved ? "? Approved" : "? Rejected";
+                _logger.LogInformation($"{statusText} booking successfully: {confirmDto.Id}");
+
+                // Send SignalR notification to user
+                try
+                {
+                    var roomName = booking.Room?.Name ?? "Unknown Room";
+                    var campusName = booking.Room?.Campus?.Name ?? "Unknown Campus";
+                    var statusDisplay = confirmDto.Status == BookingStatus.Approved ? "approved" : "rejected";
+                    
+                    string message;
+                    if (confirmDto.Status == BookingStatus.Approved)
+                    {
+                        message = string.IsNullOrWhiteSpace(confirmDto.AdminNote)
+                            ? $"Your booking for '{roomName}' at {campusName} has been {statusDisplay}!"
+                            : $"Your booking for '{roomName}' at {campusName} has been {statusDisplay}. Note: {confirmDto.AdminNote}";
+                    }
+                    else
+                    {
+                        message = $"Your booking for '{roomName}' at {campusName} has been {statusDisplay}. Reason: {confirmDto.AdminNote}";
+                    }
+
+                    await _hubContext.SendBookingStatusUpdateAsync(
+                        booking.UserId.ToString(),
+                        confirmDto.Id,
+                        confirmDto.Status.ToString(),
+                        message
+                    );
+
+                    _logger.LogInformation($"?? Sent {statusDisplay} notification to user {booking.UserId}");
+                }
+                catch (Exception notifEx)
+                {
+                    _logger.LogWarning(notifEx, $"Failed to send notification for booking {confirmDto.Id}");
+                    // Don't throw - notification failure shouldn't fail the confirmation
+                }
+
+                return await GetBookingByIdAsync(confirmDto.Id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error confirming booking: {confirmDto.Id}");
+                throw;
+            }
+        }
+
         public async Task<bool> CancelBookingAsync(Guid bookingId)
         {
             try
@@ -408,7 +509,7 @@ namespace UniSpace.Service.Services
                 var currentUserId = _claimsService.GetCurrentUserId;
                 _logger.LogInformation($"Admin {currentUserId} is approving booking: {bookingId}");
 
-                var booking = await _unitOfWork.Booking.GetByIdAsync(bookingId);
+                var booking = await _unitOfWork.Booking.GetByIdAsync(bookingId, b => b.Room, b => b.User);
 
                 if (booking == null || booking.IsDeleted)
                 {
@@ -417,7 +518,7 @@ namespace UniSpace.Service.Services
 
                 if (booking.Status != BookingStatus.Pending)
                 {
-                    throw ErrorHelper.BadRequest($"Can only approve pending bookings");
+                    throw ErrorHelper.BadRequest($"Can only approve pending bookings. Current status: {booking.Status}");
                 }
 
                 var currentTime = _currentTime.GetCurrentTime();
@@ -430,7 +531,31 @@ namespace UniSpace.Service.Services
                 await _unitOfWork.Booking.Update(booking);
                 await _unitOfWork.SaveChangesAsync();
 
-                _logger.LogInformation($"Booking approved successfully: {bookingId}");
+                _logger.LogInformation($"? Booking approved successfully: {bookingId}");
+
+                // Send SignalR notification to user
+                try
+                {
+                    var roomName = booking.Room?.Name ?? "Unknown Room";
+                    var message = string.IsNullOrWhiteSpace(adminNote)
+                        ? $"Your booking for '{roomName}' has been approved!"
+                        : $"Your booking for '{roomName}' has been approved. Note: {adminNote}";
+
+                    await _hubContext.SendBookingStatusUpdateAsync(
+                        booking.UserId.ToString(),
+                        bookingId,
+                        "Approved",
+                        message
+                    );
+
+                    _logger.LogInformation($"?? Sent approval notification to user {booking.UserId}");
+                }
+                catch (Exception notifEx)
+                {
+                    _logger.LogWarning(notifEx, $"Failed to send approval notification for booking {bookingId}");
+                    // Don't throw - notification failure shouldn't fail the approval
+                }
+
                 return true;
             }
             catch (Exception ex)
@@ -447,7 +572,7 @@ namespace UniSpace.Service.Services
                 var currentUserId = _claimsService.GetCurrentUserId;
                 _logger.LogInformation($"Admin {currentUserId} is rejecting booking: {bookingId}");
 
-                var booking = await _unitOfWork.Booking.GetByIdAsync(bookingId);
+                var booking = await _unitOfWork.Booking.GetByIdAsync(bookingId, b => b.Room, b => b.User);
 
                 if (booking == null || booking.IsDeleted)
                 {
@@ -456,7 +581,7 @@ namespace UniSpace.Service.Services
 
                 if (booking.Status != BookingStatus.Pending)
                 {
-                    throw ErrorHelper.BadRequest($"Can only reject pending bookings");
+                    throw ErrorHelper.BadRequest($"Can only reject pending bookings. Current status: {booking.Status}");
                 }
 
                 if (string.IsNullOrWhiteSpace(adminNote))
@@ -474,7 +599,29 @@ namespace UniSpace.Service.Services
                 await _unitOfWork.Booking.Update(booking);
                 await _unitOfWork.SaveChangesAsync();
 
-                _logger.LogInformation($"Booking rejected successfully: {bookingId}");
+                _logger.LogInformation($"? Booking rejected successfully: {bookingId}");
+
+                // Send SignalR notification to user
+                try
+                {
+                    var roomName = booking.Room?.Name ?? "Unknown Room";
+                    var message = $"Your booking for '{roomName}' has been rejected. Reason: {adminNote}";
+
+                    await _hubContext.SendBookingStatusUpdateAsync(
+                        booking.UserId.ToString(),
+                        bookingId,
+                        "Rejected",
+                        message
+                    );
+
+                    _logger.LogInformation($"?? Sent rejection notification to user {booking.UserId}");
+                }
+                catch (Exception notifEx)
+                {
+                    _logger.LogWarning(notifEx, $"Failed to send rejection notification for booking {bookingId}");
+                    // Don't throw - notification failure shouldn't fail the rejection
+                }
+
                 return true;
             }
             catch (Exception ex)

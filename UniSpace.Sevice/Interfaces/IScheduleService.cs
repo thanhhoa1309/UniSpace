@@ -11,6 +11,7 @@ namespace UniSpace.Service.Interfaces
     {
         // Create
         Task<ScheduleDto?> CreateScheduleAsync(CreateScheduleDto createDto);
+        Task<BulkCreateScheduleResultDto> BulkCreateSchedulesAsync(BulkCreateScheduleDto bulkCreateDto);
 
         // Read
         Task<List<ScheduleDto>> GetAllSchedulesAsync();

@@ -1,0 +1,415 @@
+@page
+@using UniSpace.BusinessObject.Enums
+@model UniSpace.Presentation.Pages.Admin.Schedule.CalendarModel
+@{
+    ViewData["Title"] = "Schedule Calendar";
+    var days = new[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+}
+
+<div class="container-fluid mt-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>
+                <i class="bi bi-calendar-week text-primary"></i> Schedule Calendar
+            </h2>
+            <p class="text-muted mb-0">Weekly view of room schedules</p>
+        </div>
+        <div class="btn-group">
+            <a asp-page="Index" class="btn btn-outline-secondary">
+                <i class="bi bi-list"></i> List View
+            </a>
+            <a asp-page="BulkCreate" class="btn btn-primary">
+                <i class="bi bi-calendar-plus"></i> Bulk Create
+            </a>
+        </div>
+    </div>
+
+    <!-- Week Navigation & Filters -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <!-- Week Navigation -->
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center gap-2">
+                        <a asp-page="Calendar" 
+                           asp-route-viewDate="@Model.CurrentWeekStart.AddDays(-7).ToString("yyyy-MM-dd")"
+                           asp-route-filterRoomId="@Model.FilterRoomId"
+                           asp-route-filterCampusId="@Model.FilterCampusId"
+                           asp-route-filterType="@Model.FilterType"
+                           class="btn btn-outline-primary">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                        
+                        <button type="button" class="btn btn-primary flex-fill" disabled>
+                            Week: @Model.CurrentWeekStart.ToString("MMM dd") - @Model.CurrentWeekEnd.AddDays(-1).ToString("MMM dd, yyyy")
+                        </button>
+                        
+                        <a asp-page="Calendar" 
+                           asp-route-viewDate="@Model.CurrentWeekStart.AddDays(7).ToString("yyyy-MM-dd")"
+                           asp-route-filterRoomId="@Model.FilterRoomId"
+                           asp-route-filterCampusId="@Model.FilterCampusId"
+                           asp-route-filterType="@Model.FilterType"
+                           class="btn btn-outline-primary">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                        
+                        <a asp-page="Calendar" class="btn btn-outline-secondary">
+                            <i class="bi bi-calendar-event"></i> Today
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="col-md-8">
+                    <form method="get" class="row g-2">
+                        <input type="hidden" name="viewDate" value="@Model.ViewDate?.ToString("yyyy-MM-dd")" />
+                        
+                        <div class="col-auto">
+                            <select name="filterType" class="form-select" onchange="this.form.submit()">
+                                <option value="">All Types</option>
+                                <option value="@((int)ScheduleType.Academic_Course)" 
+                                        selected="@(Model.FilterType == ScheduleType.Academic_Course)">
+                                    ?? Academic
+                                </option>
+                                <option value="@((int)ScheduleType.Recurring_Maintenance)" 
+                                        selected="@(Model.FilterType == ScheduleType.Recurring_Maintenance)">
+                                    ?? Maintenance
+                                </option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-outline-primary">
+                                <i class="bi bi-funnel"></i> Apply
+                            </button>
+                        </div>
+                        
+                        @if (Model.FilterRoomId.HasValue || Model.FilterCampusId.HasValue || Model.FilterType.HasValue)
+                        {
+                            <div class="col-auto">
+                                <a asp-page="Calendar" class="btn btn-outline-secondary">
+                                    <i class="bi bi-x-circle"></i> Clear
+                                </a>
+                            </div>
+                        }
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calendar Grid -->
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="calendar-container">
+                <table class="calendar-table">
+                    <thead>
+                        <tr class="calendar-header">
+                            <th class="time-column">Time</th>
+                            @for (int i = 0; i < 7; i++)
+                            {
+                                var date = Model.CurrentWeekStart.AddDays(i);
+                                var isToday = date.Date == DateTime.Today;
+                                <th class="day-column @(isToday ? "today" : "")">
+                                    <div class="day-header">
+                                        <div class="day-name">@days[i]</div>
+                                        <div class="day-date @(isToday ? "today-marker" : "")">
+                                            @date.ToString("MMM dd")
+                                        </div>
+                                    </div>
+                                </th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.WeekView.Any())
+                        {
+                            <tr>
+                                <td colspan="8" class="text-center py-5">
+                                    <i class="bi bi-calendar-x display-1 text-muted"></i>
+                                    <p class="text-muted mt-3">No schedules found for this week</p>
+                                    <a asp-page="BulkCreate" class="btn btn-primary">
+                                        <i class="bi bi-plus-circle"></i> Create Schedules
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var row in Model.WeekView)
+                            {
+                                <tr class="calendar-row">
+                                    <td class="time-cell">
+                                        <div class="time-label">
+                                            @row.TimeSlot.ToString(@"hh\:mm")
+                                        </div>
+                                    </td>
+                                    @for (int day = 0; day < 7; day++)
+                                    {
+                                        <td class="schedule-cell">
+                                            @if (row.DaySchedules[day].Any())
+                                            {
+                                                <div class="schedule-stack">
+                                                    @foreach (var schedule in row.DaySchedules[day])
+                                                    {
+                                                        var colorClass = schedule.ScheduleType == ScheduleType.Academic_Course 
+                                                            ? "schedule-academic" 
+                                                            : "schedule-maintenance";
+                                                        
+                                                        <div class="schedule-item @colorClass" 
+                                                             data-bs-toggle="tooltip" 
+                                                             data-bs-placement="top"
+                                                             title="@schedule.Title - @schedule.RoomName (@schedule.CampusName)"
+                                                             onclick="showScheduleDetails('@schedule.Id')">
+                                                            <div class="schedule-time">
+                                                                <i class="bi bi-clock"></i>
+                                                                @schedule.StartTime.ToString(@"hh\:mm") - @schedule.EndTime.ToString(@"hh\:mm")
+                                                            </div>
+                                                            <div class="schedule-title">@schedule.Title</div>
+                                                            <div class="schedule-room">
+                                                                <i class="bi bi-door-open"></i> @schedule.RoomName
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            }
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics -->
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="bi bi-calendar-check display-4 text-primary"></i>
+                    <h3 class="mt-2">@Model.Schedules.Count</h3>
+                    <p class="text-muted mb-0">Total Schedules</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="bi bi-book display-4 text-success"></i>
+                    <h3 class="mt-2">@Model.Schedules.Count(s => s.ScheduleType == ScheduleType.Academic_Course)</h3>
+                    <p class="text-muted mb-0">Academic Courses</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="bi bi-tools display-4 text-warning"></i>
+                    <h3 class="mt-2">@Model.Schedules.Count(s => s.ScheduleType == ScheduleType.Recurring_Maintenance)</h3>
+                    <p class="text-muted mb-0">Maintenance</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="bi bi-door-open display-4 text-info"></i>
+                    <h3 class="mt-2">@Model.Schedules.Select(s => s.RoomId).Distinct().Count()</h3>
+                    <p class="text-muted mb-0">Active Rooms</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Schedule Details Modal -->
+<div class="modal fade" id="scheduleModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Schedule Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="scheduleDetails">
+                <div class="text-center">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a id="editScheduleBtn" href="#" class="btn btn-primary">
+                    <i class="bi bi-pencil"></i> Edit
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .calendar-container {
+            overflow-x: auto;
+        }
+
+        .calendar-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 0.9em;
+        }
+
+        .calendar-header th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 10px;
+            font-weight: 600;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .time-column {
+            width: 100px;
+            min-width: 100px;
+        }
+
+        .day-column {
+            width: calc((100% - 100px) / 7);
+            min-width: 150px;
+        }
+
+        .day-column.today {
+            background: rgba(255, 193, 7, 0.2);
+        }
+
+        .day-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .day-name {
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .day-date {
+            font-size: 0.8em;
+            opacity: 0.9;
+        }
+
+        .today-marker {
+            background: #ffc107;
+            color: #000;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+
+        .time-cell {
+            background: #f8f9fa;
+            border-right: 2px solid #dee2e6;
+            padding: 15px 10px;
+            text-align: center;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .schedule-cell {
+            border: 1px solid #e9ecef;
+            padding: 8px;
+            vertical-align: top;
+            min-height: 80px;
+        }
+
+        .schedule-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .schedule-item {
+            padding: 10px;
+            border-radius: 6px;
+            border-left: 4px solid;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .schedule-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .schedule-academic {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left-color: #2196f3;
+        }
+
+        .schedule-maintenance {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left-color: #ff9800;
+        }
+
+        .schedule-time {
+            font-size: 0.75em;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .schedule-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .schedule-room {
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        .calendar-row:hover {
+            background: rgba(0,0,0,0.02);
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        function showScheduleDetails(scheduleId) {
+            var modal = new bootstrap.Modal(document.getElementById('scheduleModal'));
+            modal.show();
+            
+            document.getElementById('editScheduleBtn').href = '/Admin/Schedule/Edit?id=' + scheduleId;
+            
+            // Load schedule details via AJAX
+            fetch('/Admin/Schedule/Details?id=' + scheduleId + '&handler=GetDetails')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('scheduleDetails').innerHTML = html;
+                })
+                .catch(error => {
+                    document.getElementById('scheduleDetails').innerHTML = 
+                        '<div class="alert alert-danger">Failed to load schedule details</div>';
+                });
+        }
+    </script>
+}

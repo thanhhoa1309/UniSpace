@@ -4,72 +4,219 @@
     ViewData["Title"] = "Report Room Issue";
 }
 
-<div class="container mt-4">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<style>
+    .report-form-card {
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+
+    .gradient-header {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+        padding: 30px;
+        color: white;
+        border-radius: 15px 15px 0 0;
+    }
+
+    .form-control, .form-select {
+        border-radius: 10px;
+        border: 2px solid #e9ecef;
+        padding: 12px 20px;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #ff6b6b;
+        box-shadow: 0 0 0 0.2rem rgba(255, 107, 107, 0.25);
+    }
+
+    .btn-submit {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+        border: none;
+        padding: 15px 40px;
+        font-weight: 600;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+    }
+
+    .info-box {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 12px;
+        padding: 20px;
+        color: white;
+    }
+
+    .issue-type-option {
+        padding: 15px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .char-counter {
+        position: absolute;
+        right: 20px;
+        bottom: 15px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .form-group {
+        position: relative;
+        margin-bottom: 25px;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .required-asterisk {
+        color: #ff6b6b;
+        font-size: 18px;
+    }
+
+    .helper-text {
+        background: #f8f9fa;
+        border-left: 3px solid #667eea;
+        padding: 12px;
+        border-radius: 8px;
+        margin-top: 8px;
+        font-size: 14px;
+    }
+</style>
+
+<div class="container mt-5 mb-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow">
-                <div class="card-header bg-danger text-white">
-                    <h4 class="mb-0">
-                        <i class="bi bi-exclamation-triangle"></i> Report Room Issue
-                    </h4>
+        <div class="col-lg-8">
+            <div class="card report-form-card">
+                <div class="gradient-header">
+                    <div class="text-center">
+                        <i class="bi bi-exclamation-triangle-fill display-1 mb-3"></i>
+                        <h1 class="display-6 fw-bold mb-2">Report Room Issue</h1>
+                        <p class="mb-0 opacity-75">Help us maintain quality by reporting any problems you encountered
+                        </p>
+                    </div>
                 </div>
-                <div class="card-body">
+
+                <div class="card-body p-5">
                     @if (!string.IsNullOrEmpty(Model.ErrorMessage))
                     {
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <i class="bi bi-exclamation-circle"></i> @Model.ErrorMessage
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+                            <i class="bi bi-exclamation-circle-fill me-2"></i>
+                            <strong>Error!</strong> @Model.ErrorMessage
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
                     }
 
-                    <div class="alert alert-info mb-4">
-                        <i class="bi bi-info-circle"></i>
-                        <strong>Note:</strong> Each booking can only be reported once. Please provide detailed information about the issue.
+                    <div class="info-box mb-4">
+                        <div class="d-flex align-items-start">
+                            <i class="bi bi-info-circle-fill fs-3 me-3"></i>
+                            <div>
+                                <h6 class="fw-bold mb-2">Important Information</h6>
+                                <ul class="mb-0 small">
+                                    <li>Each booking can only be reported once</li>
+                                    <li>Please provide detailed information to help us resolve issues quickly</li>
+                                    <li>Reports are reviewed by administrators within 24 hours</li>
+                                    <li>You'll be notified when your report is resolved</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
 
-                    <form method="post">
+                    <form method="post" id="reportForm">
                         <input type="hidden" asp-for="Input.BookingId" />
 
-                        <div class="mb-3">
+                        <!-- Issue Type -->
+                        <div class="form-group">
                             <label asp-for="Input.IssueType" class="form-label">
-                                <i class="bi bi-tag"></i> Issue Type <span class="text-danger">*</span>
+                                <i class="bi bi-tag-fill text-primary"></i>
+                                Issue Type
+                                <span class="required-asterisk">*</span>
                             </label>
-                            <select asp-for="Input.IssueType" class="form-select" required>
+                            <select asp-for="Input.IssueType" class="form-select" id="issueType" required>
                                 <option value="">-- Select Issue Type --</option>
-                                <option value="Broken Equipment">Broken Equipment</option>
-                                <option value="Cleanliness">Cleanliness</option>
-                                <option value="Air Conditioning">Air Conditioning</option>
-                                <option value="Lighting">Lighting</option>
-                                <option value="Furniture">Furniture</option>
-                                <option value="Technology">Technology (Projector, Computer, etc.)</option>
-                                <option value="Safety">Safety Concern</option>
-                                <option value="Other">Other</option>
+                                <option value="Broken Equipment">?? Broken Equipment</option>
+                                <option value="Cleanliness">?? Cleanliness</option>
+                                <option value="Air Conditioning">?? Air Conditioning</option>
+                                <option value="Lighting">?? Lighting</option>
+                                <option value="Furniture">?? Furniture</option>
+                                <option value="Technology">?? Technology (Projector, Computer, etc.)</option>
+                                <option value="Safety">?? Safety Concern</option>
+                                <option value="Noise">?? Noise Issue</option>
+                                <option value="Other">?? Other</option>
                             </select>
-                            <span asp-validation-for="Input.IssueType" class="text-danger"></span>
+                            <span asp-validation-for="Input.IssueType" class="text-danger small"></span>
                         </div>
 
-                        <div class="mb-3">
+                        <!-- Description -->
+                        <div class="form-group">
                             <label asp-for="Input.Description" class="form-label">
-                                <i class="bi bi-chat-left-text"></i> Description <span class="text-danger">*</span>
+                                <i class="bi bi-chat-left-text-fill text-primary"></i>
+                                Detailed Description
+                                <span class="required-asterisk">*</span>
                             </label>
-                            <textarea asp-for="Input.Description" class="form-control" rows="6" 
-                                      placeholder="Please describe the issue in detail (minimum 10 characters)..." required></textarea>
-                            <div class="form-text">
-                                <i class="bi bi-info-circle"></i> Be as specific as possible to help us resolve the issue quickly.
-                                <span id="charCount">0</span>/1000 characters
+                            <div class="position-relative">
+                                <textarea asp-for="Input.Description" 
+                                          class="form-control" 
+                                          rows="8" 
+                                          id="description"
+                                          maxlength="1000"
+                                          placeholder="Please describe the issue in detail...
+
+Example:
+• What is the problem?
+• When did you notice it?
+• Where exactly in the room?
+• How severe is the issue?
+• Any other relevant details..."
+                                          required></textarea>
+                                <div class="char-counter">
+                                    <span id="charCount" class="badge bg-secondary">0</span> / 1000
+                                </div>
                             </div>
-                            <span asp-validation-for="Input.Description" class="text-danger"></span>
+                            <div class="helper-text mt-2">
+                                <i class="bi bi-lightbulb-fill text-warning"></i>
+                                <strong>Tip:</strong> The more details you provide, the faster we can resolve the issue.
+                                Minimum 10 characters required.
+                            </div>
+                            <span asp-validation-for="Input.Description" class="text-danger small"></span>
                         </div>
 
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <a asp-page="/Dashboard" class="btn btn-secondary">
+                        <!-- Action Buttons -->
+                        <div class="d-flex gap-3 justify-content-end mt-5">
+                            <a asp-page="/Bookings/MyBookings" class="btn btn-outline-secondary btn-lg px-4">
                                 <i class="bi bi-x-circle"></i> Cancel
                             </a>
-                            <button type="submit" class="btn btn-danger">
-                                <i class="bi bi-send"></i> Submit Report
+                            <button type="submit" class="btn btn-submit btn-lg px-5 text-white">
+                                <i class="bi bi-send-fill"></i> Submit Report
                             </button>
                         </div>
                     </form>
+                </div>
+            </div>
+
+            <!-- Help Card -->
+            <div class="card mt-4 border-0 shadow-sm">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-3">
+                        <i class="bi bi-question-circle text-primary"></i> Need Help?
+                    </h6>
+                    <p class="small mb-0 text-muted">
+                        If you have urgent issues or need immediate assistance, please contact facility management
+                        at <a href="mailto:facility@unispace.edu">facility@unispace.edu</a> or call ext. 5000.
+                    </p>
                 </div>
             </div>
         </div>
@@ -78,25 +225,94 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <script>
         $(document).ready(function() {
-            // Character counter for description
-            $('#Input_Description').on('input', function() {
-                var length = $(this).val().length;
-                $('#charCount').text(length);
+            // Character counter
+            const description = $('#description');
+            const charCount = $('#charCount');
+            const charBadge = charCount.parent();
+
+            description.on('input', function() {
+                const length = $(this).val().length;
+                charCount.text(length);
+                
+                // Update badge color based on length
+                charBadge.removeClass('bg-secondary bg-danger bg-warning bg-success');
                 
                 if (length < 10) {
-                    $('#charCount').addClass('text-danger').removeClass('text-success');
+                    charBadge.addClass('bg-danger');
+                } else if (length < 50) {
+                    charBadge.addClass('bg-warning');
                 } else if (length > 950) {
-                    $('#charCount').addClass('text-warning').removeClass('text-success text-danger');
+                    charBadge.addClass('bg-warning');
                 } else {
-                    $('#charCount').addClass('text-success').removeClass('text-danger text-warning');
+                    charBadge.addClass('bg-success');
                 }
             });
 
             // Initialize character count
-            $('#Input_Description').trigger('input');
+            description.trigger('input');
+
+            // Form validation
+            $('#reportForm').on('submit', function(e) {
+                const issueType = $('#issueType').val();
+                const desc = description.val().trim();
+
+                if (!issueType) {
+                    e.preventDefault();
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Issue Type Required',
+                        text: 'Please select the type of issue you want to report.',
+                        confirmButtonColor: '#ff6b6b'
+                    });
+                    return false;
+                }
+
+                if (desc.length < 10) {
+                    e.preventDefault();
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Description Too Short',
+                        text: 'Please provide at least 10 characters to describe the issue.',
+                        confirmButtonColor: '#ff6b6b'
+                    });
+                    description.focus();
+                    return false;
+                }
+
+                // Confirmation dialog
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Submit Report?',
+                    html: `
+                        <div class="text-start">
+                            <p class="mb-2"><strong>Issue Type:</strong> ${issueType}</p>
+                            <p class="mb-2"><strong>Description Length:</strong> ${desc.length} characters</p>
+                            <div class="alert alert-info mt-3 mb-0">
+                                <small><i class="bi bi-info-circle"></i> You can only submit one report per booking.</small>
+                            </div>
+                        </div>
+                    `,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#ff6b6b',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: '<i class="bi bi-send"></i> Yes, Submit!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.submit();
+                    }
+                });
+            });
+
+            // Auto-dismiss alerts
+            setTimeout(function() {
+                $('.alert').fadeOut('slow');
+            }, 5000);
         });
     </script>
 }

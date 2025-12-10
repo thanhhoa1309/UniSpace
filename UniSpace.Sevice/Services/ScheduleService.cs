@@ -118,6 +118,181 @@ namespace UniSpace.Service.Services
             }
         }
 
+        public async Task<BulkCreateScheduleResultDto> BulkCreateSchedulesAsync(BulkCreateScheduleDto bulkCreateDto)
+        {
+            try
+            {
+                _logger.LogInformation($"Bulk creating schedules for {bulkCreateDto.RoomIds.Count} room(s) on {bulkCreateDto.DaysOfWeek.Count} day(s)");
+
+                var result = new BulkCreateScheduleResultDto
+                {
+                    TotalRoomsProcessed = bulkCreateDto.RoomIds.Count * bulkCreateDto.DaysOfWeek.Count
+                };
+
+                // Validate input
+                if (string.IsNullOrWhiteSpace(bulkCreateDto.Title))
+                {
+                    throw ErrorHelper.BadRequest("Schedule title is required");
+                }
+
+                if (bulkCreateDto.StartTime >= bulkCreateDto.EndTime)
+                {
+                    throw ErrorHelper.BadRequest("Start time must be before end time");
+                }
+
+                if (bulkCreateDto.StartDate >= bulkCreateDto.EndDate)
+                {
+                    throw ErrorHelper.BadRequest("Start date must be before end date");
+                }
+
+                if (!bulkCreateDto.RoomIds.Any())
+                {
+                    throw ErrorHelper.BadRequest("At least one room must be selected");
+                }
+
+                if (!bulkCreateDto.DaysOfWeek.Any())
+                {
+                    throw ErrorHelper.BadRequest("At least one day of week must be selected");
+                }
+
+                // Validate days of week
+                if (bulkCreateDto.DaysOfWeek.Any(d => d < 0 || d > 6))
+                {
+                    throw ErrorHelper.BadRequest("Day of week must be between 0 (Sunday) and 6 (Saturday)");
+                }
+
+                var currentUserId = _claimsService.GetCurrentUserId;
+                var currentTime = _currentTime.GetCurrentTime();
+
+                // Process each room
+                foreach (var roomId in bulkCreateDto.RoomIds)
+                {
+                    // Check if room exists
+                    var room = await _unitOfWork.Room.GetByIdAsync(roomId, r => r.Campus);
+                    if (room == null || room.IsDeleted)
+                    {
+                        result.FailedSchedules++;
+                        result.Errors.Add(new BulkCreateErrorDto
+                        {
+                            RoomId = roomId,
+                            RoomName = room?.Name ?? "Unknown",
+                            ErrorMessage = $"Room with ID '{roomId}' not found"
+                        });
+
+                        if (!bulkCreateDto.SkipConflicts)
+                        {
+                            throw ErrorHelper.NotFound($"Room with ID '{roomId}' not found");
+                        }
+                        continue;
+                    }
+
+                    // Process each day of week
+                    foreach (var dayOfWeek in bulkCreateDto.DaysOfWeek)
+                    {
+                        try
+                        {
+                            // Check for conflicts with break time
+                            if (!await IsTimeSlotAvailableAsync(
+                                roomId,
+                                dayOfWeek,
+                                bulkCreateDto.StartTime,
+                                bulkCreateDto.EndTime,
+                                bulkCreateDto.StartDate,
+                                bulkCreateDto.EndDate,
+                                bulkCreateDto.BreakTimeMinutes))
+                            {
+                                var conflicts = await GetConflictingSchedulesAsync(
+                                    roomId,
+                                    dayOfWeek,
+                                    bulkCreateDto.StartTime,
+                                    bulkCreateDto.EndTime,
+                                    bulkCreateDto.StartDate,
+                                    bulkCreateDto.EndDate);
+
+                                var conflictDetails = string.Join(", ", conflicts.Select(s =>
+                                    $"{s.Title} ({s.StartTime:hh\\:mm} - {s.EndTime:hh\\:mm})"));
+
+                                result.FailedSchedules++;
+                                result.Errors.Add(new BulkCreateErrorDto
+                                {
+                                    RoomId = roomId,
+                                    RoomName = room.Name,
+                                    DayOfWeek = dayOfWeek,
+                                    ErrorMessage = $"Conflict on {GetDayOfWeekDisplay(dayOfWeek)}: {conflictDetails}"
+                                });
+
+                                if (!bulkCreateDto.SkipConflicts)
+                                {
+                                    throw ErrorHelper.Conflict(
+                                        $"Schedule conflicts with existing schedule(s) in room '{room.Name}' on {GetDayOfWeekDisplay(dayOfWeek)}: {conflictDetails}. " +
+                                        $"Please ensure there is at least {bulkCreateDto.BreakTimeMinutes} minutes break time between schedules.");
+                                }
+                                continue;
+                            }
+
+                            // Create schedule
+                            var schedule = new Schedule
+                            {
+                                Id = Guid.NewGuid(),
+                                RoomId = roomId,
+                                ScheduleType = bulkCreateDto.ScheduleType,
+                                Title = bulkCreateDto.Title.Trim(),
+                                StartTime = bulkCreateDto.StartTime,
+                                EndTime = bulkCreateDto.EndTime,
+                                DayOfWeek = dayOfWeek,
+                                StartDate = bulkCreateDto.StartDate.ToUniversalTime(),
+                                EndDate = bulkCreateDto.EndDate.ToUniversalTime(),
+                                IsDeleted = false,
+                                CreatedAt = currentTime,
+                                CreatedBy = currentUserId
+                            };
+
+                            await _unitOfWork.Schedule.AddAsync(schedule);
+                            await _unitOfWork.SaveChangesAsync();
+
+                            result.SuccessfulSchedules++;
+
+                            // Add to created schedules
+                            var scheduleDto = await GetScheduleByIdAsync(schedule.Id);
+                            if (scheduleDto != null)
+                            {
+                                result.CreatedSchedules.Add(scheduleDto);
+                            }
+
+                            _logger.LogInformation($"Schedule created for room {room.Name} on {GetDayOfWeekDisplay(dayOfWeek)}");
+                        }
+                        catch (Exception ex)
+                        {
+                            result.FailedSchedules++;
+                            result.Errors.Add(new BulkCreateErrorDto
+                            {
+                                RoomId = roomId,
+                                RoomName = room.Name,
+                                DayOfWeek = dayOfWeek,
+                                ErrorMessage = ex.Message
+                            });
+
+                            _logger.LogError(ex, $"Error creating schedule for room {roomId} on day {dayOfWeek}");
+
+                            if (!bulkCreateDto.SkipConflicts)
+                            {
+                                throw;
+                            }
+                        }
+                    }
+                }
+
+                _logger.LogInformation($"Bulk create completed: {result.SuccessfulSchedules} successful, {result.FailedSchedules} failed");
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in bulk create schedules");
+                throw;
+            }
+        }
+
         #endregion
 
         #region Read
