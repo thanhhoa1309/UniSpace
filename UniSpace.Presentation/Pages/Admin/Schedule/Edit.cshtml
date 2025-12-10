@@ -1,14 +1,314 @@
-@page
+﻿@page
 @using UniSpace.BusinessObject.Enums
 @model UniSpace.Presentation.Pages.Admin.Schedule.EditModel
 @{
     ViewData["Title"] = "Edit Schedule";
 }
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-10 col-lg-8">
-            <!-- Breadcrumb -->
+<style>
+    /* Page Container */
+    .edit-page-container {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        min-height: 100vh;
+        padding: 20px 0;
+    }
+
+    /* Glass Card */
+    .glass-card {
+        background: rgba(45, 45, 45, 0.5);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        transition: all 0.3s ease;
+        margin-bottom: 24px;
+    }
+
+        .glass-card:hover {
+            border: 1px solid rgba(255, 138, 0, 0.4);
+            box-shadow: 0 12px 40px 0 rgba(255, 138, 0, 0.15);
+        }
+
+    /* Breadcrumb Glass */
+    .breadcrumb-glass {
+        background: rgba(45, 45, 45, 0.5);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 10px;
+        padding: 12px 20px;
+    }
+
+        .breadcrumb-glass .breadcrumb {
+            margin-bottom: 0;
+            background: transparent;
+        }
+
+        .breadcrumb-glass .breadcrumb-item a {
+            color: #ff8a00;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+            .breadcrumb-glass .breadcrumb-item a:hover {
+                color: #ffa500;
+                text-shadow: 0 0 10px rgba(255, 138, 0, 0.5);
+            }
+
+        .breadcrumb-glass .breadcrumb-item.active {
+            color: #e0e0e0;
+        }
+
+        .breadcrumb-glass .breadcrumb-item + .breadcrumb-item::before {
+            color: #9ca3af;
+        }
+
+    /* Neon Text */
+    .neon-text {
+        color: #ff8a00;
+        font-weight: bold;
+    }
+
+    .text-muted-glass {
+        color: #9ca3af;
+    }
+
+    .text-glass {
+        color: #e0e0e0;
+    }
+
+    /* Alert Glass */
+    .alert-glass-danger {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        border-radius: 10px;
+        padding: 16px 20px;
+        color: #fca5a5;
+        margin-bottom: 20px;
+    }
+
+    .alert-glass-info {
+        background: rgba(6, 182, 212, 0.1);
+        border: 1px solid rgba(6, 182, 212, 0.4);
+        border-radius: 10px;
+        padding: 16px 20px;
+        color: #67e8f9;
+        margin-bottom: 20px;
+    }
+
+    .alert-glass-warning {
+        background: rgba(245, 158, 11, 0.1);
+        border: 1px solid rgba(245, 158, 11, 0.4);
+        border-radius: 10px;
+        padding: 16px 20px;
+        color: #fbbf24;
+        margin-bottom: 20px;
+    }
+
+    /* Card Header */
+    .glass-card-header {
+        background: rgba(245, 158, 11, 0.15);
+        border-bottom: 2px solid rgba(245, 158, 11, 0.3);
+        border-radius: 15px 15px 0 0;
+        padding: 24px;
+    }
+
+    /* Card Body */
+    .glass-card-body {
+        padding: 32px;
+        color: #e0e0e0;
+    }
+
+    /* Form Labels */
+    .form-label-glass {
+        color: #e0e0e0;
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin-bottom: 8px;
+    }
+
+        .form-label-glass i {
+            margin-right: 4px;
+        }
+
+    /* Form Controls */
+    .form-control-glass,
+    .form-select-glass {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+        color: #ffffff;
+        padding: 12px 16px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+        .form-control-glass::placeholder {
+            color: #6b7280;
+        }
+
+        .form-control-glass:focus,
+        .form-select-glass:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 138, 0, 0.6);
+            outline: none;
+            box-shadow: 0 0 15px rgba(255, 138, 0, 0.2);
+            color: #ffffff;
+        }
+
+        .form-select-glass option {
+            background: rgba(45, 45, 45, 0.95);
+            color: #ffffff;
+            padding: 8px;
+        }
+
+            .form-select-glass option:hover,
+            .form-select-glass option:checked {
+                background: rgba(255, 138, 0, 0.2);
+                color: #ff8a00;
+            }
+
+        /* Highlight changed fields */
+        .form-control-glass.border-warning,
+        .form-select-glass.border-warning {
+            border: 2px solid rgba(245, 158, 11, 0.6);
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+        }
+
+    /* Validation Errors */
+    .text-danger {
+        color: #fca5a5 !important;
+        font-size: 0.875rem;
+        margin-top: 4px;
+    }
+
+    .form-control-glass.input-validation-error,
+    .form-select-glass.input-validation-error {
+        border: 2px solid rgba(239, 68, 68, 0.6);
+        box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+    }
+
+    /* Buttons */
+    .btn-neon-primary {
+        background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 100%);
+        border: 2px solid #ff8a00;
+        color: #fff;
+        font-weight: 600;
+        padding: 12px 28px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 20px rgba(255, 138, 0, 0.4);
+    }
+
+        .btn-neon-primary:hover {
+            box-shadow: 0 0 30px rgba(255, 138, 0, 0.7);
+            transform: translateY(-2px);
+            color: #fff;
+        }
+
+    .btn-glass-secondary {
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        font-weight: 600;
+        padding: 12px 28px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+        .btn-glass-secondary:hover {
+            border: 2px solid rgba(255, 138, 0, 0.5);
+            color: #ff8a00;
+            box-shadow: 0 0 20px rgba(255, 138, 0, 0.2);
+        }
+
+    .btn-glass-warning {
+        background: rgba(245, 158, 11, 0.15);
+        border: 2px solid rgba(245, 158, 11, 0.3);
+        color: #fbbf24;
+        font-weight: 600;
+        padding: 12px 28px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+        .btn-glass-warning:hover {
+            background: rgba(245, 158, 11, 0.25);
+            border-color: rgba(245, 158, 11, 0.5);
+            color: #fcd34d;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+        }
+
+    /* Form Group Spacing */
+    .form-group-glass {
+        margin-bottom: 24px;
+    }
+
+    /* Section Headers */
+    .section-label-glass {
+        color: #ff8a00;
+        font-weight: 700;
+        font-size: 1rem;
+        margin-bottom: 12px;
+        display: block;
+    }
+
+        .section-label-glass i {
+            margin-right: 8px;
+        }
+
+    /* Divider */
+    .divider-glass {
+        border: none;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 138, 0, 0.3), transparent);
+        margin: 32px 0;
+    }
+
+    /* Original Details Box */
+    .original-details-glass {
+        background: rgba(6, 182, 212, 0.1);
+        border: 1px solid rgba(6, 182, 212, 0.3);
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 24px;
+    }
+
+        .original-details-glass ul {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+
+            .original-details-glass ul li {
+                padding: 8px 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            }
+
+                .original-details-glass ul li:last-child {
+                    border-bottom: none;
+                }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .glass-card-body {
+            padding: 20px;
+        }
+
+        .btn-neon-primary,
+        .btn-glass-secondary,
+        .btn-glass-warning {
+            padding: 10px 20px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+    }
+</style>
+
+<div class="edit-page-container">
+    <div class="container-fluid px-4">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb-glass mb-4">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
@@ -27,185 +327,203 @@
                     <li class="breadcrumb-item active">Edit</li>
                 </ol>
             </nav>
+        </div>
 
-            <!-- Main Card -->
-            <div class="card shadow-lg">
-                <div class="card-header bg-warning">
-                    <h4 class="mb-0">
-                        <i class="bi bi-pencil-square"></i> Edit Schedule: @Model.CurrentSchedule?.Title
-                    </h4>
-                </div>
-                <div class="card-body p-4">
-                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
-                    {
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <i class="bi bi-exclamation-triangle"></i> @Model.ErrorMessage
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    }
-
-                    <form method="post" id="editForm">
-                        <input type="hidden" asp-for="Input.Id" />
-
-                        <div class="row">
-                            <!-- Room Selection -->
-                            <div class="col-md-6 mb-4">
-                                <label asp-for="Input.RoomId" class="form-label fw-bold">
-                                    <i class="bi bi-door-closed text-primary"></i> Room 
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <select asp-for="Input.RoomId" class="form-select form-select-lg">
-                                    @foreach (var option in Model.RoomOptions)
-                                    {
-                                        <option value="@option.Value" selected="@option.Selected">
-                                            @option.Text
-                                        </option>
-                                    }
-                                </select>
-                                <span asp-validation-for="Input.RoomId" class="text-danger"></span>
-                            </div>
-
-                            <!-- Schedule Type -->
-                            <div class="col-md-6 mb-4">
-                                <label asp-for="Input.ScheduleType" class="form-label fw-bold">
-                                    <i class="bi bi-tag text-info"></i> Schedule Type 
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <select asp-for="Input.ScheduleType" class="form-select form-select-lg">
-                                    <option value="@((int)ScheduleType.Academic_Course)" 
-                                            selected="@(Model.Input.ScheduleType == ScheduleType.Academic_Course)">
-                                        ?? Academic Course
-                                    </option>
-                                    <option value="@((int)ScheduleType.Recurring_Maintenance)" 
-                                            selected="@(Model.Input.ScheduleType == ScheduleType.Recurring_Maintenance)">
-                                        ?? Recurring Maintenance
-                                    </option>
-                                </select>
-                                <span asp-validation-for="Input.ScheduleType" class="text-danger"></span>
-                            </div>
-
-                            <!-- Title -->
-                            <div class="col-md-12 mb-4">
-                                <label asp-for="Input.Title" class="form-label fw-bold">
-                                    <i class="bi bi-card-text text-success"></i> Title 
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <input asp-for="Input.Title" 
-                                       class="form-control form-control-lg" 
-                                       placeholder="e.g., PRN221 - Advanced C# Programming" />
-                                <span asp-validation-for="Input.Title" class="text-danger"></span>
-                            </div>
-
-                            <!-- Day of Week -->
-                            <div class="col-md-6 mb-4">
-                                <label asp-for="Input.DayOfWeek" class="form-label fw-bold">
-                                    <i class="bi bi-calendar3 text-warning"></i> Day of Week 
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <select asp-for="Input.DayOfWeek" class="form-select form-select-lg">
-                                    <option value="0" selected="@(Model.Input.DayOfWeek == 0)">Sunday</option>
-                                    <option value="1" selected="@(Model.Input.DayOfWeek == 1)">Monday</option>
-                                    <option value="2" selected="@(Model.Input.DayOfWeek == 2)">Tuesday</option>
-                                    <option value="3" selected="@(Model.Input.DayOfWeek == 3)">Wednesday</option>
-                                    <option value="4" selected="@(Model.Input.DayOfWeek == 4)">Thursday</option>
-                                    <option value="5" selected="@(Model.Input.DayOfWeek == 5)">Friday</option>
-                                    <option value="6" selected="@(Model.Input.DayOfWeek == 6)">Saturday</option>
-                                </select>
-                                <span asp-validation-for="Input.DayOfWeek" class="text-danger"></span>
-                            </div>
-
-                            <!-- Placeholder for alignment -->
-                            <div class="col-md-6 mb-4"></div>
-
-                            <!-- Time Range -->
-                            <div class="col-md-12 mb-4">
-                                <label class="form-label fw-bold">
-                                    <i class="bi bi-clock text-primary"></i> Time Range 
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="startTime" class="form-label">Start Time</label>
-                                        <input asp-for="Input.StartTime" 
-                                               type="time" 
-                                               class="form-control form-control-lg" />
-                                        <span asp-validation-for="Input.StartTime" class="text-danger"></span>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="endTime" class="form-label">End Time</label>
-                                        <input asp-for="Input.EndTime" 
-                                               type="time" 
-                                               class="form-control form-control-lg" />
-                                        <span asp-validation-for="Input.EndTime" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Date Range -->
-                            <div class="col-md-12 mb-4">
-                                <label class="form-label fw-bold">
-                                    <i class="bi bi-calendar-range text-success"></i> Date Range 
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="startDate" class="form-label">Start Date</label>
-                                        <input asp-for="Input.StartDate" 
-                                               type="date" 
-                                               class="form-control form-control-lg" />
-                                        <span asp-validation-for="Input.StartDate" class="text-danger"></span>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="endDate" class="form-label">End Date</label>
-                                        <input asp-for="Input.EndDate" 
-                                               type="date" 
-                                               class="form-control form-control-lg" />
-                                        <span asp-validation-for="Input.EndDate" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Change Summary -->
-                        @if (Model.CurrentSchedule != null)
+        <div class="row justify-content-center">
+            <div class="col-xl-10">
+                <!-- Main Card -->
+                <div class="glass-card">
+                    <div class="glass-card-header">
+                        <h4 class="mb-0 neon-text">
+                            <i class="bi bi-pencil-square"></i> Edit Schedule: @Model.CurrentSchedule?.Title
+                        </h4>
+                    </div>
+                    <div class="glass-card-body">
+                        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
                         {
-                            <div class="alert alert-info">
-                                <i class="bi bi-clock-history"></i> 
-                                <strong>Original Details:</strong>
-                                <ul class="mb-0 mt-2">
-                                    <li><strong>Room:</strong> @Model.CurrentSchedule.RoomName</li>
-                                    <li><strong>Type:</strong> @Model.CurrentSchedule.ScheduleTypeDisplay</li>
-                                    <li><strong>Day:</strong> @Model.CurrentSchedule.DayOfWeekDisplay</li>
-                                    <li><strong>Time:</strong> @Model.CurrentSchedule.StartTime.ToString(@"hh\:mm") - @Model.CurrentSchedule.EndTime.ToString(@"hh\:mm")</li>
-                                    <li><strong>Period:</strong> @Model.CurrentSchedule.StartDate.ToString("MMM dd, yyyy") - @Model.CurrentSchedule.EndDate.ToString("MMM dd, yyyy")</li>
-                                </ul>
+                            <div class="alert-glass-danger" role="alert">
+                                <i class="bi bi-exclamation-triangle me-2"></i>@Model.ErrorMessage
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="filter: brightness(0) invert(1);"></button>
                             </div>
                         }
 
-                        <!-- Action Buttons -->
-                        <div class="d-flex gap-2 justify-content-between">
-                            <a asp-page="Details" asp-route-id="@Model.Input.Id" 
-                               class="btn btn-outline-secondary btn-lg">
-                                <i class="bi bi-arrow-left"></i> Back to Details
-                            </a>
-                            <div class="d-flex gap-2">
-                                <a asp-page="Index" class="btn btn-outline-secondary btn-lg">
-                                    <i class="bi bi-x-circle"></i> Cancel
-                                </a>
-                                <button type="submit" class="btn btn-warning btn-lg text-white">
-                                    <i class="bi bi-save"></i> Save Changes
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+                        <form method="post" id="editForm">
+                            <input type="hidden" asp-for="Input.Id" />
 
-            <!-- Warning -->
-            <div class="alert alert-warning mt-4">
-                <i class="bi bi-exclamation-triangle"></i> 
-                <strong>Notice:</strong> Changing the schedule may affect existing bookings or room availability.
-                Please verify there are no conflicts with other schedules.
+                            <div class="row">
+                                <!-- Room Selection -->
+                                <div class="col-md-6 form-group-glass">
+                                    <label asp-for="Input.RoomId" class="form-label-glass">
+                                        <i class="bi bi-door-closed" style="color: #10b981;"></i> Room
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <select asp-for="Input.RoomId" class="form-select-glass">
+                                        @foreach (var option in Model.RoomOptions)
+                                        {
+                                            <option value="@option.Value" selected="@option.Selected">
+                                                @option.Text
+                                            </option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="Input.RoomId" class="text-danger"></span>
+                                </div>
+
+                                <!-- Schedule Type -->
+                                <div class="col-md-6 form-group-glass">
+                                    <label asp-for="Input.ScheduleType" class="form-label-glass">
+                                        <i class="bi bi-tag" style="color: #06b6d4;"></i> Schedule Type
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <select asp-for="Input.ScheduleType" class="form-select-glass">
+                                        <option value="@((int)ScheduleType.Academic_Course)"
+                                                selected="@(Model.Input.ScheduleType == ScheduleType.Academic_Course)">
+                                            📚 Academic Course
+                                        </option>
+                                        <option value="@((int)ScheduleType.Recurring_Maintenance)"
+                                                selected="@(Model.Input.ScheduleType == ScheduleType.Recurring_Maintenance)">
+                                            🔧 Recurring Maintenance
+                                        </option>
+                                    </select>
+                                    <span asp-validation-for="Input.ScheduleType" class="text-danger"></span>
+                                </div>
+
+                                <!-- Title -->
+                                <div class="col-md-12 form-group-glass">
+                                    <label asp-for="Input.Title" class="form-label-glass">
+                                        <i class="bi bi-card-text" style="color: #ff8a00;"></i> Title
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="Input.Title"
+                                           class="form-control-glass"
+                                           placeholder="e.g., PRN221 - Advanced C# Programming" />
+                                    <span asp-validation-for="Input.Title" class="text-danger"></span>
+                                </div>
+
+                                <!-- Day of Week -->
+                                <div class="col-md-6 form-group-glass">
+                                    <label asp-for="Input.DayOfWeek" class="form-label-glass">
+                                        <i class="bi bi-calendar3" style="color: #fbbf24;"></i> Day of Week
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <select asp-for="Input.DayOfWeek" class="form-select-glass">
+                                        <option value="0" selected="@(Model.Input.DayOfWeek == 0)">Sunday</option>
+                                        <option value="1" selected="@(Model.Input.DayOfWeek == 1)">Monday</option>
+                                        <option value="2" selected="@(Model.Input.DayOfWeek == 2)">Tuesday</option>
+                                        <option value="3" selected="@(Model.Input.DayOfWeek == 3)">Wednesday</option>
+                                        <option value="4" selected="@(Model.Input.DayOfWeek == 4)">Thursday</option>
+                                        <option value="5" selected="@(Model.Input.DayOfWeek == 5)">Friday</option>
+                                        <option value="6" selected="@(Model.Input.DayOfWeek == 6)">Saturday</option>
+                                    </select>
+                                    <span asp-validation-for="Input.DayOfWeek" class="text-danger"></span>
+                                </div>
+
+                                <!-- Placeholder for alignment -->
+                                <div class="col-md-6"></div>
+
+                                <!-- Time Range -->
+                                <div class="col-md-12 form-group-glass">
+                                    <label class="section-label-glass">
+                                        <i class="bi bi-clock"></i> Time Range
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="startTime" class="form-label-glass">Start Time</label>
+                                            <input asp-for="Input.StartTime"
+                                                   type="time"
+                                                   class="form-control-glass" />
+                                            <span asp-validation-for="Input.StartTime" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="endTime" class="form-label-glass">End Time</label>
+                                            <input asp-for="Input.EndTime"
+                                                   type="time"
+                                                   class="form-control-glass" />
+                                            <span asp-validation-for="Input.EndTime" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Date Range -->
+                                <div class="col-md-12 form-group-glass">
+                                    <label class="section-label-glass">
+                                        <i class="bi bi-calendar-range"></i> Date Range
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="startDate" class="form-label-glass">Start Date</label>
+                                            <input asp-for="Input.StartDate"
+                                                   type="date"
+                                                   class="form-control-glass" />
+                                            <span asp-validation-for="Input.StartDate" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="endDate" class="form-label-glass">End Date</label>
+                                            <input asp-for="Input.EndDate"
+                                                   type="date"
+                                                   class="form-control-glass" />
+                                            <span asp-validation-for="Input.EndDate" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Original Details -->
+                            @if (Model.CurrentSchedule != null)
+                            {
+                                <div class="original-details-glass">
+                                    <strong class="text-glass">
+                                        <i class="bi bi-clock-history" style="color: #06b6d4;"></i>
+                                        Original Details:
+                                    </strong>
+                                    <ul class="mt-3">
+                                        <li class="text-glass">
+                                            <strong>Room:</strong> @Model.CurrentSchedule.RoomName
+                                        </li>
+                                        <li class="text-glass">
+                                            <strong>Type:</strong> @Model.CurrentSchedule.ScheduleTypeDisplay
+                                        </li>
+                                        <li class="text-glass">
+                                            <strong>Day:</strong> @Model.CurrentSchedule.DayOfWeekDisplay
+                                        </li>
+                                        <li class="text-glass">
+                                            <strong>Time:</strong> @Model.CurrentSchedule.StartTime.ToString(@"hh\:mm") - @Model.CurrentSchedule.EndTime.ToString(@"hh\:mm")
+                                        </li>
+                                        <li class="text-glass">
+                                            <strong>Period:</strong> @Model.CurrentSchedule.StartDate.ToString("MMM dd, yyyy") - @Model.CurrentSchedule.EndDate.ToString("MMM dd, yyyy")
+                                        </li>
+                                    </ul>
+                                </div>
+                            }
+
+                            <hr class="divider-glass" />
+
+                            <!-- Action Buttons -->
+                            <div class="d-flex gap-3 justify-content-between flex-wrap">
+                                <a asp-page="Details" asp-route-id="@Model.Input.Id"
+                                   class="btn btn-glass-secondary">
+                                    <i class="bi bi-arrow-left"></i> Back to Details
+                                </a>
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <a asp-page="Index" class="btn btn-glass-secondary">
+                                        <i class="bi bi-x-circle"></i> Cancel
+                                    </a>
+                                    <button type="submit" class="btn btn-glass-warning">
+                                        <i class="bi bi-save"></i> Save Changes
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Warning -->
+                <div class="alert-glass-warning">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    <strong>Notice:</strong> Changing the schedule may affect existing bookings or room availability.
+                    Please verify there are no conflicts with other schedules.
+                </div>
             </div>
         </div>
     </div>
@@ -213,7 +531,7 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    
+
     <script>
         // Form validation
         const form = document.getElementById('editForm');
@@ -239,9 +557,9 @@
                 if (input) {
                     const originalKey = field.charAt(0).toLowerCase() + field.slice(1);
                     if (input.value !== originalValues[originalKey]) {
-                        input.classList.add('border-warning', 'border-2');
+                        input.classList.add('border-warning');
                     } else {
-                        input.classList.remove('border-warning', 'border-2');
+                        input.classList.remove('border-warning');
                     }
                 }
             });
@@ -251,6 +569,17 @@
         document.querySelectorAll('input, select').forEach(element => {
             element.addEventListener('change', highlightChanges);
             element.addEventListener('input', highlightChanges);
+        });
+
+        // Auto-dismiss alerts after 5 seconds
+        window.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                var alerts = document.querySelectorAll('[class*="alert-glass"]');
+                alerts.forEach(function(alert) {
+                    var bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+                    if (bsAlert) bsAlert.close();
+                });
+            }, 5000);
         });
     </script>
 }

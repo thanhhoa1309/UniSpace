@@ -11,17 +11,20 @@
         background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
         min-height: 100vh;
         padding: 20px 0;
+        position: relative;
     }
 
     /* Glass Card Header */
     .glass-card-header {
+        background: rgba(45, 45, 45, 0.6);
+        backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         border: 1px solid rgba(255, 138, 0, 0.2);
         border-radius: 15px;
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
         padding: 24px;
         transition: all 0.3s ease;
-        margin-bottom: 24px;
+        position: relative;
     }
 
         .glass-card-header:hover {
@@ -39,42 +42,25 @@
         color: #9ca3af;
     }
 
-    /* Alert Glass */
-    .alert-glass-success {
-        background: rgba(16, 185, 129, 0.1);
-        border: 1px solid rgba(16, 185, 129, 0.4);
-        border-radius: 10px;
-        padding: 16px 20px;
-        color: #6ee7b7;
-        margin-bottom: 20px;
-    }
-
-    .alert-glass-danger {
-        background: rgba(239, 68, 68, 0.1);
-        border: 1px solid rgba(239, 68, 68, 0.4);
-        border-radius: 10px;
-        padding: 16px 20px;
-        color: #fca5a5;
-        margin-bottom: 20px;
-    }
-
-    /* Filter Card */
-    .filter-card-glass {
+    /* Search Filter Card */
+    .search-filter-card {
+        background: rgba(45, 45, 45, 0.6);
+        backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         border: 1px solid rgba(255, 138, 0, 0.2);
         border-radius: 15px;
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
         overflow: hidden;
-        margin-bottom: 24px;
+        position: relative;
     }
 
-    .filter-card-header {
+    .search-filter-header {
         background: rgba(255, 138, 0, 0.1);
         border-bottom: 1px solid rgba(255, 138, 0, 0.3);
         padding: 15px 20px;
     }
 
-    .filter-card-body {
+    .search-filter-body {
         padding: 24px;
     }
 
@@ -110,19 +96,9 @@
         }
 
         .form-select-glass option {
-            background: rgba(45, 45, 45, 0.95);
+            background: #2d2d2d;
             color: #ffffff;
-            padding: 8px;
-            border: none;
-            outline: none;
         }
-
-            .form-select-glass option:hover,
-            .form-select-glass option:checked {
-                background: rgba(255, 138, 0, 0.2);
-                color: #ff8a00;
-                border: none;
-            }
 
     /* Buttons */
     .btn-neon-primary {
@@ -177,14 +153,19 @@
 
     /* Table Card */
     .table-card-glass {
+        background: rgba(45, 45, 45, 0.6);
+        backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         border: 1px solid rgba(255, 138, 0, 0.2);
         border-radius: 15px;
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
         overflow: hidden;
+        position: relative;
+        z-index: 1;
     }
 
     .table-header-glass {
+        background: rgba(255, 138, 0, 0.15);
         border-bottom: 2px solid rgba(255, 138, 0, 0.3);
         padding: 20px 24px;
     }
@@ -230,40 +211,37 @@
         }
 
     /* Badges */
-    .badge-glass-primary {
-        background: rgba(255, 138, 0, 0.2);
-        border: 1px solid rgba(255, 138, 0, 0.4);
-        color: #ff8a00;
+    .badge-neon {
+        background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 100%);
+        color: #fff;
         padding: 6px 12px;
         border-radius: 12px;
         font-weight: 600;
+        box-shadow: 0 0 15px rgba(255, 138, 0, 0.5);
     }
 
-    .badge-glass-secondary {
-        background: rgba(156, 163, 175, 0.2);
-        border: 1px solid rgba(156, 163, 175, 0.4);
-        color: #9ca3af;
-        padding: 6px 12px;
-        border-radius: 12px;
-        font-weight: 600;
+    .badge-glass-success {
+        background: rgba(16, 185, 129, 0.2);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+        color: #10b981;
+    }
+
+    .badge-glass-danger {
+        background: rgba(239, 68, 68, 0.2);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        color: #f87171;
     }
 
     .badge-glass-info {
         background: rgba(6, 182, 212, 0.2);
         border: 1px solid rgba(6, 182, 212, 0.4);
         color: #06b6d4;
-        padding: 6px 12px;
-        border-radius: 12px;
-        font-weight: 600;
     }
 
     .badge-glass-warning {
         background: rgba(245, 158, 11, 0.2);
         border: 1px solid rgba(245, 158, 11, 0.4);
         color: #f59e0b;
-        padding: 6px 12px;
-        border-radius: 12px;
-        font-weight: 600;
     }
 
     /* Action Buttons */
@@ -309,10 +287,44 @@
             box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
         }
 
-    /* Modal */
+    /* Alerts */
+    .alert-glass-success {
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+        border-radius: 10px;
+        padding: 16px 20px;
+        color: #6ee7b7;
+        position: relative;
+        z-index: 1;
+    }
+
+    .alert-glass-danger {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        border-radius: 10px;
+        padding: 16px 20px;
+        color: #fca5a5;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Modal - Critical z-index fix */
+    .modal {
+        z-index: 9999 !important;
+    }
+
+    .modal-backdrop {
+        z-index: 9998 !important;
+    }
+
     .modal-content-glass {
+        background: rgba(35, 35, 35, 0.98);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         border: 1px solid rgba(255, 138, 0, 0.3);
         border-radius: 15px;
+        position: relative;
+        z-index: 10000;
     }
 
     .modal-header-glass-danger {
@@ -338,7 +350,7 @@
         color: #9ca3af;
     }
 
-    /* Pagination */
+    /* Pagination Styles */
     .pagination-glass {
         display: flex;
         gap: 8px;
@@ -385,7 +397,7 @@
     /* Responsive */
     @@media (max-width: 768px) {
         .glass-card-header,
-        .filter-card-body {
+        .search-filter-body {
             padding: 20px;
         }
 
@@ -396,68 +408,70 @@
 </style>
 
 <div class="index-page-container">
-    <div class="container-fluid px-4">
+    <div class="container-fluid mt-4">
         <!-- Header -->
-        <div class="glass-card-header">
-            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-                <div>
-                    <h2 class="neon-text mb-2">
-                        <i class="bi bi-calendar-week"></i> Schedule Management
-                    </h2>
-                    <p class="text-muted-glass mb-0">Manage room schedules and availability</p>
-                </div>
-                <div class="d-flex gap-2">
-                    <a asp-page="Dashboard" class="btn btn-glass-info">
-                        <i class="bi bi-speedometer2"></i> Dashboard
-                    </a>
-                    <a asp-page="Create" class="btn btn-neon-primary">
-                        <i class="bi bi-plus-circle"></i> Create Schedule
-                    </a>
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="glass-card-header">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                        <div>
+                            <h2 class="neon-text mb-2">
+                                <i class="bi bi-calendar-week"></i> Schedule Management
+                            </h2>
+                            <p class="text-muted-glass mb-0">Manage room schedules and availability</p>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <a asp-page="Dashboard" class="btn btn-glass-info btn-lg">
+                                <i class="bi bi-speedometer2"></i> Dashboard
+                            </a>
+                            <a asp-page="Create" class="btn btn-neon-primary btn-lg">
+                                <i class="bi bi-plus-circle"></i> Create Schedule
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Success/Error Messages -->
+        <!-- Alerts -->
         @if (!string.IsNullOrEmpty(Model.SuccessMessage))
         {
-            <div class="alert-glass-success" role="alert">
-                <i class="bi bi-check-circle me-2"></i>@Model.SuccessMessage
+            <div class="alert-glass-success mb-4" role="alert">
+                <i class="bi bi-check-circle me-2"></i> @Model.SuccessMessage
                 <button type="button" class="btn-close" data-bs-dismiss="alert" style="filter: brightness(0) invert(1);"></button>
             </div>
         }
 
         @if (!string.IsNullOrEmpty(Model.ErrorMessage))
         {
-            <div class="alert-glass-danger" role="alert">
-                <i class="bi bi-exclamation-triangle me-2"></i>@Model.ErrorMessage
+            <div class="alert-glass-danger mb-4" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i> @Model.ErrorMessage
                 <button type="button" class="btn-close" data-bs-dismiss="alert" style="filter: brightness(0) invert(1);"></button>
             </div>
         }
 
-        <!-- Filter Card -->
-        <div class="filter-card-glass">
-            <div class="filter-card-header">
+        <!-- Search and Filter Section -->
+        <div class="search-filter-card mb-4">
+            <div class="search-filter-header">
                 <h5 class="mb-0 neon-text">
-                    <i class="bi bi-funnel"></i> Filter Schedules
+                    <i class="bi bi-funnel"></i> Search & Filter
                 </h5>
             </div>
-            <div class="filter-card-body">
+            <div class="search-filter-body">
                 <form method="get">
-                    <div class="d-flex justify-content-evenly align-items-end flex-wrap gap-3">
-                        <!-- Search -->
-                        <div class="flex-fill" style="min-width: 200px;">
+                    <div class="d-flex justify-content-evenly align-items-end gap-3">
+                        <!-- Search Bar -->
+                        <div style="flex">
                             <label class="form-label-glass">
                                 <i class="bi bi-search"></i> Search
                             </label>
-                            <input type="text"
-                                   name="search"
-                                   class="form-control-glass"
+                            <input type="text" name="search" class="form-control-glass"
                                    placeholder="Title, room, or campus..."
                                    value="@Model.SearchTerm" />
                         </div>
 
                         <!-- Room Filter -->
-                        <div class="flex-fill" style="min-width: 200px;">
+                        <div style="flex">
                             <label class="form-label-glass">
                                 <i class="bi bi-door-closed"></i> Room
                             </label>
@@ -472,7 +486,7 @@
                         </div>
 
                         <!-- Type Filter -->
-                        <div class="flex-fill" style="min-width: 150px;">
+                        <div style="flex">
                             <label class="form-label-glass">
                                 <i class="bi bi-tag"></i> Type
                             </label>
@@ -490,7 +504,7 @@
                         </div>
 
                         <!-- Day Filter -->
-                        <div class="flex-fill" style="min-width: 150px;">
+                        <div style="flex">
                             <label class="form-label-glass">
                                 <i class="bi bi-calendar3"></i> Day
                             </label>
@@ -506,151 +520,199 @@
                             </select>
                         </div>
 
-                        <!-- Actions -->
-                        <div style="min-width: 150px;">
-                            <div class="d-flex gap-2">
-                                <button type="submit" class="btn btn-neon-primary flex-fill">
-                                    <i class="bi bi-search"></i> Filter
-                                </button>
-                                <a asp-page="Index" class="btn btn-glass-secondary">
-                                    <i class="bi bi-arrow-clockwise"></i>
-                                </a>
-                            </div>
+                        <!-- Action Button -->
+                        <div style="align-self: flex-end">
+                            <button type="submit" class="btn btn-neon-primary" style="padding: 10px 30px; white-space: nowrap;">
+                                <i class="bi bi-search"></i> Filter
+                            </button>
                         </div>
                     </div>
+
+                    <!-- Clear Filters Button -->
+                    @if (!string.IsNullOrEmpty(Model.SearchTerm) || Model.FilterRoomId.HasValue ||
+                                        Model.FilterType.HasValue || Model.FilterDay.HasValue)
+                    {
+                        <div class="text-end mt-3">
+                            <a asp-page="Index" class="btn btn-glass-secondary">
+                                <i class="bi bi-x-circle"></i>
+                            </a>
+                        </div>
+                    }
                 </form>
             </div>
         </div>
 
-        <!-- Schedules Table Card -->
-        <div class="table-card-glass">
-            <div class="table-header-glass">
-                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-                    <div>
-                        <h5 class="mb-0 neon-text">
-                            <i class="bi bi-list-ul"></i> Schedules
-                        </h5>
-                        <small class="text-muted-glass">
-                            Showing @Model.Schedules.Count of @Model.Schedules.TotalCount schedules
-                        </small>
+        <!-- Schedules Table -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-card-glass">
+                    <div class="table-header-glass">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                            <h5 class="mb-0 neon-text">
+                                <i class="bi bi-list-ul"></i> Schedule List
+                                <span class="badge-count ms-2">@Model.Schedules.Count</span>
+                            </h5>
+                        </div>
                     </div>
-                    <div>
-                        <span class="badge-count">
-                            Page @Model.Schedules.CurrentPage of @Model.Schedules.TotalPages
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class="p-0">
-                @if (Model.Schedules.Any())
-                {
-                    <div class="table-responsive">
-                        <table class="table table-glass">
-                            <thead>
-                                <tr>
-                                    <th width="250">
-                                        <i class="bi bi-card-text me-1"></i>Title
-                                    </th>
-                                    <th width="180">
-                                        <i class="bi bi-door-closed me-1"></i>Room
-                                    </th>
-                                    <th width="120">
-                                        <i class="bi bi-tag me-1"></i>Type
-                                    </th>
-                                    <th width="100">
-                                        <i class="bi bi-calendar3 me-1"></i>Day
-                                    </th>
-                                    <th width="120">
-                                        <i class="bi bi-clock me-1"></i>Time
-                                    </th>
-                                    <th width="130">
-                                        <i class="bi bi-calendar-range me-1"></i>Period
-                                    </th>
-                                    <th width="140" class="text-center">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var schedule in Model.Schedules)
+                    <div class="card-body p-0">
+                        @if (Model.Schedules.Any())
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-glass">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 5%">#</th>
+                                            <th style="width: 20%">
+                                                <i class="bi bi-card-text me-1"></i> Title
+                                            </th>
+                                            <th style="width: 15%">
+                                                <i class="bi bi-door-closed me-1"></i> Room
+                                            </th>
+                                            <th style="width: 12%">
+                                                <i class="bi bi-tag me-1"></i> Type
+                                            </th>
+                                            <th style="width: 10%">
+                                                <i class="bi bi-calendar3 me-1"></i> Day
+                                            </th>
+                                            <th style="width: 13%">
+                                                <i class="bi bi-clock me-1"></i> Time
+                                            </th>
+                                            <th style="width: 13%">
+                                                <i class="bi bi-calendar-range me-1"></i> Period
+                                            </th>
+                                            <th style="width: 12%" class="text-center">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (int i = 0; i < Model.Schedules.Count; i++)
+                                        {
+                                            var schedule = Model.Schedules[i];
+                                            var typeBadge = schedule.ScheduleType == ScheduleType.Academic_Course
+                                            ? "badge-neon" : "badge-glass-warning";
+
+                                            <tr>
+                                                <td><strong class="neon-text">@(i + 1)</strong></td>
+                                                <td>
+                                                    <strong class="neon-text">@schedule.Title</strong>
+                                                    <br />
+                                                    <small class="text-muted-glass">
+                                                        <i class="bi bi-building"></i> @schedule.CampusName
+                                                    </small>
+                                                </td>
+                                                <td>
+                                                    <span class="badge badge-glass-info">
+                                                        @schedule.RoomName
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="badge @typeBadge">
+                                                        @if (schedule.ScheduleType == ScheduleType.Academic_Course)
+                                                        {
+                                                            <i class="bi bi-book me-1"></i>
+                                                
+                                                            <text>Academic</text>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="bi bi-tools me-1"></i>
+                                                
+                                                            <text>Maintenance</text>
+                                                        }
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="badge badge-glass-info">
+                                                        @schedule.DayOfWeekDisplay
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <small style="color: #d1d5db;">
+                                                        @schedule.StartTime.ToString(@"hh\:mm") -
+                                                        @schedule.EndTime.ToString(@"hh\:mm")
+                                                    </small>
+                                                </td>
+                                                <td>
+                                                    <small style="color: #d1d5db;">
+                                                        @schedule.StartDate.ToString("MMM dd") -
+                                                        @schedule.EndDate.ToString("MMM dd")
+                                                    </small>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex gap-2 justify-content-center">
+                                                        <a asp-page="Details" asp-route-id="@schedule.Id"
+                                                           class="btn btn-action-glass btn-action-info" title="View Details">
+                                                            <i class="bi bi-eye"></i>
+                                                        </a>
+                                                        <a asp-page="Edit" asp-route-id="@schedule.Id"
+                                                           class="btn btn-action-glass btn-action-warning" title="Edit">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </a>
+                                                        <button type="button" class="btn btn-action-glass btn-action-danger"
+                                                                onclick="confirmDelete('@schedule.Id', '@schedule.Title')"
+                                                                title="Delete">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="empty-state-glass">
+                                <i class="bi bi-calendar-x" style="font-size: 5rem;"></i>
+                                <h4 class="mt-3">
+                                    @if (!string.IsNullOrEmpty(Model.SearchTerm) || Model.FilterRoomId.HasValue ||
+                                                                    Model.FilterType.HasValue || Model.FilterDay.HasValue)
+                                    {
+                                        <text>No schedules found matching your filters</text>
+                                    }
+                                    else
+                                    {
+                                        <text>No schedules available</text>
+                                    }
+                                </h4>
+                                @if (string.IsNullOrEmpty(Model.SearchTerm) && !Model.FilterRoomId.HasValue)
                                 {
-                                    <tr>
-                                        <td>
-                                            <strong class="neon-text">@schedule.Title</strong>
-                                            <br />
-                                            <small class="text-muted-glass">
-                                                <i class="bi bi-building"></i> @schedule.CampusName
-                                            </small>
-                                        </td>
-                                        <td>
-                                            <span class="badge-glass-secondary">
-                                                @schedule.RoomName
-                                            </span>
-                                        </td>
-                                        <td>
-                                            @if (schedule.ScheduleType == ScheduleType.Academic_Course)
-                                            {
-                                                <span class="badge-glass-primary">
-                                                    <i class="bi bi-book me-1"></i>Academic
-                                                </span>
-                                            }
-                                            else
-                                            {
-                                                <span class="badge-glass-warning">
-                                                    <i class="bi bi-tools me-1"></i>Maintenance
-                                                </span>
-                                            }
-                                        </td>
-                                        <td>
-                                            <span class="badge-glass-info">
-                                                @schedule.DayOfWeekDisplay
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <small class="text-muted-glass">
-                                                @schedule.StartTime.ToString(@"hh\:mm") -
-                                                @schedule.EndTime.ToString(@"hh\:mm")
-                                            </small>
-                                        </td>
-                                        <td>
-                                            <small class="text-muted-glass">
-                                                @schedule.StartDate.ToString("MMM dd") -
-                                                @schedule.EndDate.ToString("MMM dd")
-                                            </small>
-                                        </td>
-                                        <td class="text-center">
-                                            <div class="d-flex gap-2 justify-content-center">
-                                                <a asp-page="Details"
-                                                   asp-route-id="@schedule.Id"
-                                                   class="btn btn-action-glass btn-action-info"
-                                                   title="View Details">
-                                                    <i class="bi bi-eye"></i>
-                                                </a>
-                                                <a asp-page="Edit"
-                                                   asp-route-id="@schedule.Id"
-                                                   class="btn btn-action-glass btn-action-warning"
-                                                   title="Edit">
-                                                    <i class="bi bi-pencil"></i>
-                                                </a>
-                                                <button type="button"
-                                                        class="btn btn-action-glass btn-action-danger"
-                                                        onclick="confirmDelete('@schedule.Id', '@schedule.Title')"
-                                                        title="Delete">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    <p>Get started by creating your first schedule</p>
+                                    <a asp-page="Create" class="btn btn-neon-primary btn-lg mt-3">
+                                        <i class="bi bi-plus-circle"></i> Create First Schedule
+                                    </a>
                                 }
-                            </tbody>
-                        </table>
+                                else
+                                {
+                                    <a asp-page="Index" class="btn btn-glass-secondary mt-3">
+                                        <i class="bi bi-x-circle"></i> Clear Filters
+                                    </a>
+                                }
+                            </div>
+                        }
                     </div>
 
                     <!-- Pagination -->
                     @if (Model.Schedules.TotalPages > 1)
                     {
-                        <div class="table-header-glass">
+                        <div class="table-header-glass mt-3">
                             <nav aria-label="Schedule pagination">
                                 <ul class="pagination pagination-glass mb-0 justify-content-center">
-                                    <!-- Previous -->
+                                    <!-- First Page -->
+                                    <li class="page-item @(Model.Schedules.CurrentPage == 1 ? "disabled" : "")">
+                                        <a class="page-link-glass"
+                                           asp-page="Index"
+                                           asp-route-pageNumber="1"
+                                           asp-route-search="@Model.SearchTerm"
+                                           asp-route-roomId="@Model.FilterRoomId"
+                                           asp-route-type="@Model.FilterType"
+                                           asp-route-day="@Model.FilterDay"
+                                           aria-label="First">
+                                            <i class="bi bi-chevron-double-left"></i>
+                                        </a>
+                                    </li>
+
+                                    <!-- Previous Page -->
                                     <li class="page-item @(Model.Schedules.CurrentPage == 1 ? "disabled" : "")">
                                         <a class="page-link-glass"
                                            asp-page="Index"
@@ -658,7 +720,8 @@
                                            asp-route-search="@Model.SearchTerm"
                                            asp-route-roomId="@Model.FilterRoomId"
                                            asp-route-type="@Model.FilterType"
-                                           asp-route-day="@Model.FilterDay">
+                                           asp-route-day="@Model.FilterDay"
+                                           aria-label="Previous">
                                             <i class="bi bi-chevron-left"></i>
                                         </a>
                                     </li>
@@ -666,26 +729,37 @@
                                     <!-- Page Numbers -->
                                     @{
                                         var startPage = Math.Max(1, Model.Schedules.CurrentPage - 2);
-                                        var endPage = Math.Min(Model.Schedules.TotalPages, startPage + 4);
-                                        startPage = Math.Max(1, endPage - 4);
+                                        var endPage = Math.Min(Model.Schedules.TotalPages, Model.Schedules.CurrentPage + 2);
+
+                                        if (endPage - startPage < 4)
+                                        {
+                                            if (startPage == 1)
+                                            {
+                                                endPage = Math.Min(Model.Schedules.TotalPages, startPage + 4);
+                                            }
+                                            else if (endPage == Model.Schedules.TotalPages)
+                                            {
+                                                startPage = Math.Max(1, endPage - 4);
+                                            }
+                                        }
+
+                                        for (int i = startPage; i <= endPage; i++)
+                                        {
+                                            <li class="page-item @(i == Model.Schedules.CurrentPage ? "active" : "")">
+                                                <a class="page-link-glass"
+                                                   asp-page="Index"
+                                                   asp-route-pageNumber="@i"
+                                                   asp-route-search="@Model.SearchTerm"
+                                                   asp-route-roomId="@Model.FilterRoomId"
+                                                   asp-route-type="@Model.FilterType"
+                                                   asp-route-day="@Model.FilterDay">
+                                                    @i
+                                                </a>
+                                            </li>
+                                        }
                                     }
 
-                                    @for (int i = startPage; i <= endPage; i++)
-                                    {
-                                        <li class="page-item @(i == Model.Schedules.CurrentPage ? "active" : "")">
-                                            <a class="page-link-glass"
-                                               asp-page="Index"
-                                               asp-route-pageNumber="@i"
-                                               asp-route-search="@Model.SearchTerm"
-                                               asp-route-roomId="@Model.FilterRoomId"
-                                               asp-route-type="@Model.FilterType"
-                                               asp-route-day="@Model.FilterDay">
-                                                @i
-                                            </a>
-                                        </li>
-                                    }
-
-                                    <!-- Next -->
+                                    <!-- Next Page -->
                                     <li class="page-item @(Model.Schedules.CurrentPage == Model.Schedules.TotalPages ? "disabled" : "")">
                                         <a class="page-link-glass"
                                            asp-page="Index"
@@ -693,54 +767,62 @@
                                            asp-route-search="@Model.SearchTerm"
                                            asp-route-roomId="@Model.FilterRoomId"
                                            asp-route-type="@Model.FilterType"
-                                           asp-route-day="@Model.FilterDay">
+                                           asp-route-day="@Model.FilterDay"
+                                           aria-label="Next">
                                             <i class="bi bi-chevron-right"></i>
+                                        </a>
+                                    </li>
+
+                                    <!-- Last Page -->
+                                    <li class="page-item @(Model.Schedules.CurrentPage == Model.Schedules.TotalPages ? "disabled" : "")">
+                                        <a class="page-link-glass"
+                                           asp-page="Index"
+                                           asp-route-pageNumber="@Model.Schedules.TotalPages"
+                                           asp-route-search="@Model.SearchTerm"
+                                           asp-route-roomId="@Model.FilterRoomId"
+                                           asp-route-type="@Model.FilterType"
+                                           asp-route-day="@Model.FilterDay"
+                                           aria-label="Last">
+                                            <i class="bi bi-chevron-double-right"></i>
                                         </a>
                                     </li>
                                 </ul>
                             </nav>
                         </div>
                     }
-                }
-                else
-                {
-                    <div class="empty-state-glass">
-                        <i class="bi bi-calendar-x" style="font-size: 5rem;"></i>
-                        <h5 class="mt-3">No schedules found</h5>
-                        <p class="text-muted-glass">Try adjusting your filters or create a new schedule.</p>
-                        <a asp-page="Create" class="btn btn-neon-primary mt-2">
-                            <i class="bi bi-plus-circle me-1"></i>Create First Schedule
-                        </a>
-                    </div>
-                }
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1">
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true" data-bs-backdrop="true" data-bs-keyboard="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content-glass">
-            <div class="modal-header-glass-danger d-flex justify-content-between align-items-center">
-                <h5 class="modal-title mb-0" style="color: #f87171;">
+        <div class="modal-content modal-content-glass">
+            <div class="modal-header modal-header-glass-danger">
+                <h5 class="modal-title" id="deleteModalLabel" style="color: #f87171;">
                     <i class="bi bi-exclamation-triangle"></i> Confirm Delete
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: brightness(0) invert(1);"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body-glass">
-                <p>Are you sure you want to delete this schedule?</p>
+            <div class="modal-body modal-body-glass">
+                <p class="mb-3">
+                    Are you sure you want to delete schedule <strong id="scheduleTitle" style="color: #f87171;"></strong>?
+                </p>
                 <div class="alert-glass-danger">
-                    <strong id="scheduleTitle"></strong>
+                    <i class="bi bi-info-circle"></i>
+                    <small>This action cannot be undone.</small>
                 </div>
-                <p class="mb-0"><small class="text-muted-glass">This action cannot be undone.</small></p>
             </div>
-            <div class="modal-footer-glass">
-                <button type="button" class="btn btn-glass-secondary" data-bs-dismiss="modal">Cancel</button>
-                <form method="post" asp-page-handler="Delete" id="deleteForm" class="d-inline">
+            <div class="modal-footer modal-footer-glass">
+                <button type="button" class="btn btn-glass-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> Cancel
+                </button>
+                <form method="post" asp-page-handler="Delete" class="d-inline" id="deleteForm">
                     <input type="hidden" name="id" id="deleteScheduleId" />
                     <button type="submit" class="btn btn-neon-primary" style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); border-color: #dc2626;">
-                        <i class="bi bi-trash me-1"></i>Delete Schedule
+                        <i class="bi bi-trash"></i> Delete Schedule
                     </button>
                 </form>
             </div>
@@ -750,22 +832,34 @@
 
 @section Scripts {
     <script>
-        function confirmDelete(id, title) {
-            document.getElementById('deleteScheduleId').value = id;
-            document.getElementById('scheduleTitle').textContent = title;
-            var modal = new bootstrap.Modal(document.getElementById('deleteModal'));
-            modal.show();
-        }
+        // Store modal instance globally
+        let deleteModalInstance = null;
 
-        // Auto-dismiss alerts after 5 seconds
+        // Initialize modal once when page loads
         window.addEventListener('DOMContentLoaded', function() {
+            const deleteModalElement = document.getElementById('deleteModal');
+            if (deleteModalElement) {
+                deleteModalInstance = new bootstrap.Modal(deleteModalElement);
+            }
+
+            // Auto-hide alerts
             setTimeout(function() {
-                var alerts = document.querySelectorAll('[class*="alert-glass"]');
+                var alerts = document.querySelectorAll('.alert-glass-success:not(.modal .alert-glass-success), .alert-glass-danger:not(.modal .alert-glass-danger)');
                 alerts.forEach(function(alert) {
                     var bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
                     bsAlert.close();
                 });
             }, 5000);
         });
+
+        // Delete confirmation
+        function confirmDelete(scheduleId, scheduleTitle) {
+            document.getElementById('deleteScheduleId').value = scheduleId;
+            document.getElementById('scheduleTitle').textContent = scheduleTitle;
+
+            if (deleteModalInstance) {
+                deleteModalInstance.show();
+            }
+        }
     </script>
 }
