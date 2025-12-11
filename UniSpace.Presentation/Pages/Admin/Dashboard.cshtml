@@ -5,40 +5,48 @@
 }
 
 <style>
-    /* Dashboard Container */
-    .dashboard-container {
-        padding: 2rem 0;
+    /* Page Container */
+    .admin-dashboard-page-container {
+        min-height: 100vh;
+        padding: 40px 0;
     }
 
     /* Header Glassmorphism */
-    .dashboard-header {
-        background: rgba(20, 20, 30, 0.6);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+    .dashboard-header-glass {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
         border-radius: 15px;
-        padding: 2rem;
-        margin-bottom: 2rem;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        padding: 32px;
+        margin-bottom: 32px;
+        transition: all 0.3s ease;
     }
 
-        .dashboard-header h2 {
-            color: #00ffff;
+        .dashboard-header-glass:hover {
+            border: 1px solid rgba(255, 138, 0, 0.4);
+            box-shadow: 0 12px 40px 0 rgba(255, 138, 0, 0.15);
+        }
+
+        .dashboard-header-glass h2 {
+            color: #ff8a00;
             font-weight: 700;
             margin-bottom: 0.5rem;
         }
 
-        .dashboard-header p {
-            color: rgba(255, 255, 255, 0.7);
+        .dashboard-header-glass p {
+            color: #d1d5db;
+            margin: 0;
         }
 
     /* Glass Cards for Statistics */
     .glass-stat-card {
-        background: rgba(20, 20, 30, 0.6);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
         border-radius: 15px;
-        padding: 1.5rem;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        padding: 24px;
         height: 100%;
         transition: all 0.3s ease;
         position: relative;
@@ -57,43 +65,44 @@
 
         .glass-stat-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.3);
-            border-color: rgba(0, 255, 255, 0.5);
+            box-shadow: 0 12px 40px rgba(255, 138, 0, 0.3);
+            border-color: rgba(255, 138, 0, 0.5);
         }
 
         .glass-stat-card.card-cyan {
-            --card-color: #00ffff;
+            --card-color: #06b6d4;
         }
 
         .glass-stat-card.card-green {
-            --card-color: #00ff88;
+            --card-color: #10b981;
         }
 
         .glass-stat-card.card-purple {
-            --card-color: #8000ff;
+            --card-color: #a855f7;
         }
 
         .glass-stat-card.card-orange {
-            --card-color: #ffa500;
+            --card-color: #ff8a00;
         }
 
     .stat-icon {
         font-size: 2.5rem;
-        opacity: 0.8;
+        opacity: 0.9;
     }
 
     .stat-label {
         font-size: 0.75rem;
         text-transform: uppercase;
         letter-spacing: 1px;
-        color: rgba(255, 255, 255, 0.7);
+        color: #9ca3af;
         margin-bottom: 0.5rem;
+        font-weight: 600;
     }
 
     .stat-value {
         font-size: 2rem;
         font-weight: 700;
-        color: #ffffff;
+        color: #ff8a00;
     }
 
     .stat-footer {
@@ -103,60 +112,71 @@
     }
 
         .stat-footer a {
-            color: rgba(255, 255, 255, 0.8);
+            color: #d1d5db;
             text-decoration: none;
             font-size: 0.875rem;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
+            font-weight: 500;
         }
 
             .stat-footer a:hover {
                 color: var(--card-color);
+                text-shadow: 0 0 10px var(--card-color);
             }
 
     /* Module Dashboard Cards */
     .glass-module-card {
-        background: rgba(20, 20, 30, 0.6);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
         border-radius: 15px;
-        padding: 2rem;
-        margin-bottom: 2rem;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        padding: 32px;
+        margin-bottom: 32px;
+        transition: all 0.3s ease;
     }
 
+        .glass-module-card:hover {
+            border: 1px solid rgba(255, 138, 0, 0.4);
+            box-shadow: 0 12px 40px 0 rgba(255, 138, 0, 0.15);
+        }
+
         .glass-module-card .card-header-glass {
-            background: rgba(0, 255, 255, 0.1);
-            border: 1px solid rgba(0, 255, 255, 0.3);
+            background: rgba(255, 138, 0, 0.15);
+            border: 1px solid rgba(255, 138, 0, 0.3);
             border-radius: 10px;
-            padding: 1rem 1.5rem;
-            margin-bottom: 1.5rem;
+            padding: 16px 24px;
+            margin-bottom: 24px;
         }
 
             .glass-module-card .card-header-glass h5 {
-                color: #00ffff;
+                color: #ff8a00;
                 margin: 0;
-                font-weight: 600;
+                font-weight: 700;
             }
 
     .module-item {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(45, 45, 45, 0.6);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
         border-radius: 12px;
-        padding: 1.5rem;
+        padding: 24px;
         text-align: center;
         transition: all 0.3s ease;
         height: 100%;
+        position: relative;
     }
 
         .module-item:hover {
             transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
+            background: rgba(255, 138, 0, 0.1);
+            box-shadow: 0 12px 30px rgba(255, 138, 0, 0.3);
+            border-color: rgba(255, 138, 0, 0.4);
         }
 
         .module-item.priority {
-            border: 2px solid rgba(255, 165, 0, 0.5);
-            background: rgba(255, 165, 0, 0.05);
+            border: 2px solid rgba(255, 138, 0, 0.5);
+            background: rgba(255, 138, 0, 0.1);
         }
 
         .module-item i {
@@ -165,13 +185,13 @@
         }
 
         .module-item h5 {
-            color: #ffffff;
+            color: #e0e0e0;
             font-weight: 600;
             margin-bottom: 0.75rem;
         }
 
         .module-item p {
-            color: rgba(255, 255, 255, 0.6);
+            color: #9ca3af;
             font-size: 0.875rem;
             margin-bottom: 1rem;
         }
@@ -180,8 +200,8 @@
     .btn-neon {
         background: transparent;
         border: 2px solid currentColor;
-        padding: 0.5rem 1.5rem;
-        border-radius: 25px;
+        padding: 10px 24px;
+        border-radius: 8px;
         font-weight: 600;
         font-size: 0.875rem;
         transition: all 0.3s ease;
@@ -190,78 +210,96 @@
     }
 
     .btn-neon-cyan {
-        color: #00ffff;
-        border-color: #00ffff;
+        color: #06b6d4;
+        border-color: #06b6d4;
     }
 
         .btn-neon-cyan:hover {
-            background: #00ffff;
-            color: #000;
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.6);
+            border-color: #06b6d4;
         }
 
     .btn-neon-green {
-        color: #00ff88;
-        border-color: #00ff88;
+        color: #10b981;
+        border-color: #10b981;
     }
 
         .btn-neon-green:hover {
-            background: #00ff88;
-            color: #000;
-            box-shadow: 0 0 15px rgba(0, 255, 136, 0.6);
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+            border-color: #10b981;
         }
 
     .btn-neon-purple {
-        color: #8000ff;
-        border-color: #8000ff;
+        color: #a855f7;
+        border-color: #a855f7;
     }
 
         .btn-neon-purple:hover {
-            background: #8000ff;
+            background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
             color: #fff;
-            box-shadow: 0 0 15px rgba(128, 0, 255, 0.6);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
+            border-color: #a855f7;
         }
 
     .btn-neon-orange {
-        color: #ffa500;
-        border-color: #ffa500;
+        color: #ff8a00;
+        border-color: #ff8a00;
     }
 
         .btn-neon-orange:hover {
-            background: #ffa500;
-            color: #000;
-            box-shadow: 0 0 15px rgba(255, 165, 0, 0.6);
+            background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 100%);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(255, 138, 0, 0.6);
+            border-color: #ff8a00;
+        }
+
+    .btn-neon-danger {
+        color: #ef4444;
+        border-color: #ef4444;
+    }
+
+        .btn-neon-danger:hover {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+            border-color: #ef4444;
         }
 
     /* Quick Actions List */
     .glass-list-item {
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(45, 45, 45, 0.6);
+        border: 1px solid rgba(255, 138, 0, 0.2);
         border-radius: 10px;
-        padding: 1rem;
-        margin-bottom: 0.75rem;
+        padding: 16px;
+        margin-bottom: 12px;
         transition: all 0.3s ease;
-        color: #ffffff;
+        color: #e0e0e0;
         text-decoration: none;
         display: flex;
         align-items: center;
     }
 
         .glass-list-item:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(0, 255, 255, 0.5);
+            background: rgba(255, 138, 0, 0.1);
+            border-color: rgba(255, 138, 0, 0.5);
             transform: translateX(5px);
-            color: #00ffff;
+            color: #ff8a00;
+            box-shadow: 0 4px 15px rgba(255, 138, 0, 0.3);
         }
 
         .glass-list-item.priority-item {
-            background: rgba(255, 165, 0, 0.1);
-            border-color: rgba(255, 165, 0, 0.3);
+            background: rgba(255, 138, 0, 0.15);
+            border-color: rgba(255, 138, 0, 0.4);
         }
 
             .glass-list-item.priority-item:hover {
-                background: rgba(255, 165, 0, 0.15);
-                border-color: rgba(255, 165, 0, 0.6);
+                background: rgba(255, 138, 0, 0.2);
+                border-color: rgba(255, 138, 0, 0.6);
+                box-shadow: 0 4px 20px rgba(255, 138, 0, 0.4);
             }
 
         .glass-list-item i {
@@ -270,22 +308,23 @@
         }
 
         .glass-list-item strong {
-            color: #ffffff;
+            color: #ff8a00;
             display: block;
             margin-bottom: 0.25rem;
         }
 
         .glass-list-item small {
-            color: rgba(255, 255, 255, 0.6);
+            color: #9ca3af;
         }
 
     /* Progress Bars */
-    /* .progress-glass {
+    .progress-glass {
         background: rgba(255, 255, 255, 0.1);
         border-radius: 10px;
         height: 10px;
         overflow: hidden;
-    } */
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
 
     .progress-bar-neon {
         border-radius: 10px;
@@ -293,34 +332,37 @@
     }
 
     .progress-bar-cyan {
-        background: linear-gradient(90deg, #00ffff, #0080ff);
-        box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        background: linear-gradient(90deg, #06b6d4, #0891b2);
+        box-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
     }
 
     .progress-bar-green {
-        background: linear-gradient(90deg, #00ff88, #00cc66);
-        box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        background: linear-gradient(90deg, #10b981, #059669);
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
     }
 
     .progress-bar-orange {
-        background: linear-gradient(90deg, #ffa500, #ff8c00);
-        box-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
+        background: linear-gradient(90deg, #ff8a00, #ff6b00);
+        box-shadow: 0 0 10px rgba(255, 138, 0, 0.5);
     }
 
     .progress-label {
-        color: rgba(255, 255, 255, 0.9);
+        color: #d1d5db;
         font-size: 0.875rem;
         margin-bottom: 0.5rem;
     }
 
     .progress-value {
-        color: #00ffff;
+        color: #ff8a00;
         font-weight: 600;
     }
 
     /* Badge Pulse Animation */
     .pulse-badge {
         animation: pulse 2s ease-in-out infinite;
+        background: rgba(255, 138, 0, 0.3) !important;
+        border: 1px solid rgba(255, 138, 0, 0.5) !important;
+        color: #ff8a00 !important;
     }
 
     @@keyframes pulse {
@@ -337,35 +379,85 @@
 
     /* Overview Section */
     .overview-glass {
-        background: rgba(20, 20, 30, 0.6);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
         border-radius: 15px;
-        padding: 2rem;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        padding: 32px;
+        transition: all 0.3s ease;
     }
 
+        .overview-glass:hover {
+            border: 1px solid rgba(255, 138, 0, 0.4);
+            box-shadow: 0 12px 40px 0 rgba(255, 138, 0, 0.15);
+        }
+
+        .overview-glass h5 {
+            color: #ff8a00;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
         .overview-glass p {
-            color: rgba(255, 255, 255, 0.8);
+            color: #d1d5db;
             line-height: 1.8;
         }
 
         .overview-glass strong {
-            color: #00ffff;
+            color: #ff8a00;
         }
 
         .overview-glass .text-warning {
-            color: #ffa500 !important;
+            color: #ff8a00 !important;
         }
 
     .btn-group .btn {
         margin: 0 0.25rem;
     }
 
+    /* Reports Card - Special Red Style */
+    .reports-card-glass {
+        background: rgba(239, 68, 68, 0.1);
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(239, 68, 68, 0.4);
+        border-radius: 12px;
+        padding: 24px;
+        text-align: center;
+        transition: all 0.3s ease;
+        height: 100%;
+        position: relative;
+    }
+
+        .reports-card-glass:hover {
+            transform: translateY(-5px);
+            background: rgba(239, 68, 68, 0.15);
+            box-shadow: 0 12px 30px rgba(239, 68, 68, 0.3);
+            border-color: rgba(239, 68, 68, 0.6);
+        }
+
+        .reports-card-glass i {
+            font-size: 3rem;
+            color: #ef4444;
+            margin-bottom: 1rem;
+        }
+
+        .reports-card-glass h5 {
+            color: #e0e0e0;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .reports-card-glass p {
+            color: #9ca3af;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
     /* Responsive */
     @@media (max-width: 768px) {
-        .dashboard-header {
-            padding: 1.5rem;
+        .dashboard-header-glass {
+            padding: 24px;
         }
 
         .glass-stat-card {
@@ -375,301 +467,309 @@
         .module-item {
             margin-bottom: 1rem;
         }
+
+        .glass-module-card {
+            padding: 24px;
+        }
+
+        .overview-glass {
+            padding: 24px;
+        }
     }
 </style>
 
-<div class="container-fluid dashboard-container">
-    <!-- Header -->
-    <div class="dashboard-header">
-        <h2><i class="bi bi-speedometer2"></i> Admin Dashboard</h2>
-        <p>Welcome back, @User.Identity?.Name</p>
-    </div>
+<div class="admin-dashboard-page-container">
+    <div class="container-fluid dashboard-container">
+        <!-- Header -->
+        <div class="dashboard-header-glass">
+            <h2><i class="bi bi-speedometer2"></i> Admin Dashboard</h2>
+            <p>Welcome back, @User.Identity?.Name</p>
+        </div>
 
-    <!-- Statistics Cards -->
-    <div class="row mb-4">
-        <!-- Total Campuses -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="glass-stat-card card-cyan">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="stat-label">Total Campuses</div>
-                        <div class="stat-value">@Model.TotalCampuses</div>
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <!-- Total Campuses -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="glass-stat-card card-cyan">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="stat-label">Total Campuses</div>
+                            <div class="stat-value">@Model.TotalCampuses</div>
+                        </div>
+                        <div>
+                            <i class="bi bi-building stat-icon" style="color: #06b6d4;"></i>
+                        </div>
                     </div>
-                    <div>
-                        <i class="bi bi-building stat-icon" style="color: #00ffff;"></i>
+                    <div class="stat-footer">
+                        <a asp-page="/Admin/Campus/Index">
+                            View Details <i class="bi bi-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
-                <div class="stat-footer">
-                    <a asp-page="/Admin/Campus/Index">
-                        View Details <i class="bi bi-arrow-right"></i>
-                    </a>
+            </div>
+
+            <!-- Total Rooms -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="glass-stat-card card-green">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="stat-label">Total Rooms</div>
+                            <div class="stat-value">@Model.TotalRooms</div>
+                        </div>
+                        <div>
+                            <i class="bi bi-door-open stat-icon" style="color: #10b981;"></i>
+                        </div>
+                    </div>
+                    <div class="stat-footer">
+                        <a asp-page="/Admin/Room/Index">
+                            View Details <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Schedules -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="glass-stat-card card-purple">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="stat-label">Total Schedules</div>
+                            <div class="stat-value">@Model.TotalSchedules</div>
+                        </div>
+                        <div>
+                            <i class="bi bi-calendar-week stat-icon" style="color: #a855f7;"></i>
+                        </div>
+                    </div>
+                    <div class="stat-footer">
+                        <a asp-page="/Admin/Schedule/Dashboard">
+                            View Dashboard <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Bookings -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="glass-stat-card card-orange">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="stat-label">Total Bookings</div>
+                            <div class="stat-value">@Model.TotalBookings</div>
+                        </div>
+                        <div>
+                            <i class="bi bi-calendar-check stat-icon" style="color: #ff8a00;"></i>
+                        </div>
+                    </div>
+                    <div class="stat-footer">
+                        <a asp-page="/Admin/Booking/Dashboard">
+                            View Dashboard <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Total Rooms -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="glass-stat-card card-green">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="stat-label">Total Rooms</div>
-                        <div class="stat-value">@Model.TotalRooms</div>
+        <!-- Module Dashboards -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="glass-module-card">
+                    <div class="card-header-glass">
+                        <h5><i class="bi bi-grid-3x3-gap"></i> Module Dashboards</h5>
                     </div>
-                    <div>
-                        <i class="bi bi-door-open stat-icon" style="color: #00ff88;"></i>
-                    </div>
-                </div>
-                <div class="stat-footer">
-                    <a asp-page="/Admin/Room/Index">
-                        View Details <i class="bi bi-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Total Schedules -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="glass-stat-card card-purple">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="stat-label">Total Schedules</div>
-                        <div class="stat-value">@Model.TotalSchedules</div>
-                    </div>
-                    <div>
-                        <i class="bi bi-calendar-week stat-icon" style="color: #8000ff;"></i>
-                    </div>
-                </div>
-                <div class="stat-footer">
-                    <a asp-page="/Admin/Schedule/Dashboard">
-                        View Dashboard <i class="bi bi-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Total Bookings -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="glass-stat-card card-orange">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="stat-label">Total Bookings</div>
-                        <div class="stat-value">@Model.TotalBookings</div>
-                    </div>
-                    <div>
-                        <i class="bi bi-calendar-check stat-icon" style="color: #ffa500;"></i>
-                    </div>
-                </div>
-                <div class="stat-footer">
-                    <a asp-page="/Admin/Booking/Dashboard">
-                        View Dashboard <i class="bi bi-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Module Dashboards -->
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="glass-module-card">
-                <div class="card-header-glass">
-                    <h5><i class="bi bi-grid-3x3-gap"></i> Module Dashboards</h5>
-                </div>
-                <div class="row g-3">
-                    <!-- Campus Dashboard -->
-                    <div class="col-md-3">
-                        <div class="module-item">
-                            <i class="bi bi-building" style="color: #00ffff;"></i>
-                            <h5>Campus Management</h5>
-                            <p>Manage campuses, locations, and facilities</p>
-                            <a asp-page="/Admin/Campus/Dashboard" class="btn btn-neon btn-neon-cyan">
-                                <i class="bi bi-speedometer2"></i> View Dashboard
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Room Dashboard -->
-                    <div class="col-md-3">
-                        <div class="module-item">
-                            <i class="bi bi-door-open" style="color: #00ff88;"></i>
-                            <h5>Room Management</h5>
-                            <p>Manage rooms, capacity, and availability</p>
-                            <a asp-page="/Admin/Room/Dashboard" class="btn btn-neon btn-neon-green">
-                                <i class="bi bi-speedometer2"></i> View Dashboard
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Schedule Dashboard -->
-                    <div class="col-md-3">
-                        <div class="module-item">
-                            <i class="bi bi-calendar-week" style="color: #8000ff;"></i>
-                            <h5>Schedule Management</h5>
-                            <p>Manage schedules, courses, and maintenance</p>
-                            <a asp-page="/Admin/Schedule/Dashboard" class="btn btn-neon btn-neon-purple">
-                                <i class="bi bi-speedometer2"></i> View Dashboard
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Booking Confirmation Dashboard -->
-                    <div class="col-md-3">
-                        <div class="module-item priority">
-                            <span class="badge bg-warning position-absolute top-0 end-0 m-2 pulse-badge">
-                                <i class="bi bi-star-fill"></i> Priority
-                            </span>
-                            <i class="bi bi-clipboard-check" style="color: #ffa500;"></i>
-                            <h5>Booking Confirmation</h5>
-                            <p>Review and approve pending booking requests</p>
-                            <a asp-page="/Admin/Booking/Dashboard" class="btn btn-neon btn-neon-orange">
-                                <i class="bi bi-speedometer2"></i> View Dashboard
-                            </a>
+                    <div class="row g-3">
+                        <!-- Campus Dashboard -->
+                        <div class="col-lg-3 col-md-6">
+                            <div class="module-item">
+                                <i class="bi bi-building" style="color: #06b6d4;"></i>
+                                <h5>Campus Management</h5>
+                                <p>Manage campuses, locations, and facilities</p>
+                                <a asp-page="/Admin/Campus/Dashboard" class="btn btn-neon btn-neon-cyan">
+                                    <i class="bi bi-speedometer2"></i> View Dashboard
+                                </a>
+                            </div>
                         </div>
 
-                        <!-- Reports Dashboard - NEW -->
-                        <div class="col-md-3 mt-3">
-                            <div class="card h-100 hover-shadow border-danger" style="border-width: 2px;">
-                                <div class="card-body text-center">
-                                    <i class="bi bi-file-earmark-bar-graph display-4 text-danger mb-3"></i>
-                                    <h5 class="card-title">Reports & Analytics</h5>
-                                    <p class="card-text text-muted small">View system reports, statistics, and analytics</p>
-                                    <a asp-page="/Admin/Reports/Dashboard" class="btn btn-danger btn-sm">
-                                        <i class="bi bi-graph-up"></i> View Dashboard
-                                    </a>
-                                </div>
+                        <!-- Room Dashboard -->
+                        <div class="col-lg-3 col-md-6">
+                            <div class="module-item">
+                                <i class="bi bi-door-open" style="color: #10b981;"></i>
+                                <h5>Room Management</h5>
+                                <p>Manage rooms, capacity, and availability</p>
+                                <a asp-page="/Admin/Room/Dashboard" class="btn btn-neon btn-neon-green">
+                                    <i class="bi bi-speedometer2"></i> View Dashboard
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Schedule Dashboard -->
+                        <div class="col-lg-3 col-md-6">
+                            <div class="module-item">
+                                <i class="bi bi-calendar-week" style="color: #a855f7;"></i>
+                                <h5>Schedule Management</h5>
+                                <p>Manage schedules, courses, and maintenance</p>
+                                <a asp-page="/Admin/Schedule/Dashboard" class="btn btn-neon btn-neon-purple">
+                                    <i class="bi bi-speedometer2"></i> View Dashboard
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Booking Confirmation Dashboard -->
+                        <div class="col-lg-3 col-md-6">
+                            <div class="module-item priority">
+                                <span class="badge pulse-badge position-absolute top-0 end-0 m-2">
+                                    <i class="bi bi-star-fill"></i> Priority
+                                </span>
+                                <i class="bi bi-clipboard-check" style="color: #ff8a00;"></i>
+                                <h5>Booking Confirmation</h5>
+                                <p>Review and approve pending booking requests</p>
+                                <a asp-page="/Admin/Booking/Dashboard" class="btn btn-neon btn-neon-orange">
+                                    <i class="bi bi-speedometer2"></i> View Dashboard
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Reports Dashboard -->
+                        <div class="col-lg-3 col-md-6">
+                            <div class="reports-card-glass">
+                                <i class="bi bi-file-earmark-bar-graph"></i>
+                                <h5>Reports & Analytics</h5>
+                                <p>View system reports, statistics, and analytics</p>
+                                <a asp-page="/Admin/Reports/Dashboard" class="btn btn-neon btn-neon-danger">
+                                    <i class="bi bi-graph-up"></i> View Dashboard
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Quick Actions & System Status -->
-    <div class="row">
-        <!-- Quick Actions -->
-        <div class="col-lg-6 mb-4">
-            <div class="glass-module-card">
-                <div class="card-header-glass">
-                    <h5><i class="bi bi-lightning"></i> Quick Actions</h5>
-                </div>
-                <div>
-                    <a asp-page="/Admin/Booking/Index" asp-route-status="0" class="glass-list-item priority-item">
-                        <i class="bi bi-exclamation-triangle-fill" style="color: #ffa500;"></i>
-                        <div>
-                            <strong>Review Pending Bookings</strong>
-                            <small>Confirm or reject booking requests</small>
-                        </div>
-                    </a>
-                    <a asp-page="/Admin/Campus/Create" class="glass-list-item">
-                        <i class="bi bi-plus-circle" style="color: #00ffff;"></i>
-                        <div>
-                            <strong>Add New Campus</strong>
-                            <small>Create a new campus location</small>
-                        </div>
-                    </a>
-                    <a asp-page="/Admin/Room/Create" class="glass-list-item">
-                        <i class="bi bi-door-open" style="color: #00ff88;"></i>
-                        <div>
-                            <strong>Add New Room</strong>
-                            <small>Register a new room</small>
-                        </div>
-                    </a>
-                    <a asp-page="/Admin/Schedule/Create" class="glass-list-item">
-                        <i class="bi bi-calendar-plus" style="color: #8000ff;"></i>
-                        <div>
-                            <strong>Add New Schedule</strong>
-                            <small>Create a new schedule</small>
-                        </div>
-                    </a>
-                    <a asp-page="/Admin/Campus/Index" class="glass-list-item">
-                        <i class="bi bi-list" style="color: rgba(255, 255, 255, 0.7);"></i>
-                        <div>
-                            <strong>View All Records</strong>
-                            <small>Browse all campuses, rooms, and schedules</small>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- System Status -->
-        <div class="col-lg-6 mb-4">
-            <div class="glass-module-card">
-                <div class="card-header-glass">
-                    <h5><i class="bi bi-activity"></i> System Status</h5>
-                </div>
-                <div>
-                    <div class="mb-3">
-                        <div class="d-flex justify-content-between progress-label">
-                            <span>Campus Occupancy</span>
-                            <span class="progress-value">75%</span>
-                        </div>
-                        <div class="progress">
-                            <div class="progress-bar bg-success" style="width: 75%"></div>
-                        </div>
+        <!-- Quick Actions & System Status -->
+        <div class="row">
+            <!-- Quick Actions -->
+            <div class="col-lg-6 mb-4">
+                <div class="glass-module-card">
+                    <div class="card-header-glass">
+                        <h5><i class="bi bi-lightning"></i> Quick Actions</h5>
                     </div>
-
-                    <div class="mb-3">
-                        <div class="d-flex justify-content-between progress-label">
-                            <span>Room Availability</span>
-                            <span class="progress-value">60%</span>
-                        </div>
-                        <div class="progress">
-                            <div class="progress-bar bg-info" style="width: 60%"></div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="d-flex justify-content-between progress-label">
-                            <span>Schedule Coverage</span>
-                            <span class="progress-value">85%</span>
-                        </div>
-                        <div class="progress">
-                            <div class="progress-bar bg-warning" style="width: 85%"></div>
-                        </div>
-                    </div>
-
                     <div>
-                        <div class="d-flex justify-content-between progress-label">
-                            <span>System Health</span>
-                            <span style="color: #00ff88; font-weight: 600">Healthy</span>
+                        <a asp-page="/Admin/Booking/Index" asp-route-status="0" class="glass-list-item priority-item">
+                            <i class="bi bi-exclamation-triangle-fill" style="color: #ff8a00;"></i>
+                            <div>
+                                <strong>Review Pending Bookings</strong>
+                                <small>Confirm or reject booking requests</small>
+                            </div>
+                        </a>
+                        <a asp-page="/Admin/Campus/Create" class="glass-list-item">
+                            <i class="bi bi-plus-circle" style="color: #06b6d4;"></i>
+                            <div>
+                                <strong>Add New Campus</strong>
+                                <small>Create a new campus location</small>
+                            </div>
+                        </a>
+                        <a asp-page="/Admin/Room/Create" class="glass-list-item">
+                            <i class="bi bi-door-open" style="color: #10b981;"></i>
+                            <div>
+                                <strong>Add New Room</strong>
+                                <small>Register a new room</small>
+                            </div>
+                        </a>
+                        <a asp-page="/Admin/Schedule/Create" class="glass-list-item">
+                            <i class="bi bi-calendar-plus" style="color: #a855f7;"></i>
+                            <div>
+                                <strong>Add New Schedule</strong>
+                                <small>Create a new schedule</small>
+                            </div>
+                        </a>
+                        <a asp-page="/Admin/Campus/Index" class="glass-list-item">
+                            <i class="bi bi-list" style="color: #9ca3af;"></i>
+                            <div>
+                                <strong>View All Records</strong>
+                                <small>Browse all campuses, rooms, and schedules</small>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Status -->
+            <div class="col-lg-6 mb-4">
+                <div class="glass-module-card">
+                    <div class="card-header-glass">
+                        <h5><i class="bi bi-activity"></i> System Status</h5>
+                    </div>
+                    <div>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between progress-label">
+                                <span>Campus Occupancy</span>
+                                <span class="progress-value">75%</span>
+                            </div>
+                            <div class="progress progress-glass">
+                                <div class="progress-bar progress-bar-green" style="width: 75%"></div>
+                            </div>
                         </div>
-                        <div class="progress">
-                            <div class="progress-bar bg-success" style="width: 100%"></div>
+
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between progress-label">
+                                <span>Room Availability</span>
+                                <span class="progress-value">60%</span>
+                            </div>
+                            <div class="progress progress-glass">
+                                <div class="progress-bar progress-bar-cyan" style="width: 60%"></div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between progress-label">
+                                <span>Schedule Coverage</span>
+                                <span class="progress-value">85%</span>
+                            </div>
+                            <div class="progress progress-glass">
+                                <div class="progress-bar progress-bar-orange" style="width: 85%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="d-flex justify-content-between progress-label">
+                                <span>System Health</span>
+                                <span style="color: #10b981; font-weight: 600">Healthy</span>
+                            </div>
+                            <div class="progress progress-glass">
+                                <div class="progress-bar progress-bar-green" style="width: 100%"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Overview Section -->
-    <div class="row">
-        <div class="col-md-12">
-            <div class="overview-glass">
-                <h5 style="color: #00ffff; margin-bottom: 1rem;">
-                    <i class="bi bi-info-circle"></i> System Overview
-                </h5>
-                <p>
-                    You are managing <strong>@Model.TotalCampuses campus(es)</strong> with
-                    <strong>@Model.TotalRooms room(s)</strong> and
-                    <strong>@Model.TotalSchedules schedule(s)</strong>.
-                    There are <strong class="text-warning">@Model.TotalBookings booking(s)</strong> in the system.
-                </p>
-                <div class="btn-group flex-wrap" role="group">
-                    <a asp-page="/Admin/Campus/Index" class="btn btn-neon btn-neon-cyan">
-                        <i class="bi bi-building"></i> Campuses
-                    </a>
-                    <a asp-page="/Admin/Room/Index" class="btn btn-neon btn-neon-green">
-                        <i class="bi bi-door-open"></i> Rooms
-                    </a>
-                    <a asp-page="/Admin/Schedule/Index" class="btn btn-neon btn-neon-purple">
-                        <i class="bi bi-calendar-week"></i> Schedules
-                    </a>
-                    <a asp-page="/Admin/Booking/Dashboard" class="btn btn-neon btn-neon-orange">
-                        <i class="bi bi-clipboard-check"></i> Bookings
-                    </a>
+        <!-- Overview Section -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="overview-glass">
+                    <h5>
+                        <i class="bi bi-info-circle"></i> System Overview
+                    </h5>
+                    <p>
+                        You are managing <strong>@Model.TotalCampuses campus(es)</strong> with
+                        <strong>@Model.TotalRooms room(s)</strong> and
+                        <strong>@Model.TotalSchedules schedule(s)</strong>.
+                        There are <strong class="text-warning">@Model.TotalBookings booking(s)</strong> in the system.
+                    </p>
+                    <div class="btn-group flex-wrap" role="group">
+                        <a asp-page="/Admin/Campus/Index" class="btn btn-neon btn-neon-cyan">
+                            <i class="bi bi-building"></i> Campuses
+                        </a>
+                        <a asp-page="/Admin/Room/Index" class="btn btn-neon btn-neon-green">
+                            <i class="bi bi-door-open"></i> Rooms
+                        </a>
+                        <a asp-page="/Admin/Schedule/Index" class="btn btn-neon btn-neon-purple">
+                            <i class="bi bi-calendar-week"></i> Schedules
+                        </a>
+                        <a asp-page="/Admin/Booking/Dashboard" class="btn btn-neon btn-neon-orange">
+                            <i class="bi bi-clipboard-check"></i> Bookings
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

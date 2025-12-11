@@ -547,10 +547,10 @@
 
                                                         @if (booking.Status == BookingStatus.Completed)
                                                         {
-                                                            <a href="/RoomReports/Create?bookingId=@booking.Id"
-                                                               class="btn btn-action-glass btn-action-dark action-report"
-                                                               title="Report Issue">
-                                                                <i class="bi bi-exclamation-triangle"></i>
+                                                            <a asp-page="/RoomReports/Create" 
+                                                               asp-route-bookingId="@booking.Id" 
+                                                               class="btn btn-warning">
+                                                                <i class="bi bi-exclamation-triangle"></i> Report Issue
                                                             </a>
                                                         }
                                                     </div>

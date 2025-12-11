@@ -5,39 +5,74 @@
 }
 
 <style>
+    body {
+        background: #000000;
+        min-height: 100vh;
+    }
+
+    .glass-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        transition: all 0.3s ease;
+    }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 35px rgba(255, 107, 53, 0.2);
+        }
+
     .stat-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
         border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
         overflow: hidden;
         transition: all 0.3s ease;
-        border: none;
         position: relative;
     }
 
-    .stat-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
-    }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
 
-    .stat-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 5px;
-    }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
 
-    .stat-card.pending::before {
-        background: linear-gradient(90deg, #ffc107, #ff9800);
-    }
+        .stat-card.pending::before {
+            background: linear-gradient(90deg, #fbbf24, #ff6b35);
+        }
 
-    .stat-card.approved::before {
-        background: linear-gradient(90deg, #28a745, #20c997);
-    }
+        .stat-card.approved::before {
+            background: linear-gradient(90deg, #10b981, #059669);
+        }
 
-    .stat-card.rejected::before {
-        background: linear-gradient(90deg, #dc3545, #e74c3c);
-    }
+        .stat-card.rejected::before {
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+        }
+
+        .stat-card.completed::before {
+            background: linear-gradient(90deg, #3b82f6, #2563eb);
+        }
+
+        .stat-card.cancelled::before {
+            background: linear-gradient(90deg, #6b7280, #4b5563);
+        }
+
+        .stat-card.total::before {
+            background: linear-gradient(90deg, #ff6b35, #ff8c5f);
+        }
 
     .stat-icon {
         width: 60px;
@@ -47,35 +82,74 @@
         align-items: center;
         justify-content: center;
         font-size: 24px;
+        background: rgba(255, 107, 53, 0.2);
+        border: 1px solid rgba(255, 107, 53, 0.5);
+        color: #ff6b35;
     }
 
+        .stat-icon.orange {
+            background: rgba(255, 107, 53, 0.2);
+            border-color: rgba(255, 107, 53, 0.5);
+            color: #ff6b35;
+        }
+
+        .stat-icon.yellow {
+            background: rgba(251, 191, 36, 0.2);
+            border-color: rgba(251, 191, 36, 0.5);
+            color: #fbbf24;
+        }
+
+        .stat-icon.green {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: rgba(16, 185, 129, 0.5);
+            color: #10b981;
+        }
+
+        .stat-icon.red {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.5);
+            color: #ef4444;
+        }
+
+        .stat-icon.blue {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.5);
+            color: #3b82f6;
+        }
+
+        .stat-icon.gray {
+            background: rgba(107, 114, 128, 0.2);
+            border-color: rgba(107, 114, 128, 0.5);
+            color: #6b7280;
+        }
+
     .pending-list-item {
-        border-left: 4px solid #ffc107;
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        border-left: 4px solid #ff6b35;
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-left: 4px solid #ff6b35;
         transition: all 0.3s ease;
         padding: 15px;
         margin-bottom: 10px;
-        background: white;
-        border-radius: 8px;
     }
 
-    .pending-list-item:hover {
-        background: #fff9e6;
-        transform: translateX(5px);
-        box-shadow: 0 3px 10px rgba(255, 193, 7, 0.2);
-    }
+        .pending-list-item:hover {
+            background: rgba(255, 107, 53, 0.1);
+            transform: translateX(5px);
+            box-shadow: 0 3px 10px rgba(255, 107, 53, 0.3);
+        }
 
     .priority-badge {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+        background: rgba(255, 107, 53, 0.2);
+        border: 1px solid rgba(255, 107, 53, 0.5);
+        color: #ff6b35;
         padding: 5px 12px;
         border-radius: 20px;
         font-size: 11px;
         font-weight: 600;
-    }
-
-    .chart-container {
-        position: relative;
-        height: 300px;
     }
 
     .action-required-pulse {
@@ -84,61 +158,95 @@
 
     @@keyframes pulse-ring {
         0%, 100% {
-            box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4);
+            box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.4);
         }
+
         50% {
-            box-shadow: 0 0 0 10px rgba(255, 193, 7, 0);
+            box-shadow: 0 0 0 15px rgba(255, 107, 53, 0);
         }
     }
 
-    .quick-action-btn {
-        padding: 12px 20px;
+    .glass-btn {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 10px;
+        color: #fff;
+        padding: 12px 25px;
         transition: all 0.3s ease;
         font-weight: 600;
     }
 
-    .quick-action-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        .glass-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+        }
+
+    .glass-btn-orange {
+        background: rgba(255, 107, 53, 0.2);
+        border: 1px solid rgba(255, 107, 53, 0.5);
+        color: #ff6b35;
     }
 
-    .gradient-primary {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .glass-btn-orange:hover {
+            background: rgba(255, 107, 53, 0.3);
+            border-color: rgba(255, 107, 53, 0.7);
+            color: #ff6b35;
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+        }
+
+    .glass-btn-warning {
+        background: rgba(251, 191, 36, 0.2);
+        border: 1px solid rgba(251, 191, 36, 0.5);
+        color: #fbbf24;
     }
 
-    .gradient-warning {
-        background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
-    }
-
-    .gradient-success {
-        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-    }
-
-    .gradient-danger {
-        background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%);
-    }
+        .glass-btn-warning:hover {
+            background: rgba(251, 191, 36, 0.3);
+            border-color: rgba(251, 191, 36, 0.7);
+            color: #fbbf24;
+            box-shadow: 0 5px 15px rgba(251, 191, 36, 0.3);
+        }
 
     .dashboard-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: rgba(255, 107, 53, 0.15);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 107, 53, 0.3);
         padding: 30px;
-        border-radius: 15px;
-        color: white;
+        border-radius: 20px;
         margin-bottom: 30px;
+        box-shadow: 0 8px 32px rgba(255, 107, 53, 0.2);
+    }
+
+    .page-title {
+        color: #fff;
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+    .page-subtitle {
+        color: rgba(255, 255, 255, 0.7);
     }
 
     .time-badge {
-        background: rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         padding: 5px 15px;
         border-radius: 20px;
         font-size: 12px;
         backdrop-filter: blur(10px);
+        color: rgba(255, 255, 255, 0.9);
     }
 
     .status-progress {
         height: 8px;
         border-radius: 10px;
-        background: #e9ecef;
+        background: rgba(255, 255, 255, 0.1);
         overflow: hidden;
     }
 
@@ -147,29 +255,215 @@
         transition: width 0.6s ease;
     }
 
-    .metric-change {
-        font-size: 12px;
-        font-weight: 600;
+    .gradient-orange {
+        background: linear-gradient(90deg, #ff6b35, #ff8c5f);
     }
 
-    .metric-change.up {
-        color: #28a745;
+    .gradient-warning {
+        background: linear-gradient(90deg, #fbbf24, #f59e0b);
     }
 
-    .metric-change.down {
-        color: #dc3545;
+    .gradient-success {
+        background: linear-gradient(90deg, #10b981, #059669);
     }
+
+    .gradient-danger {
+        background: linear-gradient(90deg, #ef4444, #dc2626);
+    }
+
+    .gradient-info {
+        background: linear-gradient(90deg, #3b82f6, #2563eb);
+    }
+
+    .gradient-secondary {
+        background: linear-gradient(90deg, #6b7280, #4b5563);
+    }
+
+    .text-white-primary {
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .text-white-secondary {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .text-white-muted {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .neon-orange {
+        color: #ff6b35;
+    }
+
+    .neon-orange-glow {
+        color: #ff6b35;
+        text-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
+    }
+
+    .glass-alert {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 15px;
+        color: #fff;
+    }
+
+    .glass-alert-warning {
+        background: rgba(251, 191, 36, 0.15);
+        border: 1px solid rgba(251, 191, 36, 0.3);
+        border-left: 4px solid #fbbf24;
+    }
+
+    .glass-card-header {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 20px;
+    }
+
+        .glass-card-header.orange {
+            background: rgba(255, 107, 53, 0.15);
+            border-bottom: 1px solid rgba(255, 107, 53, 0.3);
+        }
+
+        .glass-card-header.warning {
+            background: rgba(251, 191, 36, 0.15);
+            border-bottom: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
+        .glass-card-header.info {
+            background: rgba(59, 130, 246, 0.15);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+    .glass-card-footer {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 15px;
+    }
+
+    .glass-table {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+    }
+
+        .glass-table thead {
+            background: #000000;
+            border-bottom: 2px solid rgba(255, 107, 53, 0.5);
+
+        }
+
+            .glass-table thead th {
+                color: #ff6b35;
+                font-weight: 600;
+                text-transform: uppercase;
+                font-size: 0.75rem;
+                border: none;
+                padding: 15px;
+            }
+
+        .glass-table tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.2s ease;
+        }
+
+            .glass-table tbody tr:hover {
+                background: rgba(255, 107, 53, 0.05);
+            }
+
+        .glass-table tbody td {
+            color: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border: none;
+        }
+
+    .schedule-item {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+    }
+
+        .schedule-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(5px);
+        }
+
+        .schedule-item.border-success {
+            border-left: 4px solid #10b981;
+        }
+
+        .schedule-item.border-warning {
+            border-left: 4px solid #fbbf24;
+        }
+
+        .schedule-item.border-secondary {
+            border-left: 4px solid #6b7280;
+        }
+
+    .badge-glass {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 6px 12px;
+        border-radius: 8px;
+        color: #fff;
+    }
+
+    .badge-orange {
+        background: rgba(255, 107, 53, 0.2);
+        border: 1px solid rgba(255, 107, 53, 0.5);
+        color: #ff6b35;
+    }
+
+    .empty-state {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 50px;
+        text-align: center;
+    }
+
+    .stat-card-body {
+        padding: 20px;
+    }
+
+    .card-footer-action {
+        background: rgba(251, 191, 36, 0.2);
+        border: none;
+        padding: 12px;
+        text-align: center;
+    }
+
+        .card-footer-action a {
+            color: #fbbf24;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+            .card-footer-action a:hover {
+                color: #ff6b35;
+            }
 </style>
 
 <div class="container-fluid mt-4 px-4">
     <!-- Dashboard Header -->
-    <div class="dashboard-header shadow-lg">
+    <div class="dashboard-header">
         <div class="row align-items-center">
             <div class="col-md-8">
-                <h1 class="display-5 fw-bold mb-2">
-                    <i class="bi bi-clipboard-check"></i> Booking Confirmation Dashboard
+                <h1 class="page-title mb-2">
+                    <i class="bi bi-clipboard-check neon-orange-glow"></i> Booking Confirmation Dashboard
                 </h1>
-                <p class="mb-3 opacity-75">
+                <p class="page-subtitle mb-3">
                     <i class="bi bi-calendar-event"></i> @DateTime.Now.ToString("dddd, MMMM dd, yyyy")
                     <span class="time-badge ms-2">
                         <i class="bi bi-clock"></i> @DateTime.Now.ToString("HH:mm")
@@ -177,17 +471,17 @@
                 </p>
                 @if (Model.PendingBookings > 0)
                 {
-                    <div class="alert alert-warning border-0 mb-0" style="background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px);">
+                    <div class="glass-alert glass-alert-warning mb-0">
                         <i class="bi bi-exclamation-triangle-fill me-2"></i>
                         <strong>@Model.PendingBookings booking(s)</strong> awaiting your confirmation
                     </div>
                 }
             </div>
             <div class="col-md-4 text-end">
-                <a asp-page="./Index" class="btn btn-light btn-lg mb-2 w-100 quick-action-btn">
+                <a asp-page="./Index" class="btn glass-btn-orange btn-lg mb-2 w-100">
                     <i class="bi bi-list-ul"></i> View All Bookings
                 </a>
-                <a asp-page="/Admin/Dashboard" class="btn btn-outline-light btn-lg w-100 quick-action-btn">
+                <a asp-page="/Admin/Dashboard" class="btn glass-btn btn-lg w-100">
                     <i class="bi bi-arrow-left"></i> Admin Dashboard
                 </a>
             </div>
@@ -197,17 +491,17 @@
     <!-- Statistics Cards -->
     <div class="row g-4 mb-4">
         <div class="col-xl-2 col-lg-4 col-md-6">
-            <div class="card stat-card shadow-lg">
-                <div class="card-body">
+            <div class="stat-card total">
+                <div class="stat-card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <div class="text-muted small mb-2">Total Bookings</div>
-                            <h2 class="fw-bold mb-1">@Model.TotalBookings</h2>
+                            <div class="text-white-muted small mb-2">Total Bookings</div>
+                            <h2 class="text-white-primary mb-1">@Model.TotalBookings</h2>
                             <div class="status-progress mt-2">
-                                <div class="status-progress-bar gradient-primary" style="width: 100%;"></div>
+                                <div class="status-progress-bar gradient-orange" style="width: 100%;"></div>
                             </div>
                         </div>
-                        <div class="stat-icon gradient-primary text-white">
+                        <div class="stat-icon orange">
                             <i class="bi bi-calendar-check"></i>
                         </div>
                     </div>
@@ -216,30 +510,30 @@
         </div>
 
         <div class="col-xl-2 col-lg-4 col-md-6">
-            <div class="card stat-card pending shadow-lg @(Model.PendingBookings > 0 ? "action-required-pulse" : "")">
-                <div class="card-body">
+            <div class="stat-card pending @(Model.PendingBookings > 0 ? "action-required-pulse" : "")">
+                <div class="stat-card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div class="flex-grow-1">
-                            <div class="text-muted small mb-2">Pending</div>
-                            <h2 class="fw-bold mb-1 text-warning">@Model.PendingBookings</h2>
+                            <div class="text-white-muted small mb-2">Pending</div>
+                            <h2 class="text-white-primary mb-1" style="color: #fbbf24;">@Model.PendingBookings</h2>
                             @if (Model.TotalBookings > 0)
                             {
                                 var pendingPercent = (double)Model.PendingBookings / Model.TotalBookings * 100;
                                 <div class="status-progress mt-2">
                                     <div class="status-progress-bar gradient-warning" style="width: @pendingPercent.ToString("0")%;"></div>
                                 </div>
-                                <small class="text-muted">@pendingPercent.ToString("0.0")% of total</small>
+                                <small class="text-white-muted">@pendingPercent.ToString("0.0")% of total</small>
                             }
                         </div>
-                        <div class="stat-icon gradient-warning text-white">
+                        <div class="stat-icon yellow">
                             <i class="bi bi-clock-history"></i>
                         </div>
                     </div>
                 </div>
                 @if (Model.PendingBookings > 0)
                 {
-                    <div class="card-footer bg-warning">
-                        <a asp-page="./Index" asp-route-status="@((int)UniSpace.BusinessObject.Enums.BookingStatus.Pending)" class="text-dark small text-decoration-none fw-bold">
+                    <div class="card-footer-action">
+                        <a asp-page="./Index" asp-route-status="@((int)UniSpace.BusinessObject.Enums.BookingStatus.Pending)">
                             Review Now <i class="bi bi-arrow-right"></i>
                         </a>
                     </div>
@@ -248,22 +542,22 @@
         </div>
 
         <div class="col-xl-2 col-lg-4 col-md-6">
-            <div class="card stat-card approved shadow-lg">
-                <div class="card-body">
+            <div class="stat-card approved">
+                <div class="stat-card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div class="flex-grow-1">
-                            <div class="text-muted small mb-2">Approved</div>
-                            <h2 class="fw-bold mb-1 text-success">@Model.ApprovedBookings</h2>
+                            <div class="text-white-muted small mb-2">Approved</div>
+                            <h2 class="text-white-primary mb-1" style="color: #10b981;">@Model.ApprovedBookings</h2>
                             @if (Model.TotalBookings > 0)
                             {
                                 var approvedPercent = (double)Model.ApprovedBookings / Model.TotalBookings * 100;
                                 <div class="status-progress mt-2">
                                     <div class="status-progress-bar gradient-success" style="width: @approvedPercent.ToString("0")%;"></div>
                                 </div>
-                                <small class="text-muted">@approvedPercent.ToString("0.0")% of total</small>
+                                <small class="text-white-muted">@approvedPercent.ToString("0.0")% of total</small>
                             }
                         </div>
-                        <div class="stat-icon gradient-success text-white">
+                        <div class="stat-icon green">
                             <i class="bi bi-check-circle"></i>
                         </div>
                     </div>
@@ -272,22 +566,22 @@
         </div>
 
         <div class="col-xl-2 col-lg-4 col-md-6">
-            <div class="card stat-card rejected shadow-lg">
-                <div class="card-body">
+            <div class="stat-card rejected">
+                <div class="stat-card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div class="flex-grow-1">
-                            <div class="text-muted small mb-2">Rejected</div>
-                            <h2 class="fw-bold mb-1 text-danger">@Model.RejectedBookings</h2>
+                            <div class="text-white-muted small mb-2">Rejected</div>
+                            <h2 class="text-white-primary mb-1" style="color: #ef4444;">@Model.RejectedBookings</h2>
                             @if (Model.TotalBookings > 0)
                             {
                                 var rejectedPercent = (double)Model.RejectedBookings / Model.TotalBookings * 100;
                                 <div class="status-progress mt-2">
                                     <div class="status-progress-bar gradient-danger" style="width: @rejectedPercent.ToString("0")%;"></div>
                                 </div>
-                                <small class="text-muted">@rejectedPercent.ToString("0.0")% of total</small>
+                                <small class="text-white-muted">@rejectedPercent.ToString("0.0")% of total</small>
                             }
                         </div>
-                        <div class="stat-icon gradient-danger text-white">
+                        <div class="stat-icon red">
                             <i class="bi bi-x-circle"></i>
                         </div>
                     </div>
@@ -296,17 +590,17 @@
         </div>
 
         <div class="col-xl-2 col-lg-4 col-md-6">
-            <div class="card stat-card shadow-lg">
-                <div class="card-body">
+            <div class="stat-card completed">
+                <div class="stat-card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <div class="text-muted small mb-2">Completed</div>
-                            <h2 class="fw-bold mb-1 text-info">@Model.CompletedBookings</h2>
+                            <div class="text-white-muted small mb-2">Completed</div>
+                            <h2 class="text-white-primary mb-1" style="color: #3b82f6;">@Model.CompletedBookings</h2>
                             <div class="status-progress mt-2">
-                                <div class="status-progress-bar bg-info" style="width: 75%;"></div>
+                                <div class="status-progress-bar gradient-info" style="width: 75%;"></div>
                             </div>
                         </div>
-                        <div class="stat-icon bg-info text-white">
+                        <div class="stat-icon blue">
                             <i class="bi bi-check2-all"></i>
                         </div>
                     </div>
@@ -315,17 +609,17 @@
         </div>
 
         <div class="col-xl-2 col-lg-4 col-md-6">
-            <div class="card stat-card shadow-lg">
-                <div class="card-body">
+            <div class="stat-card cancelled">
+                <div class="stat-card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <div class="text-muted small mb-2">Cancelled</div>
-                            <h2 class="fw-bold mb-1 text-secondary">@Model.CancelledBookings</h2>
+                            <div class="text-white-muted small mb-2">Cancelled</div>
+                            <h2 class="text-white-primary mb-1" style="color: #6b7280;">@Model.CancelledBookings</h2>
                             <div class="status-progress mt-2">
-                                <div class="status-progress-bar bg-secondary" style="width: 40%;"></div>
+                                <div class="status-progress-bar gradient-secondary" style="width: 40%;"></div>
                             </div>
                         </div>
-                        <div class="stat-icon bg-secondary text-white">
+                        <div class="stat-icon gray">
                             <i class="bi bi-slash-circle"></i>
                         </div>
                     </div>
@@ -338,20 +632,20 @@
     <div class="row g-4">
         <!-- Pending Bookings (Priority) -->
         <div class="col-lg-8 mb-4">
-            <div class="card shadow-lg border-0">
-                <div class="card-header gradient-warning text-dark py-3">
+            <div class="glass-card">
+                <div class="glass-card-header warning">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0 fw-bold">
-                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <h5 class="mb-0 text-white-primary">
+                            <i class="bi bi-exclamation-triangle-fill me-2" style="color: #fbbf24;"></i>
                             Pending Confirmations
                         </h5>
                         @if (Model.PendingBookingsList.Any())
                         {
-                            <span class="badge bg-dark fs-6">@Model.PendingBookingsList.Count items</span>
+                            <span class="badge-glass badge-orange fs-6">@Model.PendingBookingsList.Count items</span>
                         }
                     </div>
                 </div>
-                <div class="card-body p-3">
+                <div class="p-3">
                     @if (Model.PendingBookingsList.Any())
                     {
                         <div class="list-group list-group-flush">
@@ -362,32 +656,32 @@
                                         <div class="col-md-3">
                                             <div class="d-flex align-items-center">
                                                 <div class="me-3">
-                                                    <i class="bi bi-person-circle fs-2 text-primary"></i>
+                                                    <i class="bi bi-person-circle fs-2 neon-orange"></i>
                                                 </div>
                                                 <div>
-                                                    <strong class="d-block">@booking.UserName</strong>
-                                                    <small class="text-muted">@booking.UserEmail</small>
+                                                    <strong class="d-block text-white-primary">@booking.UserName</strong>
+                                                    <small class="text-white-muted">@booking.UserEmail</small>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <span class="priority-badge">@booking.RoomTypeDisplay</span>
                                             <div class="mt-1">
-                                                <strong>@booking.RoomName</strong>
+                                                <strong class="text-white-primary">@booking.RoomName</strong>
                                             </div>
-                                            <small class="text-muted">@booking.CampusName</small>
+                                            <small class="text-white-muted">@booking.CampusName</small>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="text-center">
-                                                <i class="bi bi-calendar-event text-warning fs-4"></i>
+                                                <i class="bi bi-calendar-event neon-orange fs-4"></i>
                                                 <div class="mt-1">
-                                                    <strong>@booking.StartTime.ToString("MMM dd")</strong><br/>
-                                                    <span class="text-primary">@booking.StartTime.ToString("HH:mm")</span>
+                                                    <strong class="text-white-primary">@booking.StartTime.ToString("MMM dd")</strong><br />
+                                                    <span class="neon-orange">@booking.StartTime.ToString("HH:mm")</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-3 text-end">
-                                            <a asp-page="./Confirm" asp-route-id="@booking.Id" class="btn btn-warning btn-sm px-4">
+                                            <a asp-page="./Confirm" asp-route-id="@booking.Id" class="btn glass-btn-warning btn-sm px-4">
                                                 <i class="bi bi-clipboard-check me-1"></i> Review Now
                                             </a>
                                         </div>
@@ -398,17 +692,17 @@
                     }
                     else
                     {
-                        <div class="text-center py-5">
-                            <i class="bi bi-check-circle text-success" style="font-size: 64px;"></i>
-                            <h5 class="mt-3 text-muted">All caught up!</h5>
-                            <p class="text-muted mb-0">No pending bookings require your attention</p>
+                        <div class="empty-state">
+                            <i class="bi bi-check-circle" style="font-size: 64px; color: #10b981;"></i>
+                            <h5 class="mt-3 text-white-secondary">All caught up!</h5>
+                            <p class="text-white-muted mb-0">No pending bookings require your attention</p>
                         </div>
                     }
                 </div>
                 @if (Model.PendingBookingsList.Any())
                 {
-                    <div class="card-footer bg-light">
-                        <a asp-page="./Index" asp-route-status="@((int)UniSpace.BusinessObject.Enums.BookingStatus.Pending)" class="btn btn-outline-warning w-100">
+                    <div class="glass-card-footer">
+                        <a asp-page="./Index" asp-route-status="@((int)UniSpace.BusinessObject.Enums.BookingStatus.Pending)" class="btn glass-btn-warning w-100">
                             <i class="bi bi-list-ul"></i> View All Pending Bookings
                         </a>
                     </div>
@@ -418,36 +712,37 @@
 
         <!-- Today's Schedule -->
         <div class="col-lg-4 mb-4">
-            <div class="card shadow-lg border-0">
-                <div class="card-header bg-info text-white py-3">
-                    <h5 class="mb-0 fw-bold">
-                        <i class="bi bi-calendar-day me-2"></i>
+            <div class="glass-card">
+                <div class="glass-card-header info">
+                    <h5 class="mb-0 text-white-primary">
+                        <i class="bi bi-calendar-day me-2" style="color: #3b82f6;"></i>
                         Today's Schedule
                     </h5>
                 </div>
-                <div class="card-body p-3" style="max-height: 500px; overflow-y: auto;">
+                <div class="p-3" style="max-height: 500px; overflow-y: auto;">
                     @if (Model.TodayBookings.Any())
                     {
                         @foreach (var booking in Model.TodayBookings)
                         {
-                            <div class="card mb-3 border-start border-4 @(booking.Status == UniSpace.BusinessObject.Enums.BookingStatus.Approved ? "border-success" : booking.Status == UniSpace.BusinessObject.Enums.BookingStatus.Pending ? "border-warning" : "border-secondary")">
-                                <div class="card-body p-3">
+                            <div class="schedule-item @(booking.Status == UniSpace.BusinessObject.Enums.BookingStatus.Approved ? "border-success" : booking.Status == UniSpace.BusinessObject.Enums.BookingStatus.Pending ? "border-warning" : "border-secondary")">
+                                <div class="p-3">
                                     <div class="d-flex justify-content-between align-items-start mb-2">
                                         <div>
-                                            <h6 class="mb-1">@booking.RoomName</h6>
-                                            <small class="text-muted">@booking.CampusName</small>
+                                            <h6 class="mb-1 text-white-primary">@booking.RoomName</h6>
+                                            <small class="text-white-muted">@booking.CampusName</small>
                                         </div>
                                         <span class="badge @Model.GetStatusBadgeClass(booking.Status)">
                                             @booking.StatusDisplay
                                         </span>
                                     </div>
                                     <div class="mb-2">
-                                        <i class="bi bi-clock text-primary me-1"></i>
-                                        <strong>@booking.StartTime.ToString("HH:mm")</strong> - @booking.EndTime.ToString("HH:mm")
+                                        <i class="bi bi-clock neon-orange me-1"></i>
+                                        <strong class="text-white-primary">@booking.StartTime.ToString("HH:mm")</strong>
+                                        <span class="text-white-muted">- @booking.EndTime.ToString("HH:mm")</span>
                                     </div>
                                     <div class="text-truncate">
-                                        <i class="bi bi-person text-muted me-1"></i>
-                                        <small>@booking.UserName</small>
+                                        <i class="bi bi-person text-white-muted me-1"></i>
+                                        <small class="text-white-secondary">@booking.UserName</small>
                                     </div>
                                 </div>
                             </div>
@@ -455,9 +750,9 @@
                     }
                     else
                     {
-                        <div class="text-center py-5">
-                            <i class="bi bi-calendar-x text-muted" style="font-size: 48px;"></i>
-                            <p class="text-muted mt-3 mb-0">No bookings scheduled for today</p>
+                        <div class="empty-state">
+                            <i class="bi bi-calendar-x text-white-muted" style="font-size: 48px;"></i>
+                            <p class="text-white-muted mt-3 mb-0">No bookings scheduled for today</p>
                         </div>
                     }
                 </div>
@@ -468,19 +763,19 @@
     <!-- Recent Activity -->
     <div class="row">
         <div class="col-12">
-            <div class="card shadow-lg border-0">
-                <div class="card-header gradient-primary text-white py-3">
-                    <h5 class="mb-0 fw-bold">
-                        <i class="bi bi-clock-history me-2"></i>
+            <div class="glass-card">
+                <div class="glass-card-header orange">
+                    <h5 class="mb-0 text-white-primary">
+                        <i class="bi bi-clock-history me-2 neon-orange"></i>
                         Recent Activity
                     </h5>
                 </div>
-                <div class="card-body p-0">
+                <div class="p-0">
                     @if (Model.RecentBookings.Any())
                     {
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
+                            <table class="table glass-table align-middle mb-0">
+                                <thead>
                                     <tr>
                                         <th width="120">Created</th>
                                         <th>User</th>
@@ -496,32 +791,32 @@
                                     {
                                         <tr>
                                             <td>
-                                                <small class="text-muted">
+                                                <small class="text-white-muted">
                                                     <i class="bi bi-calendar3"></i>
-                                                    @booking.CreatedAt.ToString("MMM dd")<br/>
+                                                    @booking.CreatedAt.ToString("MMM dd")<br />
                                                     @booking.CreatedAt.ToString("HH:mm")
                                                 </small>
                                             </td>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <i class="bi bi-person-circle fs-4 text-primary me-2"></i>
+                                                    <i class="bi bi-person-circle fs-4 neon-orange me-2"></i>
                                                     <div>
-                                                        <strong class="d-block">@booking.UserName</strong>
-                                                        <small class="text-muted">@booking.UserEmail</small>
+                                                        <strong class="d-block text-white-primary">@booking.UserName</strong>
+                                                        <small class="text-white-muted">@booking.UserEmail</small>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td>
-                                                <span class="badge bg-primary mb-1">@booking.RoomTypeDisplay</span><br/>
-                                                <strong>@booking.RoomName</strong>
+                                                <span class="badge-glass badge-orange mb-1">@booking.RoomTypeDisplay</span><br />
+                                                <strong class="text-white-primary">@booking.RoomName</strong>
                                             </td>
-                                            <td>
+                                            <td class="text-white-secondary">
                                                 <i class="bi bi-building"></i> @booking.CampusName
                                             </td>
                                             <td>
-                                                <i class="bi bi-calendar-event text-primary"></i>
-                                                @booking.StartTime.ToString("MMM dd, HH:mm")<br/>
-                                                <small class="text-muted">Duration: @((booking.EndTime - booking.StartTime).TotalHours.ToString("0.##"))h</small>
+                                                <i class="bi bi-calendar-event neon-orange"></i>
+                                                <span class="text-white-primary">@booking.StartTime.ToString("MMM dd, HH:mm")</span><br />
+                                                <small class="text-white-muted">Duration: @((booking.EndTime - booking.StartTime).TotalHours.ToString("0.##"))h</small>
                                             </td>
                                             <td>
                                                 <span class="badge @Model.GetStatusBadgeClass(booking.Status)">
@@ -529,7 +824,7 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                <a asp-page="./Details" asp-route-id="@booking.Id" class="btn btn-sm btn-outline-primary">
+                                                <a asp-page="./Details" asp-route-id="@booking.Id" class="btn btn-sm glass-btn-orange">
                                                     <i class="bi bi-eye"></i>
                                                 </a>
                                             </td>
@@ -541,16 +836,16 @@
                     }
                     else
                     {
-                        <div class="text-center py-5">
-                            <i class="bi bi-inbox text-muted" style="font-size: 64px;"></i>
-                            <p class="text-muted mt-3 mb-0">No recent bookings</p>
+                        <div class="empty-state">
+                            <i class="bi bi-inbox text-white-muted" style="font-size: 64px;"></i>
+                            <p class="text-white-muted mt-3 mb-0">No recent bookings</p>
                         </div>
                     }
                 </div>
                 @if (Model.RecentBookings.Any())
                 {
-                    <div class="card-footer bg-light">
-                        <a asp-page="./Index" class="btn btn-outline-primary w-100">
+                    <div class="glass-card-footer">
+                        <a asp-page="./Index" class="btn glass-btn-orange w-100">
                             <i class="bi bi-list-ul"></i> View All Bookings
                         </a>
                     </div>
@@ -572,7 +867,7 @@
             // Add smooth scroll to pending items
             $('.pending-list-item').on('click', function(e) {
                 if (!$(e.target).is('a, button')) {
-                    var reviewBtn = $(this).find('a[asp-page="./Confirm"]');
+                    var reviewBtn = $(this).find('a[href*="Confirm"]');
                     if (reviewBtn.length) {
                         window.location.href = reviewBtn.attr('href');
                     }
