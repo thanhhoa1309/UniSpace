@@ -5,247 +5,652 @@
     ViewData["Title"] = "Dashboard";
 }
 
-<div class="container-fluid py-4">
-    <div class="row">
-        <div class="col-12">
-            <h1 class="mb-4">
-                <i class="bi bi-speedometer2"></i> My Dashboard
-            </h1>
-        </div>
-    </div>
-
-    <!-- User Information Card -->
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="bi bi-person-circle"></i> User Information</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <p><strong>Email:</strong> @Model.UserEmail</p>
-                        </div>
-                        <div class="col-md-6">
-                            <p><strong>Role:</strong> 
-                                @{
-                                    var roleClass = Model.UserRole switch
-                                    {
-                                        "Student" => "bg-success",
-                                        "Lecturer" => "bg-info",
-                                        "Admin" => "bg-warning text-dark",
-                                        _ => "bg-secondary"
-                                    };
-                                }
-                                <span class="badge @roleClass">@Model.UserRole</span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Statistics Cards -->
-    <div class="row mb-4">
-        <div class="col-lg-3 col-md-6 mb-3">
-            <div class="card">
-                <div class="card-body text-center">
-                    <div class="text-primary mb-2">
-                        <i class="bi bi-calendar-check" style="font-size: 3rem;"></i>
-                    </div>
-                    <h3 class="mb-0">@Model.TotalBookings</h3>
-                    <p class="text-muted mb-0">Total Bookings</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 mb-3">
-            <div class="card">
-                <div class="card-body text-center">
-                    <div class="text-warning mb-2">
-                        <i class="bi bi-hourglass-split" style="font-size: 3rem;"></i>
-                    </div>
-                    <h3 class="mb-0">@Model.PendingBookings</h3>
-                    <p class="text-muted mb-0">Pending Approval</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 mb-3">
-            <div class="card">
-                <div class="card-body text-center">
-                    <div class="text-success mb-2">
-                        <i class="bi bi-check-circle" style="font-size: 3rem;"></i>
-                    </div>
-                    <h3 class="mb-0">@Model.ApprovedBookings</h3>
-                    <p class="text-muted mb-0">Approved Bookings</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 mb-3">
-            <div class="card">
-                <div class="card-body text-center">
-                    <div class="text-info mb-2">
-                        <i class="bi bi-file-text" style="font-size: 3rem;"></i>
-                    </div>
-                    <h3 class="mb-0">@Model.TotalReports</h3>
-                    <p class="text-muted mb-0">Reports Submitted</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0"><i class="bi bi-lightning"></i> Quick Actions</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <div class="d-grid">
-                                <a href="/Bookings/SearchRooms" class="btn btn-primary btn-lg">
-                                    <i class="bi bi-search"></i> Search Rooms
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="d-grid">
-                                <a href="/Bookings/MyBookings" class="btn btn-success btn-lg">
-                                    <i class="bi bi-list-check"></i> My Bookings
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="d-grid">
-                                <a href="/RoomReports/MyReports" class="btn btn-info btn-lg">
-                                    <i class="bi bi-file-text"></i> My Reports
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Upcoming Bookings -->
-    @if (Model.UpcomingBookings.Any())
-    {
-        <div class="row mb-4">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0"><i class="bi bi-calendar-event"></i> Upcoming Bookings</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Room</th>
-                                        <th>Campus</th>
-                                        <th>Date & Time</th>
-                                        <th>Purpose</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var booking in Model.UpcomingBookings)
-                                    {
-                                        <tr>
-                                            <td>@booking.RoomName</td>
-                                            <td>@booking.CampusName</td>
-                                            <td>
-                                                <small>
-                                                    @booking.StartTime.ToLocalTime().ToString("MMM dd, yyyy")<br>
-                                                    @booking.StartTime.ToLocalTime().ToString("HH:mm") - @booking.EndTime.ToLocalTime().ToString("HH:mm")
-                                                </small>
-                                            </td>
-                                            <td>
-                                                <small>@(booking.Purpose.Length > 50 ? booking.Purpose.Substring(0, 50) + "..." : booking.Purpose)</small>
-                                            </td>
-                                            <td>
-                                                <a href="/Bookings/Details?id=@booking.Id" class="btn btn-sm btn-primary">
-                                                    <i class="bi bi-eye"></i> View
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<style>
+    /* Page Container */
+    .dashboard-page-container {
+        min-height: 100vh;
+        padding: 40px 0;
     }
 
-    <!-- Recent Bookings -->
-    @if (Model.RecentBookings.Any())
-    {
+    /* Header Card */
+    .dashboard-header-glass {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        padding: 24px;
+        margin-bottom: 24px;
+        transition: all 0.3s ease;
+    }
+        .dashboard-header-glass h1 {
+            color: #ff8a00;
+            font-weight: bold;
+            margin: 0;
+        }
+
+    /* User Information Card */
+    .user-info-glass {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+        .user-info-glass:hover {
+            border: 1px solid rgba(255, 138, 0, 0.4);
+            box-shadow: 0 12px 40px 0 rgba(255, 138, 0, 0.15);
+        }
+
+    .user-info-header {
+        background: rgba(255, 138, 0, 0.15);
+        border-bottom: 2px solid rgba(255, 138, 0, 0.3);
+        padding: 20px 24px;
+    }
+
+        .user-info-header h5 {
+            color: #ff8a00;
+            font-weight: bold;
+            margin: 0;
+        }
+
+    .user-info-body {
+        padding: 24px;
+        color: #e0e0e0;
+    }
+
+        .user-info-body strong {
+            color: #ff8a00;
+        }
+
+    /* Role Badge */
+    .role-badge-student {
+        background: rgba(16, 185, 129, 0.2);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+        color: #10b981;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-weight: 600;
+    }
+
+    .role-badge-lecturer {
+        background: rgba(6, 182, 212, 0.2);
+        border: 1px solid rgba(6, 182, 212, 0.4);
+        color: #06b6d4;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-weight: 600;
+    }
+
+    .role-badge-admin {
+        background: rgba(245, 158, 11, 0.2);
+        border: 1px solid rgba(245, 158, 11, 0.4);
+        color: #f59e0b;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-weight: 600;
+    }
+
+    /* Statistics Cards */
+    .stat-card-glass {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        transition: all 0.3s ease;
+        height: 100%;
+        overflow: hidden;
+    }
+
+        .stat-card-glass:hover {
+            border: 1px solid rgba(255, 138, 0, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(255, 138, 0, 0.2);
+        }
+
+    .stat-card-body {
+        padding: 32px 24px;
+        text-align: center;
+        color: #e0e0e0;
+    }
+
+        .stat-card-body h3 {
+            color: #ff8a00;
+            font-weight: bold;
+            font-size: 2.5rem;
+            margin: 12px 0;
+        }
+
+        .stat-card-body p {
+            color: #9ca3af;
+            margin: 0;
+            font-weight: 600;
+        }
+
+    .stat-icon {
+        font-size: 3rem;
+        margin-bottom: 8px;
+    }
+
+    .stat-icon-primary {
+        color: #ff8a00;
+    }
+
+    .stat-icon-warning {
+        color: #f59e0b;
+    }
+
+    .stat-icon-success {
+        color: #10b981;
+    }
+
+    .stat-icon-info {
+        color: #06b6d4;
+    }
+
+    /* Quick Actions Card */
+    .quick-actions-glass {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+        .quick-actions-glass:hover {
+            border: 1px solid rgba(255, 138, 0, 0.4);
+            box-shadow: 0 12px 40px 0 rgba(255, 138, 0, 0.15);
+        }
+
+    .quick-actions-header {
+        background: rgba(255, 138, 0, 0.15);
+        border-bottom: 2px solid rgba(255, 138, 0, 0.3);
+        padding: 20px 24px;
+    }
+
+        .quick-actions-header h5 {
+            color: #ff8a00;
+            font-weight: bold;
+            margin: 0;
+        }
+
+    .quick-actions-body {
+        padding: 24px;
+    }
+
+    /* Quick Action Buttons */
+    .btn-action-primary {
+        background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 100%);
+        border: 2px solid #ff8a00;
+        color: #fff;
+        font-weight: 600;
+        padding: 16px 24px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 20px rgba(255, 138, 0, 0.4);
+    }
+
+        .btn-action-primary:hover {
+            box-shadow: 0 0 30px rgba(255, 138, 0, 0.7);
+            transform: translateY(-2px);
+            color: #fff;
+        }
+
+    .btn-action-success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        border: 2px solid #10b981;
+        color: #fff;
+        font-weight: 600;
+        padding: 16px 24px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+    }
+
+        .btn-action-success:hover {
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.7);
+            transform: translateY(-2px);
+            color: #fff;
+        }
+
+    .btn-action-info {
+        background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+        border: 2px solid #06b6d4;
+        color: #fff;
+        font-weight: 600;
+        padding: 16px 24px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+    }
+
+        .btn-action-info:hover {
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.7);
+            transform: translateY(-2px);
+            color: #fff;
+        }
+
+    /* Bookings Cards */
+    .bookings-card-glass {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+        .bookings-card-glass:hover {
+            border: 1px solid rgba(255, 138, 0, 0.4);
+            box-shadow: 0 12px 40px 0 rgba(255, 138, 0, 0.15);
+        }
+
+    .bookings-header {
+        background: rgba(255, 138, 0, 0.15);
+        border-bottom: 2px solid rgba(255, 138, 0, 0.3);
+        padding: 20px 24px;
+    }
+
+        .bookings-header h5 {
+            color: #ff8a00;
+            font-weight: bold;
+            margin: 0;
+        }
+
+    .bookings-body {
+        padding: 24px;
+    }
+
+    /* Table Styles */
+    .table-glass {
+        color: #e0e0e0;
+        margin-bottom: 0;
+    }
+
+        .table-glass thead th {
+            background: rgba(255, 138, 0, 0.1);
+            color: #ff8a00;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid rgba(255, 138, 0, 0.3);
+            padding: 16px 12px;
+            border: none;
+        }
+
+        .table-glass tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+            .table-glass tbody tr:hover {
+                background: rgba(255, 138, 0, 0.05);
+            }
+
+        .table-glass tbody td {
+            padding: 16px 12px;
+            vertical-align: middle;
+            border: none;
+        }
+
+        .table-glass strong {
+            color: #ff8a00;
+        }
+
+        .table-glass .text-muted {
+            color: #9ca3af !important;
+        }
+
+    /* Status Badges */
+    .badge-glass-pending {
+        background: rgba(245, 158, 11, 0.2);
+        border: 1px solid rgba(245, 158, 11, 0.4);
+        color: #f59e0b;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-weight: 600;
+    }
+
+    .badge-glass-approved {
+        background: rgba(16, 185, 129, 0.2);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+        color: #10b981;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-weight: 600;
+    }
+
+    .badge-glass-rejected {
+        background: rgba(239, 68, 68, 0.2);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        color: #f87171;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-weight: 600;
+    }
+
+    .badge-glass-completed {
+        background: rgba(6, 182, 212, 0.2);
+        border: 1px solid rgba(6, 182, 212, 0.4);
+        color: #06b6d4;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-weight: 600;
+    }
+
+    .badge-glass-cancelled {
+        background: rgba(156, 163, 175, 0.2);
+        border: 1px solid rgba(156, 163, 175, 0.4);
+        color: #9ca3af;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-weight: 600;
+    }
+
+    /* Action Buttons */
+    .btn-glass-view {
+        background: rgba(59, 130, 246, 0.2);
+        color: #60a5fa;
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        padding: 6px 16px;
+        border-radius: 6px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .btn-glass-view:hover {
+            background: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+            color: #60a5fa;
+        }
+
+    .btn-glass-viewall {
+        background: rgba(255, 138, 0, 0.2);
+        color: #ff8a00;
+        border: 1px solid rgba(255, 138, 0, 0.3);
+        padding: 6px 16px;
+        border-radius: 6px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .btn-glass-viewall:hover {
+            background: rgba(255, 138, 0, 0.3);
+            box-shadow: 0 0 15px rgba(255, 138, 0, 0.4);
+            color: #ff8a00;
+        }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .dashboard-header-glass,
+        .user-info-body,
+        .quick-actions-body,
+        .bookings-body {
+            padding: 20px;
+        }
+
+        .stat-card-body {
+            padding: 24px 20px;
+        }
+    }
+</style>
+
+<div class="dashboard-page-container">
+    <div class="container-fluid py-4">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="dashboard-header-glass">
+                    <h1>
+                        <i class="bi bi-speedometer2"></i> My Dashboard
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Information Card -->
         <div class="row mb-4">
             <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0"><i class="bi bi-clock-history"></i> Recent Bookings</h5>
-                            <a href="/Bookings/MyBookings" class="btn btn-sm btn-primary">View All</a>
-                        </div>
+                <div class="user-info-glass">
+                    <div class="user-info-header">
+                        <h5><i class="bi bi-person-circle"></i> User Information</h5>
                     </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Room</th>
-                                        <th>Date</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var booking in Model.RecentBookings)
-                                    {
-                                        <tr>
-                                            <td>
-                                                <strong>@booking.RoomName</strong><br>
-                                                <small class="text-muted">@booking.CampusName</small>
-                                            </td>
-                                            <td>
-                                                <small>@booking.StartTime.ToLocalTime().ToString("MMM dd, yyyy HH:mm")</small>
-                                            </td>
-                                            <td>
-                                                @{
-                                                    var badgeClass = booking.Status switch
-                                                    {
-                                                        BookingStatus.Pending => "bg-warning",
-                                                        BookingStatus.Approved => "bg-success",
-                                                        BookingStatus.Rejected => "bg-danger",
-                                                        BookingStatus.Completed => "bg-info",
-                                                        BookingStatus.Cancelled => "bg-secondary",
-                                                        _ => "bg-secondary"
-                                                    };
-                                                }
-                                                <span class="badge @badgeClass">@booking.StatusDisplay</span>
-                                            </td>
-                                            <td>
-                                                <a href="/Bookings/Details?id=@booking.Id" class="btn btn-sm btn-primary">
-                                                    <i class="bi bi-eye"></i> View
-                                                </a>
-                                            </td>
-                                        </tr>
+                    <div class="user-info-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Email:</strong> <span style="color: #e0e0e0;">@Model.UserEmail</span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p>
+                                    <strong>Role:</strong>
+                                    @{
+                                        var roleBadgeClass = Model.UserRole switch
+                                        {
+                                            "Student" => "role-badge-student",
+                                            "Lecturer" => "role-badge-lecturer",
+                                            "Admin" => "role-badge-admin",
+                                            _ => "badge-glass-cancelled"
+                                        };
                                     }
-                                </tbody>
-                            </table>
+                                    <span class="@roleBadgeClass">@Model.UserRole</span>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    }
+
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="stat-card-glass">
+                    <div class="stat-card-body">
+                        <div class="stat-icon stat-icon-primary">
+                            <i class="bi bi-calendar-check"></i>
+                        </div>
+                        <h3>@Model.TotalBookings</h3>
+                        <p>Total Bookings</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="stat-card-glass">
+                    <div class="stat-card-body">
+                        <div class="stat-icon stat-icon-warning">
+                            <i class="bi bi-hourglass-split"></i>
+                        </div>
+                        <h3>@Model.PendingBookings</h3>
+                        <p>Pending Approval</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="stat-card-glass">
+                    <div class="stat-card-body">
+                        <div class="stat-icon stat-icon-success">
+                            <i class="bi bi-check-circle"></i>
+                        </div>
+                        <h3>@Model.ApprovedBookings</h3>
+                        <p>Approved Bookings</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="stat-card-glass">
+                    <div class="stat-card-body">
+                        <div class="stat-icon stat-icon-info">
+                            <i class="bi bi-file-text"></i>
+                        </div>
+                        <h3>@Model.TotalReports</h3>
+                        <p>Reports Submitted</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="quick-actions-glass">
+                    <div class="quick-actions-header">
+                        <h5><i class="bi bi-lightning"></i> Quick Actions</h5>
+                    </div>
+                    <div class="quick-actions-body">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="d-grid">
+                                    <a href="/Bookings/SearchRooms" class="btn btn-action-primary btn-lg">
+                                        <i class="bi bi-search"></i> Search Rooms
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="d-grid">
+                                    <a href="/Bookings/MyBookings" class="btn btn-action-success btn-lg">
+                                        <i class="bi bi-list-check"></i> My Bookings
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="d-grid">
+                                    <a href="/RoomReports/MyReports" class="btn btn-action-info btn-lg">
+                                        <i class="bi bi-file-text"></i> My Reports
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Bookings -->
+        @if (Model.UpcomingBookings.Any())
+        {
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="bookings-card-glass">
+                        <div class="bookings-header">
+                            <h5><i class="bi bi-calendar-event"></i> Upcoming Bookings</h5>
+                        </div>
+                        <div class="bookings-body">
+                            <div class="table-responsive">
+                                <table class="table table-glass">
+                                    <thead>
+                                        <tr>
+                                            <th>ROOM</th>
+                                            <th>CAMPUS</th>
+                                            <th>DATE & TIME</th>
+                                            <th>PURPOSE</th>
+                                            <th class="text-center">ACTION</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var booking in Model.UpcomingBookings)
+                                        {
+                                            <tr>
+                                                <td><strong>@booking.RoomName</strong></td>
+                                                <td>@booking.CampusName</td>
+                                                <td>
+                                                    <small>
+                                                        <strong>@booking.StartTime.ToLocalTime().ToString("MMM dd, yyyy")</strong><br>
+                                                        <span class="text-muted">
+                                                            @booking.StartTime.ToLocalTime().ToString("HH:mm") - @booking.EndTime.ToLocalTime().ToString("HH:mm")
+                                                        </span>
+                                                    </small>
+                                                </td>
+                                                <td>
+                                                    <small class="text-muted">
+                                                        @(booking.Purpose.Length > 50 ? booking.Purpose.Substring(0, 50) + "..." : booking.Purpose)
+                                                    </small>
+                                                </td>
+                                                <td class="text-center">
+                                                    <a href="/Bookings/Details?id=@booking.Id" class="btn btn-glass-view btn-sm">
+                                                        <i class="bi bi-eye"></i> View
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!-- Recent Bookings -->
+        @if (Model.RecentBookings.Any())
+        {
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="bookings-card-glass">
+                        <div class="bookings-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5><i class="bi bi-clock-history"></i> Recent Bookings</h5>
+                                <a href="/Bookings/MyBookings" class="btn btn-glass-viewall btn-sm">View All</a>
+                            </div>
+                        </div>
+                        <div class="bookings-body">
+                            <div class="table-responsive">
+                                <table class="table table-glass">
+                                    <thead>
+                                        <tr>
+                                            <th>ROOM</th>
+                                            <th>DATE</th>
+                                            <th class="text-center">STATUS</th>
+                                            <th class="text-center">ACTION</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var booking in Model.RecentBookings)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <strong>@booking.RoomName</strong><br>
+                                                    <small class="text-muted">@booking.CampusName</small>
+                                                </td>
+                                                <td>
+                                                    <small>@booking.StartTime.ToLocalTime().ToString("MMM dd, yyyy HH:mm")</small>
+                                                </td>
+                                                <td class="text-center">
+                                                    @{
+                                                        var badgeClass = booking.Status switch
+                                                        {
+                                                            BookingStatus.Pending => "badge-glass-pending",
+                                                            BookingStatus.Approved => "badge-glass-approved",
+                                                            BookingStatus.Rejected => "badge-glass-rejected",
+                                                            BookingStatus.Completed => "badge-glass-completed",
+                                                            BookingStatus.Cancelled => "badge-glass-cancelled",
+                                                            _ => "badge-glass-cancelled"
+                                                        };
+                                                    }
+                                                    <span class="@badgeClass">@booking.StatusDisplay</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <a href="/Bookings/Details?id=@booking.Id" class="btn btn-glass-view btn-sm">
+                                                        <i class="bi bi-eye"></i> View
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>

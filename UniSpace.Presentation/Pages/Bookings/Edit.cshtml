@@ -4,82 +4,290 @@
     ViewData["Title"] = "Edit Booking";
 }
 
-<div class="container-fluid py-4">
-    <div class="row">
-        <div class="col-md-8 mx-auto">
-            <div class="card">
-                <div class="card-header pb-0">
-                    <div class="d-flex align-items-center">
-                        <h6 class="mb-0">Edit Booking</h6>
-                        <a href="/Bookings/Details?id=@Model.Booking.Id" class="btn btn-secondary btn-sm ms-auto">
-                            <i class="fas fa-arrow-left"></i> Back to Details
-                        </a>
-                    </div>
-                </div>
-                <div class="card-body">
-                    @if (Model.Room != null)
-                    {
-                        <!-- Room Information -->
-                        <div class="alert alert-info">
-                            <h5 class="text-dark"><i class="fas fa-door-open"></i> @Model.Room.Name</h5>
-                            <p class="mb-1">
-                                <i class="fas fa-building"></i> <strong>Campus:</strong> @Model.Room.CampusName<br>
-                                <i class="fas fa-tag"></i> <strong>Type:</strong> @Model.Room.TypeDisplay<br>
-                                <i class="fas fa-users"></i> <strong>Capacity:</strong> @Model.Room.Capacity people
-                            </p>
+<style>
+    /* Page Container */
+    .edit-booking-page-container {
+        min-height: 100vh;
+        padding: 40px 0;
+    }
+
+    /* Glass Card */
+    .glass-card-edit {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+        .glass-card-edit:hover {
+            border: 1px solid rgba(255, 138, 0, 0.4);
+            box-shadow: 0 12px 40px 0 rgba(255, 138, 0, 0.15);
+        }
+
+    /* Card Header */
+    .glass-card-header-edit {
+        background: rgba(255, 138, 0, 0.15);
+        border-bottom: 2px solid rgba(255, 138, 0, 0.3);
+        padding: 20px 24px;
+    }
+
+        .glass-card-header-edit h6 {
+            color: #ff8a00;
+            font-weight: bold;
+            margin: 0;
+        }
+
+    /* Card Body */
+    .glass-card-body-edit {
+        padding: 24px;
+    }
+
+    /* Room Info Alert */
+    .alert-glass-info {
+        background: rgba(6, 182, 212, 0.15);
+        border: 1px solid rgba(6, 182, 212, 0.4);
+        border-radius: 10px;
+        padding: 20px;
+        color: #22d3ee;
+        margin-bottom: 24px;
+    }
+
+        .alert-glass-info h5 {
+            color: #06b6d4;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .alert-glass-info p {
+            color: #d1d5db;
+            margin: 0;
+            line-height: 1.8;
+        }
+
+        .alert-glass-info strong {
+            color: #06b6d4;
+        }
+
+    /* Form Labels */
+    .form-label-glass {
+        color: #ff8a00;
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+        .form-label-glass .text-danger {
+            color: #f87171;
+        }
+
+    /* Form Controls */
+    .form-control-glass {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+        color: #ffffff;
+        padding: 12px 16px;
+        transition: all 0.3s ease;
+        min-width: 100%;
+    }
+
+        .form-control-glass::placeholder {
+            color: #6b7280;
+        }
+
+        .form-control-glass:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 138, 0, 0.6);
+            outline: none;
+            box-shadow: 0 0 15px rgba(255, 138, 0, 0.2);
+            color: #ffffff;
+        }
+
+        .form-control-glass.is-invalid {
+            border-color: rgba(239, 68, 68, 0.6);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
+        }
+
+    /* Validation Feedback */
+    .invalid-feedback {
+        color: #fca5a5;
+        font-size: 0.875rem;
+        margin-top: 6px;
+    }
+
+    /* Availability Alert */
+    .alert-glass-success {
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+        border-radius: 10px;
+        padding: 16px 20px;
+        color: #6ee7b7;
+    }
+
+    .alert-glass-danger {
+        background: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        border-radius: 10px;
+        padding: 16px 20px;
+        color: #fca5a5;
+    }
+
+    /* Validation Summary */
+    .validation-summary-glass {
+        background: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        border-radius: 10px;
+        padding: 16px 20px;
+        color: #fca5a5;
+        margin-bottom: 20px;
+    }
+
+    /* Buttons */
+    .btn-neon-primary {
+        background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 100%);
+        border: 2px solid #ff8a00;
+        color: #fff;
+        font-weight: 600;
+        padding: 12px 28px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 20px rgba(255, 138, 0, 0.4);
+    }
+
+        .btn-neon-primary:hover:not(:disabled) {
+            box-shadow: 0 0 30px rgba(255, 138, 0, 0.7);
+            transform: translateY(-2px);
+            color: #fff;
+        }
+
+        .btn-neon-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+    .btn-glass-secondary {
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        font-weight: 600;
+        padding: 12px 28px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+        .btn-glass-secondary:hover {
+            border: 2px solid rgba(255, 138, 0, 0.5);
+            color: #ff8a00;
+            box-shadow: 0 0 20px rgba(255, 138, 0, 0.2);
+        }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .glass-card-body-edit {
+            padding: 20px;
+        }
+
+        .alert-glass-info {
+            padding: 16px;
+        }
+    }
+</style>
+
+<div class="edit-booking-page-container">
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="glass-card-edit">
+                    <div class="glass-card-header-edit">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h6>
+                                <i class="fas fa-edit"></i> Edit Booking
+                            </h6>
+                            <a href="/Bookings/Details?id=@Model.Booking.Id" class="btn btn-glass-secondary btn-sm">
+                                <i class="fas fa-arrow-left"></i> Back to Details
+                            </a>
                         </div>
+                    </div>
+                    <div class="glass-card-body-edit">
+                        @if (Model.Room != null)
+                        {
+                            <!-- Room Information -->
+                            <div class="alert-glass-info">
+                                <h5>
+                                    <i class="fas fa-door-open"></i> @Model.Room.Name
+                                </h5>
+                                <p>
+                                    <i class="fas fa-building"></i> <strong>Campus:</strong> @Model.Room.CampusName<br>
+                                    <i class="fas fa-tag"></i> <strong>Type:</strong> @Model.Room.TypeDisplay<br>
+                                    <i class="fas fa-users"></i> <strong>Capacity:</strong> @Model.Room.Capacity people
+                                </p>
+                            </div>
 
-                        <!-- Edit Form -->
-                        <form method="post">
-                            <input type="hidden" asp-for="Booking.Id" />
-                            
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label asp-for="Booking.StartTime" class="form-label">Start Time <span class="text-danger">*</span></label>
-                                    <input type="datetime-local" 
-                                           class="form-control @(ViewData.ModelState["Booking.StartTime"]?.Errors.Count > 0 ? "is-invalid" : "")"
-                                           asp-for="Booking.StartTime" 
-                                           id="startTime"
-                                           required>
-                                    <span asp-validation-for="Booking.StartTime" class="invalid-feedback"></span>
+                            <!-- Edit Form -->
+                            <form method="post">
+                                <input type="hidden" asp-for="Booking.Id" />
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="Booking.StartTime" class="form-label-glass">
+                                            <i class="fas fa-calendar-alt"></i> Start Time
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="datetime-local"
+                                               class="form-control-glass @(ViewData.ModelState["Booking.StartTime"]?.Errors.Count > 0 ? "is-invalid" : "")"
+                                               asp-for="Booking.StartTime"
+                                               id="startTime"
+                                               required>
+                                        <span asp-validation-for="Booking.StartTime" class="invalid-feedback"></span>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="Booking.EndTime" class="form-label-glass">
+                                            <i class="fas fa-calendar-alt"></i> End Time
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="datetime-local"
+                                               class="form-control-glass @(ViewData.ModelState["Booking.EndTime"]?.Errors.Count > 0 ? "is-invalid" : "")"
+                                               asp-for="Booking.EndTime"
+                                               id="endTime"
+                                               required>
+                                        <span asp-validation-for="Booking.EndTime" class="invalid-feedback"></span>
+                                    </div>
                                 </div>
 
-                                <div class="col-md-6 mb-3">
-                                    <label asp-for="Booking.EndTime" class="form-label">End Time <span class="text-danger">*</span></label>
-                                    <input type="datetime-local" 
-                                           class="form-control @(ViewData.ModelState["Booking.EndTime"]?.Errors.Count > 0 ? "is-invalid" : "")"
-                                           asp-for="Booking.EndTime" 
-                                           id="endTime"
-                                           required>
-                                    <span asp-validation-for="Booking.EndTime" class="invalid-feedback"></span>
+                                <div class="mb-3">
+                                    <div id="availabilityCheck" class="alert" style="display:none;"></div>
                                 </div>
-                            </div>
 
-                            <div class="mb-3">
-                                <div id="availabilityCheck" class="alert" style="display:none;"></div>
-                            </div>
+                                <div class="mb-4">
+                                    <label asp-for="Booking.Purpose" class="form-label-glass">
+                                        <i class="fas fa-edit"></i> Purpose
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <textarea class="form-control-glass @(ViewData.ModelState["Booking.Purpose"]?.Errors.Count > 0 ? "is-invalid" : "")"
+                                              asp-for="Booking.Purpose"
+                                              rows="5"
+                                              required></textarea>
+                                    <span asp-validation-for="Booking.Purpose" class="invalid-feedback"></span>
+                                </div>
 
-                            <div class="mb-3">
-                                <label asp-for="Booking.Purpose" class="form-label">Purpose <span class="text-danger">*</span></label>
-                                <textarea class="form-control @(ViewData.ModelState["Booking.Purpose"]?.Errors.Count > 0 ? "is-invalid" : "")"
-                                          asp-for="Booking.Purpose" 
-                                          rows="4"
-                                          required></textarea>
-                                <span asp-validation-for="Booking.Purpose" class="invalid-feedback"></span>
-                            </div>
+                                <div asp-validation-summary="ModelOnly" class="validation-summary-glass" role="alert"></div>
 
-                            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
-
-                            <div class="d-flex justify-content-end">
-                                <a href="/Bookings/Details?id=@Model.Booking.Id" class="btn btn-secondary me-2">
-                                    <i class="fas fa-times"></i> Cancel
-                                </a>
-                                <button type="submit" class="btn btn-primary" id="submitBtn">
-                                    <i class="fas fa-save"></i> Update Booking
-                                </button>
-                            </div>
-                        </form>
-                    }
+                                <div class="d-flex justify-content-end gap-2">
+                                    <a href="/Bookings/Details?id=@Model.Booking.Id" class="btn btn-glass-secondary">
+                                        <i class="fas fa-times"></i> Cancel
+                                    </a>
+                                    <button type="submit" class="btn btn-neon-primary" id="submitBtn">
+                                        <i class="fas fa-save"></i> Update Booking
+                                    </button>
+                                </div>
+                            </form>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
@@ -88,7 +296,7 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    
+
     <script>
         $(document).ready(function() {
             let availabilityTimeout;
@@ -109,14 +317,14 @@
                     }, function(data) {
                         const alertDiv = $('#availabilityCheck');
                         const submitBtn = $('#submitBtn');
-                        
+
                         if (data.available) {
-                            alertDiv.removeClass('alert-danger').addClass('alert-success');
+                            alertDiv.removeClass('alert-danger alert-glass-danger').addClass('alert-glass-success');
                             alertDiv.html('<i class="fas fa-check-circle"></i> Room is available for the selected time!');
                             alertDiv.show();
                             submitBtn.prop('disabled', false);
                         } else {
-                            alertDiv.removeClass('alert-success').addClass('alert-danger');
+                            alertDiv.removeClass('alert-success alert-glass-success').addClass('alert-glass-danger');
                             alertDiv.html('<i class="fas fa-times-circle"></i> Room is not available for the selected time. Please choose a different time.');
                             alertDiv.show();
                             submitBtn.prop('disabled', true);

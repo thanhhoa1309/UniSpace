@@ -277,9 +277,9 @@ function hideReconnectingMessage() {
 }
 
 // Show disconnected message
-function showDisconnectedMessage() {
-    showToast('Disconnected', 'Notification service disconnected. Will retry...', 'error', '?');
-}
+//function showDisconnectedMessage() {
+//    showToast('Disconnected', 'Notification service disconnected. Will retry...', 'error', '?');
+//}
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
