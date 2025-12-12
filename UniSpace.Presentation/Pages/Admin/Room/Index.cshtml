@@ -362,22 +362,44 @@
         backdrop-filter: blur(15px);
         border: 1px solid rgba(255, 138, 0, 0.3);
         border-radius: 15px;
+        position: relative;
+        z-index: 1056;
     }
 
     .modal-header-glass-danger {
         background: rgba(239, 68, 68, 0.15);
         border-bottom: 1px solid rgba(239, 68, 68, 0.3);
         padding: 20px 24px;
+        position: relative;
+        z-index: 1057;
     }
 
     .modal-body-glass {
         padding: 24px;
         color: #e0e0e0;
+        position: relative;
+        z-index: 1057;
     }
 
     .modal-footer-glass {
         border-top: 1px solid rgba(255, 255, 255, 0.1);
         padding: 20px 24px;
+        position: relative;
+        z-index: 1057;
+    }
+
+        .modal-footer-glass .btn {
+            position: relative;
+            z-index: 1058;
+            pointer-events: auto;
+        }
+
+    .modal-dialog {
+        z-index: 1056;
+    }
+
+    .modal-backdrop {
+        z-index: 1050;
     }
 
     /* Empty State */
@@ -470,21 +492,21 @@
         </div>
 
         <!-- Alerts -->
-        @if (!string.IsNullOrEmpty(Model.SuccessMessage))
-        {
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
             <div class="alert-glass-success mb-4" role="alert">
                 <i class="bi bi-check-circle me-2"></i> @Model.SuccessMessage
                 <button type="button" class="btn-close" data-bs-dismiss="alert" style="filter: brightness(0) invert(1);"></button>
             </div>
-        }
+}
 
-        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
-        {
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
             <div class="alert-glass-danger mb-4" role="alert">
                 <i class="bi bi-exclamation-triangle me-2"></i> @Model.ErrorMessage
                 <button type="button" class="btn-close" data-bs-dismiss="alert" style="filter: brightness(0) invert(1);"></button>
             </div>
-        }
+}
 
         <!-- Search and Filter Section -->
         <div class="search-filter-card mb-4">
@@ -824,7 +846,7 @@
                                             <label class="form-label-glass mb-0">
                                                 <i class="bi bi-list-ol"></i> Items per page:
                                             </label>
-                                            <select class="form-select-glass" style="width: auto;" 
+                                            <select class="form-select-glass" style="width: auto;"
                                                     onchange="changePageSize(this.value)">
                                                 @foreach (var option in Model.PageSizeOptions)
                                                 {
@@ -847,7 +869,7 @@
                                                 <ul class="pagination pagination-glass mb-0">
                                                     <!-- First Page -->
                                                     <li class="page-item @(Model.Rooms.CurrentPage == 1 ? "disabled" : "")">
-                                                        <a class="page-link-glass" 
+                                                        <a class="page-link-glass"
                                                            href="@GetPageUrl(1)"
                                                            aria-label="First">
                                                             <i class="bi bi-chevron-double-left"></i>
@@ -856,7 +878,7 @@
 
                                                     <!-- Previous Page -->
                                                     <li class="page-item @(Model.Rooms.CurrentPage == 1 ? "disabled" : "")">
-                                                        <a class="page-link-glass" 
+                                                        <a class="page-link-glass"
                                                            href="@GetPageUrl(Model.Rooms.CurrentPage - 1)"
                                                            aria-label="Previous">
                                                             <i class="bi bi-chevron-left"></i>
@@ -891,7 +913,7 @@
 
                                                     <!-- Next Page -->
                                                     <li class="page-item @(Model.Rooms.CurrentPage == Model.Rooms.TotalPages ? "disabled" : "")">
-                                                        <a class="page-link-glass" 
+                                                        <a class="page-link-glass"
                                                            href="@GetPageUrl(Model.Rooms.CurrentPage + 1)"
                                                            aria-label="Next">
                                                             <i class="bi bi-chevron-right"></i>
@@ -900,7 +922,7 @@
 
                                                     <!-- Last Page -->
                                                     <li class="page-item @(Model.Rooms.CurrentPage == Model.Rooms.TotalPages ? "disabled" : "")">
-                                                        <a class="page-link-glass" 
+                                                        <a class="page-link-glass"
                                                            href="@GetPageUrl(Model.Rooms.TotalPages)"
                                                            aria-label="Last">
                                                             <i class="bi bi-chevron-double-right"></i>
@@ -914,96 +936,95 @@
                             </div>
                         </div>
                     }
-    </div>
-</div>
-
-<!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content-glass">
-            <div class="modal-header-glass-danger d-flex justify-content-between align-items-center">
-                <h5 class="modal-title" style="color: #f87171;">
-                    <i class="bi bi-exclamation-triangle"></i> Confirm Delete
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" style="filter: brightness(0) invert(1);"></button>
-                
-            </div>
-            <div class="modal-body-glass">
-                <p class="mb-3">
-                    Are you sure you want to delete room <strong id="roomName" style="color: #f87171;"></strong>?
-                </p>
-                <div class="alert-glass-danger">
-                    <i class="bi bi-info-circle"></i>
-                    <small>This action cannot be undone. The room will be soft deleted.</small>
                 </div>
             </div>
-            <div class="modal-footer-glass">
-                <button type="button" class="btn btn-glass-secondary" data-bs-dismiss="modal">
-                    <i class="bi bi-x-circle"></i> Cancel
-                </button>
-                <form method="post" asp-page-handler="Delete" class="d-inline">
-                    <input type="hidden" name="id" id="roomId" />
-                    <button type="submit" class="btn btn-neon-primary" style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); border-color: #dc2626;">
-                        <i class="bi bi-trash"></i> Delete Room
-                    </button>
-                </form>
+
+            <!-- Delete Confirmation Modal -->
+            <div class="modal fade" id="deleteModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content-glass">
+                        <div class="modal-header-glass-danger">
+                            <h5 class="modal-title" style="color: #f87171;">
+                                <i class="bi bi-exclamation-triangle"></i> Confirm Delete
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: brightness(0) invert(1);"></button>
+                        </div>
+                        <div class="modal-body-glass">
+                            <p class="mb-3">
+                                Are you sure you want to delete room <strong id="roomName" style="color: #f87171;"></strong>?
+                            </p>
+                            <div class="alert-glass-danger">
+                                <i class="bi bi-info-circle"></i>
+                                <small>This action cannot be undone. The room will be soft deleted.</small>
+                            </div>
+                        </div>
+                        <div class="modal-footer-glass">
+                            <button type="button" class="btn btn-glass-secondary" data-bs-dismiss="modal">
+                                <i class="bi bi-x-circle"></i> Cancel
+                            </button>
+                            <form method="post" asp-page-handler="Delete" class="d-inline">
+                                <input type="hidden" name="id" id="roomId" />
+                                <button type="submit" class="btn btn-neon-primary" style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); border-color: #dc2626;">
+                                    <i class="bi bi-trash"></i> Delete Room
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
 
 @section Scripts {
-    <script>
-        // Delete confirmation
-        function confirmDelete(roomId, roomName) {
-            document.getElementById('roomId').value = roomId;
-            document.getElementById('roomName').textContent = roomName;
-            var modal = new bootstrap.Modal(document.getElementById('deleteModal'));
-            modal.show();
-        }
+                <script>
+                    // Delete confirmation
+                    function confirmDelete(roomId, roomName) {
+                        document.getElementById('roomId').value = roomId;
+                        document.getElementById('roomName').textContent = roomName;
+                        var modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+                        modal.show();
+                    }
 
-        // View toggle
-        document.getElementById('viewTable').addEventListener('click', function() {
-            document.getElementById('tableView').style.display = 'block';
-            document.getElementById('gridView').style.display = 'none';
-            this.classList.add('active');
-            document.getElementById('viewGrid').classList.remove('active');
-        });
+                    // View toggle
+                    document.getElementById('viewTable').addEventListener('click', function() {
+                        document.getElementById('tableView').style.display = 'block';
+                        document.getElementById('gridView').style.display = 'none';
+                        this.classList.add('active');
+                        document.getElementById('viewGrid').classList.remove('active');
+                    });
 
-        document.getElementById('viewGrid').addEventListener('click', function() {
-            document.getElementById('tableView').style.display = 'none';
-            document.getElementById('gridView').style.display = 'block';
-            this.classList.add('active');
-            document.getElementById('viewTable').classList.remove('active');
-        });
+                    document.getElementById('viewGrid').addEventListener('click', function() {
+                        document.getElementById('tableView').style.display = 'none';
+                        document.getElementById('gridView').style.display = 'block';
+                        this.classList.add('active');
+                        document.getElementById('viewTable').classList.remove('active');
+                    });
 
-        // Page size change handler
-        function changePageSize(newPageSize) {
-            const url = new URL(window.location.href);
-            url.searchParams.set('pageSize', newPageSize);
-            url.searchParams.set('pageNumber', '1'); // Reset to first page when page size changes
-            window.location.href = url.toString();
-        }
+                    // Page size change handler
+                    function changePageSize(newPageSize) {
+                        const url = new URL(window.location.href);
+                        url.searchParams.set('pageSize', newPageSize);
+                        url.searchParams.set('pageNumber', '1'); // Reset to first page when page size changes
+                        window.location.href = url.toString();
+                    }
 
-        // Auto-hide alerts
-        setTimeout(function() {
-            var alerts = document.querySelectorAll('[class*="alert-glass"]');
-            alerts.forEach(function(alert) {
-                var bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
-                bsAlert.close();
-            });
-        }, 5000);
-    </script>
+                    // Auto-hide alerts
+                    setTimeout(function() {
+                        var alerts = document.querySelectorAll('[class*="alert-glass"]');
+                        alerts.forEach(function(alert) {
+                            var bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+                            bsAlert.close();
+                        });
+                    }, 5000);
+                </script>
 }
 
 @functions {
     private string GetPageUrl(int pageNumber)
     {
         var queryParams = new Dictionary<string, string>
-        {
+            {
             { "pageNumber", pageNumber.ToString() },
             { "pageSize", Model.CurrentPageSize.ToString() }
-        };
+            };
 
         if (!string.IsNullOrEmpty(Model.SearchTerm))
             queryParams["search"] = Model.SearchTerm;
