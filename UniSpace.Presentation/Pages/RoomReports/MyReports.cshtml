@@ -4,114 +4,377 @@
     ViewData["Title"] = "My Reports";
 }
 
-<div class="container-fluid mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>
-            <i class="bi bi-file-text"></i> My Room Reports
-        </h2>
-    </div>
-
-    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
-    {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle"></i> @Model.SuccessMessage
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+<style>
+    /* Page Container */
+    .my-reports-page-container {
+        min-height: 100vh;
+        padding: 40px 0;
     }
 
-    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
-    {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="bi bi-exclamation-circle"></i> @Model.ErrorMessage
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+    /* Glass Card */
+    .glass-card-reports {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        transition: all 0.3s ease;
     }
 
-    @if (Model.Reports == null || !Model.Reports.Any())
-    {
-        <div class="alert alert-info text-center">
-            <i class="bi bi-info-circle fs-1 d-block mb-3"></i>
-            <h5>No Reports Yet</h5>
-            <p class="mb-0">You haven't submitted any room reports. If you encounter any issues during your bookings, you can report them here.</p>
-        </div>
+        .glass-card-reports:hover {
+            border: 1px solid rgba(255, 138, 0, 0.4);
+            box-shadow: 0 12px 40px 0 rgba(255, 138, 0, 0.15);
+        }
+
+    /* Card Header */
+    .glass-card-header-reports {
+        background: rgba(255, 138, 0, 0.15);
+        border-bottom: 2px solid rgba(255, 138, 0, 0.3);
+        padding: 20px 24px;
     }
-    else
-    {
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            @foreach (var report in Model.Reports)
-            {
-                <div class="col">
-                    <div class="card h-100 shadow-sm @(report.Status == UniSpace.BusinessObject.Enums.ReportStatus.Open ? "border-warning" : "border-success")">
-                        <div class="card-header @(report.Status == UniSpace.BusinessObject.Enums.ReportStatus.Open ? "bg-warning" : "bg-success") text-white">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h6 class="mb-0">
-                                    <i class="bi bi-tag"></i> @report.IssueType
-                                </h6>
-                                <span class="badge @(report.Status == UniSpace.BusinessObject.Enums.ReportStatus.Open ? "bg-dark" : "bg-light text-dark")">
-                                    @report.StatusDisplay
-                                </span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="mb-2">
-                                <small class="text-muted">
-                                    <i class="bi bi-building"></i> <strong>Campus:</strong> @report.CampusName
-                                </small>
-                            </div>
-                            <div class="mb-2">
-                                <small class="text-muted">
-                                    <i class="bi bi-door-open"></i> <strong>Room:</strong> @report.RoomName
-                                </small>
-                            </div>
-                            <div class="mb-3">
-                                <small class="text-muted">
-                                    <i class="bi bi-calendar-event"></i> <strong>Reported:</strong> @report.CreatedAt.ToString("MMM dd, yyyy HH:mm")
-                                </small>
-                            </div>
-                            
-                            <div class="mb-0">
-                                <p class="card-text small">
-                                    <strong>Description:</strong><br/>
-                                    @(report.Description.Length > 150 ? report.Description.Substring(0, 150) + "..." : report.Description)
-                                </p>
-                            </div>
-                        </div>
-                        <div class="card-footer bg-transparent">
-                            <a asp-page="./Details" asp-route-id="@report.Id" class="btn btn-sm btn-outline-primary w-100">
-                                <i class="bi bi-eye"></i> View Details
-                            </a>
-                        </div>
-                    </div>
-                </div>
+
+        .glass-card-header-reports h2 {
+            color: #ff8a00;
+            font-weight: bold;
+            margin: 0;
+        }
+
+    /* Card Body */
+    .glass-card-body-reports {
+        padding: 24px;
+    }
+
+    /* Alert Styling */
+    .alert-glass-success {
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+        border-radius: 10px;
+        padding: 16px 20px;
+        color: #6ee7b7;
+        margin-bottom: 20px;
+    }
+
+    .alert-glass-danger {
+        background: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        border-radius: 10px;
+        padding: 16px 20px;
+        color: #fca5a5;
+        margin-bottom: 20px;
+    }
+
+    .alert-glass-info {
+        background: rgba(6, 182, 212, 0.15);
+        border: 1px solid rgba(6, 182, 212, 0.4);
+        border-radius: 10px;
+        padding: 16px 20px;
+        color: #22d3ee;
+        text-align: center;
+    }
+
+    /* Report Cards */
+    .report-card-glass {
+        background: rgba(45, 45, 45, 0.6);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 15px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+        .report-card-glass:hover {
+            border-color: rgba(255, 138, 0, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(255, 138, 0, 0.2);
+        }
+
+        .report-card-glass.border-warning-neon {
+            border: 2px solid rgba(251, 191, 36, 0.4);
+        }
+
+            .report-card-glass.border-warning-neon:hover {
+                border-color: rgba(251, 191, 36, 0.6);
+                box-shadow: 0 12px 30px rgba(251, 191, 36, 0.2);
             }
-        </div>
 
-        <div class="mt-4">
-            <div class="alert alert-light">
-                <div class="row text-center">
-                    <div class="col-md-4">
-                        <h5 class="text-primary">@Model.Reports.Count</h5>
-                        <small class="text-muted">Total Reports</small>
-                    </div>
-                    <div class="col-md-4">
-                        <h5 class="text-warning">@Model.Reports.Count(r => r.Status == UniSpace.BusinessObject.Enums.ReportStatus.Open)</h5>
-                        <small class="text-muted">Open Reports</small>
-                    </div>
-                    <div class="col-md-4">
-                        <h5 class="text-success">@Model.Reports.Count(r => r.Status == UniSpace.BusinessObject.Enums.ReportStatus.Resolved)</h5>
-                        <small class="text-muted">Resolved Reports</small>
-                    </div>
+        .report-card-glass.border-success-neon {
+            border: 2px solid rgba(16, 185, 129, 0.4);
+        }
+
+            .report-card-glass.border-success-neon:hover {
+                border-color: rgba(16, 185, 129, 0.6);
+                box-shadow: 0 12px 30px rgba(16, 185, 129, 0.2);
+            }
+
+    .report-card-header-warning {
+        background: rgba(251, 191, 36, 0.2);
+        border-bottom: 1px solid rgba(251, 191, 36, 0.3);
+        padding: 16px 20px;
+    }
+
+    .report-card-header-success {
+        background: rgba(16, 185, 129, 0.2);
+        border-bottom: 1px solid rgba(16, 185, 129, 0.3);
+        padding: 16px 20px;
+    }
+
+    .report-card-body {
+        padding: 20px;
+        color: #e0e0e0;
+    }
+
+    .report-card-footer {
+        background: rgba(255, 255, 255, 0.03);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 16px 20px;
+    }
+
+    /* Badge Styles */
+    .badge-neon-dark {
+        background: rgba(0, 0, 0, 0.4);
+        color: #fbbf24;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-weight: 600;
+        border: 1px solid rgba(251, 191, 36, 0.3);
+    }
+
+    .badge-glass-light {
+        background: rgba(255, 255, 255, 0.15);
+        color: #10b981;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-weight: 600;
+        border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    /* Statistics Card */
+    .stats-alert-glass {
+        background: rgba(45, 45, 45, 0.4);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 15px;
+        padding: 24px;
+        margin-top: 24px;
+    }
+
+        .stats-alert-glass .stat-item {
+            text-align: center;
+        }
+
+            .stats-alert-glass .stat-item h5 {
+                color: #ff8a00;
+                font-size: 2rem;
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+
+            .stats-alert-glass .stat-item small {
+                color: #9ca3af;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+        .stats-alert-glass .stat-primary h5 {
+            color: #ff8a00;
+        }
+
+        .stats-alert-glass .stat-warning h5 {
+            color: #fbbf24;
+        }
+
+        .stats-alert-glass .stat-success h5 {
+            color: #10b981;
+        }
+
+    /* Button Styles */
+    .btn-glass-outline-primary {
+        background: rgba(255, 138, 0, 0.15);
+        border: 2px solid rgba(255, 138, 0, 0.4);
+        color: #ff8a00;
+        font-weight: 600;
+        padding: 10px 20px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+        .btn-glass-outline-primary:hover {
+            background: rgba(255, 138, 0, 0.3);
+            border-color: rgba(255, 138, 0, 0.6);
+            color: #ff8a00;
+            box-shadow: 0 0 20px rgba(255, 138, 0, 0.4);
+        }
+
+    /* Text Colors */
+    .text-neon-orange {
+        color: #ff8a00;
+    }
+
+    .text-light-glass {
+        color: #e0e0e0;
+    }
+
+    .text-muted-glass {
+        color: #9ca3af;
+    }
+
+    /* Empty State */
+    .empty-state-glass {
+        text-align: center;
+        padding: 60px 40px;
+        color: #9ca3af;
+    }
+
+        .empty-state-glass i {
+            font-size: 4rem;
+            color: #06b6d4;
+            margin-bottom: 16px;
+        }
+
+        .empty-state-glass h5 {
+            color: #e0e0e0;
+            margin-top: 16px;
+            margin-bottom: 12px;
+        }
+
+        .empty-state-glass p {
+            margin-bottom: 0;
+        }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .glass-card-header-reports,
+        .glass-card-body-reports {
+            padding: 20px;
+        }
+
+        .stats-alert-glass {
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="my-reports-page-container">
+    <div class="container-fluid mt-4">
+        <div class="glass-card-reports mb-4">
+            <div class="glass-card-header-reports">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2>
+                        <i class="bi bi-file-text"></i> My Room Reports
+                    </h2>
                 </div>
             </div>
+            <div class="glass-card-body-reports">
+                @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+                {
+                    <div class="alert-glass-success alert-dismissible fade show" role="alert">
+                        <i class="bi bi-check-circle"></i> @Model.SuccessMessage
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="filter: brightness(0) invert(1);"></button>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                {
+                    <div class="alert-glass-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-circle"></i> @Model.ErrorMessage
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="filter: brightness(0) invert(1);"></button>
+                    </div>
+                }
+
+                @if (Model.Reports == null || !Model.Reports.Any())
+                {
+                    <div class="alert-glass-info">
+                        <div class="empty-state-glass">
+                            <i class="bi bi-info-circle"></i>
+                            <h5>No Reports Yet</h5>
+                            <p>You haven't submitted any room reports. If you encounter any issues during your bookings, you can report them here.</p>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                        @foreach (var report in Model.Reports)
+                        {
+                            <div class="col">
+                                <div class="report-card-glass @(report.Status == UniSpace.BusinessObject.Enums.ReportStatus.Open ? "border-warning-neon" : "border-success-neon")">
+                                    <div class="@(report.Status == UniSpace.BusinessObject.Enums.ReportStatus.Open ? "report-card-header-warning" : "report-card-header-success")">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h6 class="mb-0 text-light-glass">
+                                                <i class="bi bi-tag"></i> @report.IssueType
+                                            </h6>
+                                            <span class="@(report.Status == UniSpace.BusinessObject.Enums.ReportStatus.Open ? "badge-neon-dark" : "badge-glass-light")">
+                                                @report.StatusDisplay
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="report-card-body">
+                                        <div class="mb-2">
+                                            <small class="text-muted-glass">
+                                                <i class="bi bi-building"></i> <strong>Campus:</strong> @report.CampusName
+                                            </small>
+                                        </div>
+                                        <div class="mb-2">
+                                            <small class="text-muted-glass">
+                                                <i class="bi bi-door-open"></i> <strong>Room:</strong> @report.RoomName
+                                            </small>
+                                        </div>
+                                        <div class="mb-3">
+                                            <small class="text-muted-glass">
+                                                <i class="bi bi-calendar-event"></i> <strong>Reported:</strong> @report.CreatedAt.ToString("MMM dd, yyyy HH:mm")
+                                            </small>
+                                        </div>
+
+                                        <div class="mb-0">
+                                            <p class="card-text small text-light-glass">
+                                                <strong>Description:</strong><br />
+                                                @(report.Description.Length > 150 ? report.Description.Substring(0, 150) + "..." : report.Description)
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="report-card-footer">
+                                        <a asp-page="./Details" asp-route-id="@report.Id" class="btn btn-glass-outline-primary">
+                                            <i class="bi bi-eye"></i> View Details
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="stats-alert-glass">
+                        <div class="row text-center">
+                            <div class="col-md-4 stat-item stat-primary">
+                                <h5>@Model.Reports.Count</h5>
+                                <small>Total Reports</small>
+                            </div>
+                            <div class="col-md-4 stat-item stat-warning">
+                                <h5>@Model.Reports.Count(r => r.Status == UniSpace.BusinessObject.Enums.ReportStatus.Open)</h5>
+                                <small>Open Reports</small>
+                            </div>
+                            <div class="col-md-4 stat-item stat-success">
+                                <h5>@Model.Reports.Count(r => r.Status == UniSpace.BusinessObject.Enums.ReportStatus.Resolved)</h5>
+                                <small>Resolved Reports</small>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
-    }
+    </div>
 </div>
 
 @section Scripts {
     <script>
         // Auto-dismiss alerts after 5 seconds
-        setTimeout(function() {
-            $('.alert').fadeOut('slow');
+        setTimeout(function () {
+            $('.alert-dismissible').fadeOut('slow');
         }, 5000);
     </script>
 }

@@ -4,153 +4,444 @@
     ViewData["Title"] = "Report Details";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>
-            <i class="bi bi-file-text-fill"></i> Report Details
-        </h2>
-        <a asp-page="./MyReports" class="btn btn-secondary">
-            <i class="bi bi-arrow-left"></i> Back to My Reports
-        </a>
-    </div>
-
-    @if (Model.Report == null)
-    {
-        <div class="alert alert-danger">
-            <i class="bi bi-exclamation-triangle"></i> Report not found.
-        </div>
+<style>
+    /* Page Container */
+    .details-page-container {
+        min-height: 100vh;
+        padding: 40px 0;
     }
-    else
-    {
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="card shadow mb-4">
-                    <div class="card-header @(Model.Report.Status == UniSpace.BusinessObject.Enums.ReportStatus.Open ? "bg-warning" : "bg-success") text-white">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0">
-                                <i class="bi bi-tag"></i> @Model.Report.IssueType
-                            </h5>
-                            <span class="badge @(Model.Report.Status == UniSpace.BusinessObject.Enums.ReportStatus.Open ? "bg-dark" : "bg-light text-dark") fs-6">
-                                @Model.Report.StatusDisplay
-                            </span>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h6 class="card-subtitle mb-3 text-muted">
-                            <i class="bi bi-calendar-event"></i> Reported on @Model.Report.CreatedAt.ToString("MMMM dd, yyyy 'at' HH:mm")
-                        </h6>
 
-                        <div class="mb-4">
-                            <h6><i class="bi bi-chat-left-text"></i> Description</h6>
-                            <p class="ms-3">@Model.Report.Description</p>
-                        </div>
+    /* Header Card */
+    .header-glass {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        padding: 24px;
+        margin-bottom: 24px;
+        transition: all 0.3s ease;
+    }
 
-                        @if (Model.Report.Status == UniSpace.BusinessObject.Enums.ReportStatus.Open)
-                        {
-                            <div class="alert alert-warning">
-                                <i class="bi bi-hourglass-split"></i> <strong>Pending Review</strong><br/>
-                                <small>Our team is reviewing your report. We'll respond as soon as possible.</small>
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="alert alert-success">
-                                <i class="bi bi-check-circle"></i> <strong>Resolved</strong><br/>
-                                <small>This issue has been resolved by our team.</small>
-                                @if (Model.Report.UpdatedAt.HasValue)
-                                {
-                                    <br/>
-                                    <small class="text-muted">
-                                        <i class="bi bi-clock"></i> Resolved on @Model.Report.UpdatedAt.Value.ToString("MMMM dd, yyyy 'at' HH:mm")
-                                    </small>
-                                }
-                            </div>
-                        }
-                    </div>
-                </div>
+        .header-glass:hover {
+            border: 1px solid rgba(255, 138, 0, 0.4);
+            box-shadow: 0 12px 40px 0 rgba(255, 138, 0, 0.15);
+        }
+
+    /* Main Detail Card */
+    .detail-card-glass {
+        background: rgba(45, 45, 45, 0.6);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 15px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        margin-bottom: 24px;
+    }
+
+        .detail-card-glass:hover {
+            border-color: rgba(255, 138, 0, 0.4);
+            box-shadow: 0 12px 30px rgba(255, 138, 0, 0.2);
+        }
+
+    .detail-card-header-warning {
+        background: rgba(251, 191, 36, 0.2);
+        border-bottom: 2px solid rgba(251, 191, 36, 0.3);
+        padding: 20px 24px;
+    }
+
+    .detail-card-header-success {
+        background: rgba(16, 185, 129, 0.2);
+        border-bottom: 2px solid rgba(16, 185, 129, 0.3);
+        padding: 20px 24px;
+    }
+
+    .detail-card-body {
+        padding: 28px;
+        color: #e0e0e0;
+    }
+
+    /* Info Sidebar Card */
+    .info-card-glass {
+        background: rgba(45, 45, 45, 0.6);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 15px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        margin-bottom: 24px;
+    }
+
+        .info-card-glass:hover {
+            border-color: rgba(255, 138, 0, 0.4);
+            box-shadow: 0 12px 30px rgba(255, 138, 0, 0.2);
+        }
+
+    .info-card-header {
+        background: rgba(255, 138, 0, 0.2);
+        border-bottom: 2px solid rgba(255, 138, 0, 0.3);
+        padding: 16px 20px;
+    }
+
+        .info-card-header h6 {
+            color: #ff8a00;
+            font-weight: bold;
+            margin: 0;
+        }
+
+    .info-card-body {
+        padding: 24px;
+        color: #e0e0e0;
+    }
+
+    /* Help Card */
+    .help-card-glass {
+        background: rgba(45, 45, 45, 0.6);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(6, 182, 212, 0.2);
+        border-radius: 15px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+        .help-card-glass:hover {
+            border-color: rgba(6, 182, 212, 0.4);
+            box-shadow: 0 12px 30px rgba(6, 182, 212, 0.2);
+        }
+
+    .help-card-header {
+        background: rgba(6, 182, 212, 0.15);
+        border-bottom: 2px solid rgba(6, 182, 212, 0.3);
+        padding: 16px 20px;
+    }
+
+        .help-card-header h6 {
+            color: #06b6d4;
+            font-weight: bold;
+            margin: 0;
+        }
+
+    .help-card-body {
+        padding: 20px;
+        color: #e0e0e0;
+    }
+
+    /* Badge Styles */
+    .badge-neon-dark {
+        background: rgba(0, 0, 0, 0.4);
+        color: #fbbf24;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: 600;
+        border: 1px solid rgba(251, 191, 36, 0.4);
+    }
+
+    .badge-glass-light {
+        background: rgba(255, 255, 255, 0.15);
+        color: #10b981;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: 600;
+        border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    .badge-glass-warning {
+        background: rgba(251, 191, 36, 0.2);
+        border: 1px solid rgba(251, 191, 36, 0.4);
+        color: #fbbf24;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-weight: 600;
+    }
+
+    .badge-glass-success {
+        background: rgba(16, 185, 129, 0.2);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+        color: #10b981;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-weight: 600;
+    }
+
+    /* Alert Styles */
+    .alert-glass-warning {
+        background: rgba(251, 191, 36, 0.15);
+        border: 1px solid rgba(251, 191, 36, 0.4);
+        border-left: 4px solid #fbbf24;
+        border-radius: 10px;
+        padding: 16px 20px;
+        color: #fde68a;
+    }
+
+    .alert-glass-success {
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+        border-left: 4px solid #10b981;
+        border-radius: 10px;
+        padding: 16px 20px;
+        color: #6ee7b7;
+    }
+
+    .alert-glass-danger {
+        background: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        border-left: 4px solid #ef4444;
+        border-radius: 10px;
+        padding: 16px 20px;
+        color: #fca5a5;
+    }
+
+    /* Button Styles */
+    .btn-glass-secondary {
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        font-weight: 600;
+        padding: 10px 24px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+        .btn-glass-secondary:hover {
+            border: 2px solid rgba(255, 138, 0, 0.5);
+            color: #ff8a00;
+            box-shadow: 0 0 20px rgba(255, 138, 0, 0.2);
+        }
+
+    .btn-glass-outline-primary {
+        background: rgba(255, 138, 0, 0.15);
+        border: 2px solid rgba(255, 138, 0, 0.4);
+        color: #ff8a00;
+        font-weight: 600;
+        padding: 8px 20px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+        .btn-glass-outline-primary:hover {
+            background: rgba(255, 138, 0, 0.3);
+            border-color: rgba(255, 138, 0, 0.6);
+            color: #ff8a00;
+            box-shadow: 0 0 20px rgba(255, 138, 0, 0.4);
+        }
+
+    /* Text Colors */
+    .text-neon-orange {
+        color: #ff8a00;
+    }
+
+    .text-light-glass {
+        color: #e0e0e0;
+    }
+
+    .text-muted-glass {
+        color: #9ca3af;
+    }
+
+    .text-warning-neon {
+        color: #fbbf24;
+    }
+
+    .text-success-neon {
+        color: #10b981;
+    }
+
+    /* Description Box */
+    .description-box {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 138, 0, 0.2);
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 12px;
+    }
+
+    /* Definition List Styling */
+    .info-card-body dl dt {
+        color: #9ca3af;
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .info-card-body dl dd {
+        color: #e0e0e0;
+        font-size: 0.875rem;
+        margin-bottom: 16px;
+    }
+
+        .info-card-body dl dd small {
+            color: #9ca3af;
+        }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .header-glass,
+        .detail-card-body,
+        .info-card-body,
+        .help-card-body {
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="details-page-container">
+    <div class="container mt-4">
+        <div class="header-glass">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <h2 class="text-neon-orange mb-0">
+                    <i class="bi bi-file-text-fill"></i> Report Details
+                </h2>
+                <a asp-page="./MyReports" class="btn btn-glass-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to My Reports
+                </a>
             </div>
+        </div>
 
-            <div class="col-lg-4">
-                <div class="card shadow mb-4">
-                    <div class="card-header bg-primary text-white">
-                        <h6 class="mb-0">
-                            <i class="bi bi-info-circle"></i> Report Information
-                        </h6>
-                    </div>
-                    <div class="card-body">
-                        <dl class="row mb-0">
-                            <dt class="col-sm-5">
-                                <i class="bi bi-hash"></i> Report ID:
-                            </dt>
-                            <dd class="col-sm-7">
-                                <small class="text-muted font-monospace">@Model.Report.Id.ToString().Substring(0, 8)...</small>
-                            </dd>
-
-                            <dt class="col-sm-5">
-                                <i class="bi bi-bookmark"></i> Booking ID:
-                            </dt>
-                            <dd class="col-sm-7">
-                                <small class="text-muted font-monospace">@Model.Report.BookingId.ToString().Substring(0, 8)...</small>
-                            </dd>
-
-                            <dt class="col-sm-5">
-                                <i class="bi bi-building"></i> Campus:
-                            </dt>
-                            <dd class="col-sm-7">
-                                @Model.Report.CampusName
-                            </dd>
-
-                            <dt class="col-sm-5">
-                                <i class="bi bi-door-open"></i> Room:
-                            </dt>
-                            <dd class="col-sm-7">
-                                @Model.Report.RoomName
-                            </dd>
-
-                            <dt class="col-sm-5">
-                                <i class="bi bi-person"></i> Reporter:
-                            </dt>
-                            <dd class="col-sm-7">
-                                @Model.Report.UserName
-                            </dd>
-
-                            <dt class="col-sm-5">
-                                <i class="bi bi-envelope"></i> Email:
-                            </dt>
-                            <dd class="col-sm-7">
-                                <small>@Model.Report.UserEmail</small>
-                            </dd>
-
-                            <dt class="col-sm-5">
-                                <i class="bi bi-flag"></i> Status:
-                            </dt>
-                            <dd class="col-sm-7">
-                                <span class="badge @(Model.Report.Status == UniSpace.BusinessObject.Enums.ReportStatus.Open ? "bg-warning text-dark" : "bg-success")">
+        @if (Model.Report == null)
+        {
+            <div class="alert-glass-danger">
+                <i class="bi bi-exclamation-triangle"></i> Report not found.
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="detail-card-glass">
+                        <div class="@(Model.Report.Status == UniSpace.BusinessObject.Enums.ReportStatus.Open ? "detail-card-header-warning" : "detail-card-header-success")">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                <h5 class="mb-0 text-light-glass">
+                                    <i class="bi bi-tag"></i> @Model.Report.IssueType
+                                </h5>
+                                <span class="@(Model.Report.Status == UniSpace.BusinessObject.Enums.ReportStatus.Open ? "badge-neon-dark" : "badge-glass-light")">
                                     @Model.Report.StatusDisplay
                                 </span>
-                            </dd>
-                        </dl>
+                            </div>
+                        </div>
+                        <div class="detail-card-body">
+                            <h6 class="card-subtitle mb-3 text-muted-glass">
+                                <i class="bi bi-calendar-event"></i> Reported on @Model.Report.CreatedAt.ToString("MMMM dd, yyyy 'at' HH:mm")
+                            </h6>
+
+                            <div class="mb-4">
+                                <h6 class="text-neon-orange">
+                                    <i class="bi bi-chat-left-text"></i> Description
+                                </h6>
+                                <div class="description-box">
+                                    <p class="mb-0 text-light-glass">@Model.Report.Description</p>
+                                </div>
+                            </div>
+
+                            @if (Model.Report.Status == UniSpace.BusinessObject.Enums.ReportStatus.Open)
+                            {
+                                <div class="alert-glass-warning">
+                                    <i class="bi bi-hourglass-split"></i> <strong>Pending Review</strong><br />
+                                    <small>Our team is reviewing your report. We'll respond as soon as possible.</small>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert-glass-success">
+                                    <i class="bi bi-check-circle"></i> <strong>Resolved</strong><br />
+                                    <small>This issue has been resolved by our team.</small>
+                                    @if (Model.Report.UpdatedAt.HasValue)
+                                    {
+                                        <br />
+                                        <small class="text-muted-glass">
+                                            <i class="bi bi-clock"></i> Resolved on @Model.Report.UpdatedAt.Value.ToString("MMMM dd, yyyy 'at' HH:mm")
+                                        </small>
+                                    }
+                                </div>
+                            }
+                        </div>
                     </div>
                 </div>
 
-                <div class="card shadow">
-                    <div class="card-header bg-light">
-                        <h6 class="mb-0">
-                            <i class="bi bi-question-circle"></i> Need Help?
-                        </h6>
+                <div class="col-lg-4">
+                    <div class="info-card-glass">
+                        <div class="info-card-header">
+                            <h6 class="mb-0">
+                                <i class="bi bi-info-circle"></i> Report Information
+                            </h6>
+                        </div>
+                        <div class="info-card-body">
+                            <dl class="row mb-0">
+                                <dt class="col-sm-5">
+                                    <i class="bi bi-hash"></i> Report ID:
+                                </dt>
+                                <dd class="col-sm-7">
+                                    <small class="font-monospace">@Model.Report.Id.ToString().Substring(0, 8)...</small>
+                                </dd>
+
+                                <dt class="col-sm-5">
+                                    <i class="bi bi-bookmark"></i> Booking ID:
+                                </dt>
+                                <dd class="col-sm-7">
+                                    <small class="font-monospace">@Model.Report.BookingId.ToString().Substring(0, 8)...</small>
+                                </dd>
+
+                                <dt class="col-sm-5">
+                                    <i class="bi bi-building"></i> Campus:
+                                </dt>
+                                <dd class="col-sm-7">
+                                    @Model.Report.CampusName
+                                </dd>
+
+                                <dt class="col-sm-5">
+                                    <i class="bi bi-door-open"></i> Room:
+                                </dt>
+                                <dd class="col-sm-7">
+                                    @Model.Report.RoomName
+                                </dd>
+
+                                <dt class="col-sm-5">
+                                    <i class="bi bi-person"></i> Reporter:
+                                </dt>
+                                <dd class="col-sm-7">
+                                    @Model.Report.UserName
+                                </dd>
+
+                                <dt class="col-sm-5">
+                                    <i class="bi bi-envelope"></i> Email:
+                                </dt>
+                                <dd class="col-sm-7">
+                                    <small>@Model.Report.UserEmail</small>
+                                </dd>
+
+                                <dt class="col-sm-5">
+                                    <i class="bi bi-flag"></i> Status:
+                                </dt>
+                                <dd class="col-sm-7">
+                                    <span class="@(Model.Report.Status == UniSpace.BusinessObject.Enums.ReportStatus.Open ? "badge-glass-warning" : "badge-glass-success")">
+                                        @Model.Report.StatusDisplay
+                                    </span>
+                                </dd>
+                            </dl>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <p class="small mb-2">
-                            If you have additional information or questions about this report, please contact our support team.
-                        </p>
-                        <div class="d-grid">
-                            <a href="mailto:support@unispace.edu" class="btn btn-sm btn-outline-primary">
-                                <i class="bi bi-envelope"></i> Contact Support
-                            </a>
+
+                    <div class="help-card-glass">
+                        <div class="help-card-header">
+                            <h6 class="mb-0">
+                                <i class="bi bi-question-circle"></i> Need Help?
+                            </h6>
+                        </div>
+                        <div class="help-card-body">
+                            <p class="small mb-2 text-light-glass">
+                                If you have additional information or questions about this report, please contact our support team.
+                            </p>
+                            <div class="d-grid">
+                                <a href="mailto:support@unispace.edu" class="btn btn-glass-outline-primary btn-sm">
+                                    <i class="bi bi-envelope"></i> Contact Support
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    }
+        }
+    </div>
 </div>
