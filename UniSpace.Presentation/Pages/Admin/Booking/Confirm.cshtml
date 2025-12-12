@@ -1,4 +1,4 @@
-@page
+﻿@page
 @model UniSpace.Presentation.Pages.Admin.Booking.ConfirmModel
 @{
     ViewData["Title"] = "Confirm Booking Request";
@@ -545,9 +545,9 @@
                                           id="adminNote"
                                           maxlength="500"
                                           placeholder="Enter your note here...
-    � Why are you approving/rejecting?
-    � Any special instructions for the user?
-    � Additional comments or recommendations"></textarea>
+    • Why are you approving/rejecting?
+    • Any special instructions for the user?
+    • Additional comments or recommendations"></textarea>
                                 <div class="form-text mt-2">
                                     <i class="bi bi-info-circle"></i>
                                     <span id="noteRequirement">
@@ -626,111 +626,135 @@
         $(document).ready(function() {
             @if (Model.Booking != null)
             {
-                    @:var adminNote = $('#adminNote');
-                    @:var charCount = $('#charCount');
-                    @:var approveBtn = $('#approveBtn');
-                    @:var rejectBtn = $('#rejectBtn');
-                    @:var noteRequirement = $('#noteRequirement');
-                    @:
-                    @:// Character counter
-                    @:adminNote.on('input', function() {
-                        @:var length = $(this).val().length;
-                        @:charCount.text(length);
+                        @:var adminNote = $('#adminNote');
+                        @:var charCount = $('#charCount');
+                        @:var approveBtn = $('#approveBtn');
+                        @:var rejectBtn = $('#rejectBtn');
+                        @:var noteRequirement = $('#noteRequirement');
                         @:
-                        @:if (length > 500) {
-                            @:charCount.addClass('text-danger fw-bold');
-                            @:$(this).css('border-color', '#ef4444');
-                        @:} else if (length > 450) {
-                            @:charCount.addClass('fw-bold');
-                            @:charCount.css('color', '#fbbf24');
-                            @:charCount.removeClass('text-danger');
-                            @:$(this).css('border-color', 'rgba(255, 255, 255, 0.2)');
-                        @:} else {
-                            @:charCount.removeClass('text-danger fw-bold');
-                            @:charCount.css('color', 'rgba(255, 255, 255, 0.5)');
-                            @:$(this).css('border-color', 'rgba(255, 255, 255, 0.2)');
-                        @:}
-                    @:});
-                    @:
-                    @:// Approve button confirmation
-                    @:approveBtn.on('click', function(e) {
-                        @:e.preventDefault();
-                        @:
-                        @:Swal.fire({
-                            @:title: 'Approve Booking?',
-                            @:html: '<div class="text-start"><p class="mb-2"><strong>User:</strong> @Model.Booking.UserName</p><p class="mb-2"><strong>Room:</strong> @Model.Booking.RoomName</p><p class="mb-3"><strong>Date:</strong> @Model.Booking.StartTime.ToString("MMM dd, yyyy")</p><p class="text-muted mb-0"><i class="bi bi-info-circle"></i> The user will be notified and can use the room.</p></div>',
-                            @:icon: 'question',
-                            @:showCancelButton: true,
-                            @:confirmButtonColor: '#10b981',
-                            @:cancelButtonColor: '#6c757d',
-                            @:confirmButtonText: '<i class="bi bi-check-circle"></i> Yes, Approve!',
-                            @:cancelButtonText: 'Cancel',
-                            @:background: '#1a1a1a',
-                            @:color: '#fff'
-                        @:}).then((result) => {
-                            @:if (result.isConfirmed) {
-                                @:$(this).closest('form').submit();
+                        @:// Character counter
+                        @:adminNote.on('input', function() {
+                            @:var length = $(this).val().length;
+                            @:charCount.text(length);
+                            @:
+                            @:if (length > 500) {
+                                @:charCount.addClass('text-danger fw-bold');
+                                @:$(this).css('border-color', '#ef4444');
+                            @:} else if (length > 450) {
+                                @:charCount.addClass('fw-bold');
+                                @:charCount.css('color', '#fbbf24');
+                                @:charCount.removeClass('text-danger');
+                                @:$(this).css('border-color', 'rgba(255, 255, 255, 0.2)');
+                            @:} else {
+                                @:charCount.removeClass('text-danger fw-bold');
+                                @:charCount.css('color', 'rgba(255, 255, 255, 0.5)');
+                                @:$(this).css('border-color', 'rgba(255, 255, 255, 0.2)');
                             @:}
                         @:});
-                    @:});
-                    @:
-                    @:// Reject button confirmation
-                    @:rejectBtn.on('click', function(e) {
-                        @:e.preventDefault();
                         @:
-                        @:var note = adminNote.val().trim();
-                        @:
-                        @:if (!note || note.length < 10) {
+                        @:// Approve button confirmation
+                        @:approveBtn.on('click', function(e) {
+                            @:e.preventDefault();
+                            @:console.log('[Approve] Button clicked - BookingId:', '@Model.Booking.Id');
+                            @:
+                            @:var form = $(this).closest('form');
+                            @:console.log('[Approve] Form action:', form.attr('action'));
+                            @:console.log('[Approve] Form method:', form.attr('method'));
+                            @:
                             @:Swal.fire({
-                                @:title: 'Admin Note Required!',
-                                @:html: '<p class="mb-0">You must provide a meaningful reason (at least 10 characters) for rejecting this booking.</p>',
-                                @:icon: 'warning',
-                                @:confirmButtonColor: '#ef4444',
-                                @:confirmButtonText: 'OK',
+                                @:title: 'Approve Booking?',
+                                @:html: '<div class="text-start"><p class="mb-2"><strong>User:</strong> @Model.Booking.UserName</p><p class="mb-2"><strong>Room:</strong> @Model.Booking.RoomName</p><p class="mb-3"><strong>Date:</strong> @Model.Booking.StartTime.ToString("MMM dd, yyyy")</p><p class="text-muted mb-0"><i class="bi bi-info-circle"></i> The user will be notified and can use the room.</p></div>',
+                                @:icon: 'question',
+                                @:showCancelButton: true,
+                                @:confirmButtonColor: '#10b981',
+                                @:cancelButtonColor: '#6c757d',
+                                @:confirmButtonText: '<i class="bi bi-check-circle"></i> Yes, Approve!',
+                                @:cancelButtonText: 'Cancel',
                                 @:background: '#1a1a1a',
                                 @:color: '#fff'
+                            @:}).then((result) => {
+                                @:if (result.isConfirmed) {
+                                    @:console.log('[Approve] User confirmed - Submitting form with handler: Approve');
+                                    @:// Đảm bảo submit với đúng handler
+                                    @:form.attr('action', '?handler=Approve');
+                                    @:console.log('[Approve] Form action updated:', form.attr('action'));
+                                    @:form.submit();
+                                @:} else {
+                                    @:console.log('[Approve] User cancelled');
+                                @:}
                             @:});
-                            @:adminNote.css('border-color', '#ef4444').focus();
-                            @:noteRequirement.css('color', '#ef4444');
-                            @:return;
-                        @:}
+                        @:});
                         @:
-                        @:Swal.fire({
-                            @:title: 'Reject Booking?',
-                            @:html: '<div class="text-start"><p class="mb-2"><strong>User:</strong> @Model.Booking.UserName</p><p class="mb-2"><strong>Room:</strong> @Model.Booking.RoomName</p><div class="alert alert-warning mt-3 mb-3"><strong><i class="bi bi-chat-left-text"></i> Your note:</strong><br><span class="small">' + note + '</span></div><p class="text-danger mb-0"><i class="bi bi-exclamation-triangle"></i> This action cannot be undone!</p></div>',
-                            @:icon: 'warning',
-                            @:showCancelButton: true,
-                            @:confirmButtonColor: '#ef4444',
-                            @:cancelButtonColor: '#6c757d',
-                            @:confirmButtonText: '<i class="bi bi-x-circle"></i> Yes, Reject!',
-                            @:cancelButtonText: 'Cancel',
-                            @:background: '#1a1a1a',
-                            @:color: '#fff'
-                        @:}).then((result) => {
-                            @:if (result.isConfirmed) {
-                                @:$(this).closest('form').submit();
+                        @:// Reject button confirmation
+                        @:rejectBtn.on('click', function(e) {
+                            @:e.preventDefault();
+                            @:console.log('[Reject] Button clicked - BookingId:', '@Model.Booking.Id');
+                            @:
+                            @:var note = adminNote.val().trim();
+                            @:console.log('[Reject] Admin note length:', note.length);
+                            @:
+                            @:if (!note || note.length < 10) {
+                                @:console.log('[Reject] ERROR: Admin note too short or empty');
+                                @:Swal.fire({
+                                    @:title: 'Admin Note Required!',
+                                    @:html: '<p class="mb-0">You must provide a meaningful reason (at least 10 characters) for rejecting this booking.</p>',
+                                    @:icon: 'warning',
+                                    @:confirmButtonColor: '#ef4444',
+                                    @:confirmButtonText: 'OK',
+                                    @:background: '#1a1a1a',
+                                    @:color: '#fff'
+                                @:});
+                                @:adminNote.css('border-color', '#ef4444').focus();
+                                @:noteRequirement.css('color', '#ef4444');
+                                @:return;
+                            @:}
+                            @:
+                            @:var form = $(this).closest('form');
+                            @:console.log('[Reject] Form action:', form.attr('action'));
+                            @:console.log('[Reject] Form method:', form.attr('method'));
+                            @:
+                            @:Swal.fire({
+                                @:title: 'Reject Booking?',
+                                @:html: '<div class="text-start"><p class="mb-2"><strong>User:</strong> @Model.Booking.UserName</p><p class="mb-2"><strong>Room:</strong> @Model.Booking.RoomName</p><div class="alert alert-warning mt-3 mb-3"><strong><i class="bi bi-chat-left-text"></i> Your note:</strong><br><span class="small">' + note + '</span></div><p class="text-danger mb-0"><i class="bi bi-exclamation-triangle"></i> This action cannot be undone!</p></div>',
+                                @:icon: 'warning',
+                                @:showCancelButton: true,
+                                @:confirmButtonColor: '#ef4444',
+                                @:cancelButtonColor: '#6c757d',
+                                @:confirmButtonText: '<i class="bi bi-x-circle"></i> Yes, Reject!',
+                                @:cancelButtonText: 'Cancel',
+                                @:background: '#1a1a1a',
+                                @:color: '#fff'
+                            @:}).then((result) => {
+                                @:if (result.isConfirmed) {
+                                    @:console.log('[Reject] User confirmed - Submitting form with handler: Reject');
+                                    @:// Đảm bảo submit với đúng handler
+                                    @:form.attr('action', '?handler=Reject');
+                                    @:console.log('[Reject] Form action updated:', form.attr('action'));
+                                    @:form.submit();
+                                @:} else {
+                                    @:console.log('[Reject] User cancelled');
+                                @:}
+                            @:});
+                        @:});
+                        @:
+                        @:// Auto-dismiss alerts
+                        @:setTimeout(function() {
+                            @:$('.glass-alert').fadeOut('slow');
+                        @:}, 5000);
+                        @:
+                        @:// Highlight note field when reject is hovered
+                        @:rejectBtn.on('mouseenter', function() {
+                            @:var note = adminNote.val().trim();
+                            @:if (!note || note.length < 10) {
+                                @:adminNote.css('border-color', '#fbbf24');
+                                @:noteRequirement.css('color', '#fbbf24');
                             @:}
                         @:});
-                    @:});
-                    @:
-                    @:// Auto-dismiss alerts
-                    @:setTimeout(function() {
-                        @:$('.glass-alert').fadeOut('slow');
-                    @:}, 5000);
-                    @:
-                    @:// Highlight note field when reject is hovered
-                    @:rejectBtn.on('mouseenter', function() {
-                        @:var note = adminNote.val().trim();
-                        @:if (!note || note.length < 10) {
-                            @:adminNote.css('border-color', '#fbbf24');
-                            @:noteRequirement.css('color', '#fbbf24');
-                        @:}
-                    @:});
-                    @:
-                    @:rejectBtn.on('mouseleave', function() {
-                        @:adminNote.css('border-color', 'rgba(255, 255, 255, 0.2)');
-                        @:noteRequirement.css('color', 'rgba(255, 255, 255, 0.6)');
-                    @:});
+                        @:
+                        @:rejectBtn.on('mouseleave', function() {
+                            @:adminNote.css('border-color', 'rgba(255, 255, 255, 0.2)');
+                            @:noteRequirement.css('color', 'rgba(255, 255, 255, 0.6)');
+                        @:});
             }
         });
     </script>
